@@ -14,8 +14,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @update by itar
+ * alt+enter 响应 , 添加@Param注解
  */
 public class GenerateParamAnnotationIntention extends GenericIntention {
+
+  public static final String ADD_MYBATIS_PARAM_ANNOTATION = "add Mybatis @Param annotation";
 
   public GenerateParamAnnotationIntention() {
     super(GenerateParamChooser.INSTANCE);
@@ -23,7 +27,7 @@ public class GenerateParamAnnotationIntention extends GenericIntention {
 
   @NotNull @Override
   public String getText() {
-    return "[Mybatis] Generate @Param";
+    return ADD_MYBATIS_PARAM_ANNOTATION;
   }
 
   @Override
