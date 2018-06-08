@@ -41,7 +41,7 @@ dependencies {
 }
 
 intellij {
-    version = 'IU-2018.1'
+    version = 'IU-2018.1.4'
     plugins = ['coverage','Spring','DatabaseTools']
     pluginName = 'mybatis-plugin-free'
 }
