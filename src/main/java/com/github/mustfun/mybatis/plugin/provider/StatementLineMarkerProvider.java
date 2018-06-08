@@ -38,7 +38,8 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
   }
 
   @SuppressWarnings("unchecked")
-  @NotNull @Override
+  @NotNull
+  @Override
   public Optional<PsiMethod> apply(@NotNull XmlTag from) {
     DomElement domElement = DomUtil.getDomElement(from);
     return null == domElement ? Optional.<PsiMethod>absent() : JavaUtils.findMethod(from.getProject(), (IdDomElement)domElement);
