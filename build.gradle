@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.3.2'
+}
+
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'java'
+
+group 'com.github.mustfun'
+version '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+    compile 'org.jetbrains:annotations:13.0'
+    compile 'org.jetbrains.intellij:plugin-repository-rest-client:0.4.28'
+    compile 'org.jetbrains.intellij.plugins:structure-base:3.24'
+    compile 'org.jetbrains.intellij.plugins:structure-intellij:3.24'
+    compile 'de.undercouch:gradle-download-task:3.4.2'
+
+    testCompile gradleTestKit()
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
+        exclude module: 'groovy-all'
+    }
+    testCompile 'junit:junit:4.12'
+}
+
+intellij {
+    version = 'IU-2018.1'
+    plugins = ['coverage','Spring','DatabaseTools']
+    pluginName = 'mybatis-plugin-free'
+}
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}

@@ -1,0 +1,86 @@
+<idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
+    <id>com.github.mustfun.plugin.mybatis</id>
+    <name>MyBatis plugin</name>
+    <version>2.01</version>
+    <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
+
+    <description><![CDATA[
+          Plugin for mybatis <br/>
+          Feel free to feedback
+      ]]></description>
+
+    <change-notes><![CDATA[
+      <h4>2.01</h4>
+      <ul>
+          <li>Improvement for intellij 13</li>
+      </ul>
+      <h4>1.56</h4>
+      <ul>
+          <li>Support correct result type for select statement in mapper xml</li>
+          <li>Support correct unresolved attribute value of mapper xml</li>
+          <li>Highlight conflicting element of mapper xml as errors</li>
+          <li>Support refactor for id based tag in mapper xml</li>
+          <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
+          <li>Support find usage of mapper interface and mapper xml element</li>
+          <li>Support generating mapper of xml</li>
+          <li>Support property completion for result and id of resultMap、collection、association</li>
+          <li>Support parameter completion[ #{param} ] while editing sql(@Param based)</li>
+          <li>Support resultMap completion for collection and association of resultMap</li>
+          <li>Auto register mapper as spring bean(Optional)</li>
+          <li>Change reference strategy to support rename</li>
+          <li>Brace completion while editing sql</li>
+          <li>Support surround with CDATA section for sql</li>
+          <li>Support resultType</li>
+          <li>Parameter map support</li>
+          <li>Parameter type support</li>
+          <li>Alias support</li>
+      </ul>
+      <h4>1.46</h4>
+      <ul>
+          <li>Rewrite</li>
+          <li>Change the keystroke for generate @Param and new statement with Alt + Enter(Windows) | Option + Enter(Mac)</li>
+      </ul>
+      ]]>
+    </change-notes>
+
+    <idea-version since-build="132.947"/>
+    <depends optional="true">com.intellij.database</depends>
+    <depends optional="true">com.intellij.spring</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.MapperDescription"/>
+        <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.ConfigurationDescription"/>
+        <definitionsSearch implementation="com.github.mustfun.mybatis.plugin.definitionsearch.MapperDefinitionSearch"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.JavaService"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.AnnotationService"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.EditorService"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.alias.AliasFacade"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.locator.MapperLocator"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
+        <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
+        <applicationService serviceInterface="com.github.mustfun.mybatis.plugin.setting.MybatisSetting" serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
+        <completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.TestParamContributor"/>
+        <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
+        <fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
+        <typedHandler implementation="com.github.mustfun.mybatis.plugin.action.MybatisTypedHandler" id="mybatis" order="first"/>
+        <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
+        <refactoring.elementListenerProvider implementation="com.github.mustfun.mybatis.plugin.refactoring.MapperRefactoringProvider"/>
+        <localInspection language="JAVA" shortName="MybatisMapperMethodInspection" displayName="Mapper method inspection"
+                         groupName="Mybatis" enabledByDefault="true" level="ERROR"
+                         implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperMethodInspection"/>
+        <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Mapper xml inspection"
+                         groupName="Mybatis"
+                         implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperXmlInspection"/>
+        <intentionAction>
+            <className>com.github.mustfun.mybatis.plugin.intention.GenerateParamAnnotationIntention</className>
+        </intentionAction>
+        <intentionAction>
+            <className>com.github.mustfun.mybatis.plugin.intention.GenerateStatementIntention</className>
+        </intentionAction>
+        <intentionAction order="first">
+            <className>com.github.mustfun.mybatis.plugin.intention.GenerateMapperIntention</className>
+        </intentionAction>
+    </extensions>
+</idea-plugin>

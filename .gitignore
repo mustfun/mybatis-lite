@@ -1,0 +1,16 @@
+target/
+*/target/
+*/*.iml
+.settings
+.classpath
+.project
+log/
+*/log/
+pom.xml.releaseBackup
+output
+*tmp
+*.iml
+*.DS_Store
+.idea
+.mvn
+git
