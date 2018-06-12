@@ -17,6 +17,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.apache.xmlbeans.impl.xb.ltgfmt.Code;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,44 +55,54 @@ public class LombokIntentionAction implements IntentionAction {
         if (element==null){
             return false;
         }
-        //目前这种方式就是最优解--我看了IDEA原生实现，只能在class上面实现shortcut
-        if (element.getParent() instanceof PsiModifierList) {
+        if (element.getParent() instanceof PsiJavaFile){
+            return analyseClassHasSetterAndGetter(element.getNextSibling());
+        }
+
+        //直接在类上面的情况
+        if (element.getParent() instanceof PsiClass){
+            element = element.getNextSibling();
+        }else{
+            element = element.getParent();
+        }
+        //目前这种方式就是最优解--我看了IDEA原生实现，只能在class上面实现shortcut  ==== ，在注解周围的情况
+        if (element instanceof PsiModifierList) {
             PsiElement findElement = element.getParent();
-            if (findElement.getNextSibling()==null){
+            if (findElement==null){
                 return false;
             }
-
-            if (findElement.getNextSibling().getParent() instanceof PsiClass){
-                PsiClass clazz = (PsiClass) findElement.getNextSibling().getParent();
-                if (JavaUtils.isAnnotationPresent(clazz, Annotation.GETTER)
-                        &&JavaUtils.isAnnotationPresent(clazz, Annotation.SETTER)){
-                    return false;
-                }
-                return true;
-            }
+            return analyseClassHasSetterAndGetter(findElement);
         }
+
         return false;
 
 
 
     }
 
+    @NotNull
+    private Boolean analyseClassHasSetterAndGetter(PsiElement findElement) {
+        if (findElement instanceof PsiClass){
+            PsiClass clazz = (PsiClass) findElement;
+            if (JavaUtils.isAnnotationPresent(clazz, Annotation.GETTER)
+                    &&JavaUtils.isAnnotationPresent(clazz, Annotation.SETTER)){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
+        if (element.getParent() instanceof PsiClass||element.getNextSibling() instanceof PsiClass){
+            element = element.getNextSibling();
+        }
         PsiModifierList list = (PsiModifierList) element.getParent();
         if (list!=null){
-            PsiElement[] children = list.getChildren();
-            PsiWhiteSpace parent = null;
-            for (PsiElement child : children) {
-                if (child instanceof PsiWhiteSpace){
-                    parent = (PsiWhiteSpace)child;
-                }
-            }
             PsiClass clazz = (PsiClass) list.getNextSibling().getParent();
-            if (parent == null) {
-                return;
-            }
+
             boolean hasGetter = JavaUtils.isAnnotationPresent(clazz, Annotation.GETTER);
             boolean hasSetter = JavaUtils.isAnnotationPresent(clazz, Annotation.SETTER);
 
@@ -99,12 +110,12 @@ public class LombokIntentionAction implements IntentionAction {
 
 
             if (!hasGetter){
-                JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.GETTER.getQualifiedName());
+                JavaService.getInstance(list.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.GETTER.getQualifiedName());
                 PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), clazz);
                 list.addBefore(psiGetterAnnotation,list.getLastChild());
             }
             if (!hasSetter){
-                JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.SETTER.getQualifiedName());
+                JavaService.getInstance(list.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.SETTER.getQualifiedName());
                 PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), clazz);
                 list.addBefore(psiGetterAnnotation,list.getLastChild());
             }
