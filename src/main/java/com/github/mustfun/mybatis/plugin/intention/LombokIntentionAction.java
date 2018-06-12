@@ -72,21 +72,26 @@ public class LombokIntentionAction implements IntentionAction {
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-        PsiClass parent = (PsiClass) element.getParent().getNextSibling().getParent();
-        if (parent!=null){
-            PsiModifierList modifierList = parent.getModifierList();
-            boolean b = JavaUtils.isAnnotationPresent(parent, Annotation.GETTER)&&JavaUtils.isAnnotationPresent(parent, Annotation.SETTER) || null == modifierList;
-            if (b) {
+        PsiModifierList list = (PsiModifierList) element.getParent();
+        if (list!=null){
+            PsiElement[] children = list.getChildren();
+            PsiWhiteSpace parent = null;
+            for (PsiElement child : children) {
+                if (child instanceof PsiWhiteSpace){
+                    parent = (PsiWhiteSpace)child;
+                }
+            }
+            if (parent == null) {
                 return;
             }
-            JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) parent.getContainingFile(), "Setter");
-            JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) parent.getContainingFile(), "Getter");
+            JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) parent.getContainingFile(), Annotation.GETTER.getQualifiedName());
+            JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) parent.getContainingFile(), Annotation.SETTER.getQualifiedName());
 
             PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-            PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), modifierList);
-            PsiAnnotation psiSetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), modifierList);
-            modifierList.add(psiGetterAnnotation);
-            modifierList.add(psiSetterAnnotation);
+            PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), parent);
+            PsiAnnotation psiSetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), parent);
+            parent.add(psiGetterAnnotation);
+            parent.add(psiSetterAnnotation);
             JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation.getParent());
         }
     }
