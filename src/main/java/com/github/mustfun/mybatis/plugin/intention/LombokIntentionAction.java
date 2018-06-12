@@ -96,33 +96,37 @@ public class LombokIntentionAction implements IntentionAction {
     @Override
     public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-        if (element.getParent() instanceof PsiClass||element.getNextSibling() instanceof PsiClass){
+        if (element.getParent() instanceof PsiClass){
+            element = element.getParent();
+        }else if(element.getNextSibling() instanceof PsiClass){
             element = element.getNextSibling();
+        }else if (element.getParent().getParent() instanceof PsiClass){
+            element = element.getParent().getParent();
+        }else{
+            return ;
         }
-        PsiModifierList list = (PsiModifierList) element.getParent();
-        if (list!=null){
-            PsiClass clazz = (PsiClass) list.getNextSibling().getParent();
 
-            boolean hasGetter = JavaUtils.isAnnotationPresent(clazz, Annotation.GETTER);
-            boolean hasSetter = JavaUtils.isAnnotationPresent(clazz, Annotation.SETTER);
+        PsiClass clazz = (PsiClass) element;
 
-            PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        boolean hasGetter = JavaUtils.isAnnotationPresent(clazz, Annotation.GETTER);
+        boolean hasSetter = JavaUtils.isAnnotationPresent(clazz, Annotation.SETTER);
 
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
 
-            if (!hasGetter){
-                JavaService.getInstance(list.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.GETTER.getQualifiedName());
-                PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), clazz);
-                list.addBefore(psiGetterAnnotation,list.getLastChild());
-            }
-            if (!hasSetter){
-                JavaService.getInstance(list.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.SETTER.getQualifiedName());
-                PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), clazz);
-                list.addBefore(psiGetterAnnotation,list.getLastChild());
-            }
-            //将全限定名转换为非全限定名
-            //JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
-            CodeStyleManager.getInstance(project).reformat(clazz);
+        if (!hasGetter){
+            JavaService.getInstance(clazz.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.GETTER.getQualifiedName());
+            PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), clazz);
+            // find near class
+            clazz.addBefore(psiGetterAnnotation,JavaUtils.findNealModifierElement(clazz.getFirstChild()).getFirstChild());
         }
+        if (!hasSetter){
+            JavaService.getInstance(clazz.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.SETTER.getQualifiedName());
+            PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), clazz);
+            clazz.addBefore(psiGetterAnnotation,JavaUtils.findNealModifierElement(clazz.getFirstChild()).getFirstChild());
+        }
+        //将全限定名转换为非全限定名
+        //JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
+        CodeStyleManager.getInstance(project).reformat(clazz);
     }
 
     PsiElement afterAddHandler(PsiElement element, PsiElement anchor) {
