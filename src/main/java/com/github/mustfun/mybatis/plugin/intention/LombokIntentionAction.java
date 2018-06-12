@@ -9,10 +9,12 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import org.apache.xmlbeans.impl.xb.ltgfmt.Code;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
@@ -99,17 +101,24 @@ public class LombokIntentionAction implements IntentionAction {
             if (!hasGetter){
                 JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.GETTER.getQualifiedName());
                 PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), clazz);
-                list.addBefore(psiGetterAnnotation,children[children.length-1]);
+                list.addBefore(psiGetterAnnotation,list.getLastChild());
             }
             if (!hasSetter){
                 JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.SETTER.getQualifiedName());
                 PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), clazz);
-                list.addBefore(psiGetterAnnotation,children[children.length-1]);
+                list.addBefore(psiGetterAnnotation,list.getLastChild());
             }
             //将全限定名转换为非全限定名
             //JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
-
+            CodeStyleManager.getInstance(project).reformat(clazz);
         }
+    }
+
+    PsiElement afterAddHandler(PsiElement element, PsiElement anchor) {
+        final PsiElement newLineNode =
+                PsiParserFacade.SERVICE.getInstance(element.getProject()).createWhiteSpaceFromText("\n\n");
+        anchor.getParent().addBefore(newLineNode, anchor);
+        return anchor;
     }
 
 
