@@ -1,26 +1,17 @@
 package com.github.mustfun.mybatis.plugin.intention;
 
 import com.github.mustfun.mybatis.plugin.annotation.Annotation;
-import com.github.mustfun.mybatis.plugin.service.AnnotationService;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
-import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import org.apache.xmlbeans.impl.xb.ltgfmt.Code;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author dengzhiyuan
@@ -118,14 +109,15 @@ public class LombokIntentionAction implements IntentionAction {
             PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), clazz);
             // find near class
             clazz.addBefore(psiGetterAnnotation,JavaUtils.findNealModifierElement(clazz.getFirstChild()).getFirstChild());
+            JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
         }
         if (!hasSetter){
             JavaService.getInstance(clazz.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), Annotation.SETTER.getQualifiedName());
             PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), clazz);
             clazz.addBefore(psiGetterAnnotation,JavaUtils.findNealModifierElement(clazz.getFirstChild()).getFirstChild());
+            JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
         }
         //将全限定名转换为非全限定名
-        //JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
         CodeStyleManager.getInstance(project).reformat(clazz);
     }
 
