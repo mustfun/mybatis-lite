@@ -86,4 +86,15 @@
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateMapperIntention</className>
         </intentionAction>
     </extensions>
+    <actions>
+        <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
+               text="Mybatis Plugin" description="逆向生成Code" icon="/images/logo.png">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <action id="GenerateCodeMainUI" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeUIAction"
+                    text="Generate Code" description="生成code">
+                <add-to-group group-id="MybatisPluginActionGroup" anchor="first"/>
+            </action>
+        </group>
+
+    </actions>
 </idea-plugin>
