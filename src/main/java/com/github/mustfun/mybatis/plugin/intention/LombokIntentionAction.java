@@ -4,15 +4,20 @@ import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.service.AnnotationService;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dengzhiyuan
@@ -81,19 +86,34 @@ public class LombokIntentionAction implements IntentionAction {
                     parent = (PsiWhiteSpace)child;
                 }
             }
+            PsiClass clazz = (PsiClass) list.getNextSibling().getParent();
             if (parent == null) {
                 return;
             }
-            JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) parent.getContainingFile(), Annotation.GETTER.getQualifiedName());
-            JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) parent.getContainingFile(), Annotation.SETTER.getQualifiedName());
-
-            PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-            PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(Annotation.GETTER.toString(), parent);
-            PsiAnnotation psiSetterAnnotation = elementFactory.createAnnotationFromText(Annotation.SETTER.toString(), parent);
-            parent.add(psiGetterAnnotation);
-            parent.add(psiSetterAnnotation);
-            JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation.getParent());
+            boolean hasGetter = JavaUtils.isAnnotationPresent(clazz, Annotation.GETTER);
+            boolean hasSetter = JavaUtils.isAnnotationPresent(clazz, Annotation.SETTER);
+            List<Annotation> generateList = new ArrayList<>();
+            if (!hasGetter){
+                generateList.add(Annotation.GETTER);
+            }
+            if (!hasSetter){
+                generateList.add(Annotation.SETTER);
+            }
+            for (Annotation annotation : generateList) {
+                generateAnnotation(project, parent, clazz, annotation);
+            }
         }
+    }
+
+    private void generateAnnotation(@NotNull Project project, PsiWhiteSpace parent, PsiClass clazz,Annotation annotation) {
+        JavaService.getInstance(parent.getProject()).importClazz((PsiJavaFile) clazz.getContainingFile(), annotation.getQualifiedName());
+
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        PsiAnnotation psiGetterAnnotation = elementFactory.createAnnotationFromText(annotation.toString(), clazz);
+        clazz.addAfter(psiGetterAnnotation,parent);
+        clazz.addAfter(parent,psiGetterAnnotation);
+        //将全限定名转换为非全限定名
+        JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiGetterAnnotation);
     }
 
     @Override
