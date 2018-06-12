@@ -76,6 +76,9 @@
         <intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>
+        <intentionAction order="first">
+            <className>com.github.mustfun.mybatis.plugin.intention.LombokIntentionAction</className>
+        </intentionAction>
         <intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateStatementIntention</className>
         </intentionAction>

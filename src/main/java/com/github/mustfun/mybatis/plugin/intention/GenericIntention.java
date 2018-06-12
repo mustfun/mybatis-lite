@@ -5,6 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 
+import groovy.util.logging.Commons;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +19,8 @@ public abstract class GenericIntention implements IntentionAction{
     this.chooser = chooser;
   }
 
-  @NotNull @Override
+  @NotNull
+  @Override
   public String getFamilyName() {
     return getText();
   }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * 最终实现操作的接口
  */
 public interface IntentionChooser {
 

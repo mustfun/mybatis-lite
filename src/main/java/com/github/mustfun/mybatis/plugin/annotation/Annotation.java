@@ -37,6 +37,10 @@ public class Annotation implements Cloneable{
 
   public static final Annotation RESOURCE = new Annotation("@Resource", "javax.annotation.Resource");
 
+  public static final Annotation SETTER = new Annotation("@Setter", "lombok.Setter");
+
+  public static final Annotation GETTER = new Annotation("@Getter", "lombok.Getter");
+
   public static final Set<Annotation> STATEMENT_SYMMETRIES = ImmutableSet.of(SELECT, UPDATE, INSERT, DELETE);
 
   private final String label;
