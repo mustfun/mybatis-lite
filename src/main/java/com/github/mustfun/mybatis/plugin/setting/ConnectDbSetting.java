@@ -11,7 +11,7 @@ import javax.swing.*;
  * @date 2018/6/13
  * @since 1.0
  */
-public class ConnectDbSetting extends JDialog{
+public class ConnectDbSetting {
     private JTextField address;
     private JTextField userName;
     private JTextField password;
@@ -25,12 +25,6 @@ public class ConnectDbSetting extends JDialog{
     private JPanel listPanel;
     private JBScrollPane ScrollPaneList;
     private CheckBoxList<String> tableCheckBox;
-
-    public ConnectDbSetting(){
-        setContentPane(mainPanel);
-        setModal(false);
-        setLocationRelativeTo(null);
-    }
 
 
     public JTextField getAddress() {

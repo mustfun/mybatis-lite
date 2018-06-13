@@ -41,7 +41,28 @@ public final class UiGenerateUtil {
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
         }
-        return new DialogWrapperPanel(project, true, connectDbSetting);
+        connectDbSetting.getConnectButton().addActionListener(e -> {
+            //监听点击
+            String address = connectDbSetting.getAddress().getText();
+            String port = connectDbSetting.getPort().getText();
+            String userName = connectDbSetting.getUserName().getText();
+            String password = connectDbSetting.getPassword().getText();
+
+            Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
+
+            CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
+            tableCheckBox.addItem("address1",address,false);
+            tableCheckBox.addItem("address2",address,false);
+            tableCheckBox.addItem("address3",address,false);
+            tableCheckBox.addItem("address4",address,false);
+            tableCheckBox.addListSelectionListener(e1 -> {
+                String itemAt = tableCheckBox.getItemAt(e1.getFirstIndex());
+                Messages.showMessageDialog(itemAt, "连接数据库提示", Messages.getInformationIcon());
+            });
+
+        });
+
+        return new DialogWrapperPanel(project,true,connectDbSetting);
     }
 
     public JBPopup getCommonPopUp(){
@@ -65,24 +86,6 @@ public final class UiGenerateUtil {
                 .setCancelOnClickOutside(false)
                 .setProject(this.project)
                 .createPopup();
-        connectDbSetting.getConnectButton().addActionListener(e -> {
-            //监听点击
-            String address = connectDbSetting.getAddress().getText();
-            String port = connectDbSetting.getPort().getText();
-            String userName = connectDbSetting.getUserName().getText();
-            String password = connectDbSetting.getPassword().getText();
-
-            Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
-
-            CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
-            tableCheckBox.addItem("address",address,false);
-            tableCheckBox.addItem("address",address,false);
-            tableCheckBox.addItem("address",address,false);
-            tableCheckBox.addItem("address",address,false);
-            tableCheckBox.addListSelectionListener(e1 -> {
-
-            });
-        });
         return popup;
     }
 
