@@ -97,9 +97,11 @@
         <children>
           <scrollpane id="edfd7" class="com.intellij.ui.components.JBScrollPane" binding="ScrollPaneList">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <toolTipText value="拿到的表"/>
+            </properties>
             <border type="none"/>
             <children>
               <component id="ef623" class="com.intellij.ui.CheckBoxList" binding="tableCheckBox">

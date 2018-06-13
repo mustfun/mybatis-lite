@@ -4,16 +4,12 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.IconButton;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.CheckBoxList;
-import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author yanglin
@@ -52,8 +48,9 @@ public final class UiGenerateUtil {
                 .setRequestFocus(true)
                 .setFocusable(true)
                 .setMovable(false)
-                .setCancelOnOtherWindowOpen(false)
+                .setCancelOnOtherWindowOpen(true)
                 .setCancelOnClickOutside(false)
+                .setProject(this.project)
                 .createPopup();
         connectDbSetting.getConnectButton().addActionListener(e -> {
             //监听点击
@@ -62,11 +59,16 @@ public final class UiGenerateUtil {
             String userName = connectDbSetting.getUserName().getText();
             String password = connectDbSetting.getPassword().getText();
 
-            connectDbSetting.getTableCheckBox().addItem("address",address,false);
-            connectDbSetting.getTableCheckBox().addItem("address",address,false);
-            connectDbSetting.getTableCheckBox().addItem("address",address,false);
-            connectDbSetting.getTableCheckBox().addItem("address",address,false);
+            Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
 
+            CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
+            tableCheckBox.addItem("address",address,false);
+            tableCheckBox.addItem("address",address,false);
+            tableCheckBox.addItem("address",address,false);
+            tableCheckBox.addItem("address",address,false);
+            tableCheckBox.addListSelectionListener(e1 -> {
+
+            });
         });
         return popup;
     }
