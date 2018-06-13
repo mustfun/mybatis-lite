@@ -12,7 +12,7 @@ public interface Icons {
 
   Icon MYBATIS_LOGO = IconLoader.getIcon("/javaee/persistenceId.png");
 
-  Icon MYBATIS_LOGO_TRUE = IconLoader.getIcon("/images/logo.png");
+
 
   Icon PARAM_COMPLETION_ICON = PlatformIcons.PARAMETER_ICON;
 
@@ -21,4 +21,9 @@ public interface Icons {
   Icon STATEMENT_LINE_MARKER_ICON = IconLoader.getIcon("/images/up.png");
 
   Icon SPRING_INJECTION_ICON = IconLoader.getIcon("/images/injection.png");
+
+  Icon MYBATIS_LOGO_TRUE = IconLoader.getIcon("/images/logo.png");
+
+  Icon MYBATIS_FAVICON = IconLoader.getIcon("/images/favicon.ico");
+  Icon MYBATIS_LOGO_MINI = IconLoader.getIcon("/images/logo_16.png");
 }

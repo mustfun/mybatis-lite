@@ -88,7 +88,7 @@
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
-               text="Mybatis Plugin" description="逆向生成Code" icon="/images/logo.png">
+               text="Mybatis Plugin" description="逆向生成Code" icon="/images/logo_16.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <action id="GenerateCodeMainUI" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeUIAction"
                     text="Generate Code" description="生成code">

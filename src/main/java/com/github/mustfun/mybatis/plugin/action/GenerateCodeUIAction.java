@@ -1,8 +1,9 @@
 package com.github.mustfun.mybatis.plugin.action;
 
+import com.github.mustfun.mybatis.plugin.ui.UiGenerateUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.ui.popup.JBPopup;
 
 /**
  * @author dengzhiyuan
@@ -14,7 +15,9 @@ public class GenerateCodeUIAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Messages.showMessageDialog("Hello!", "Information", Messages.getInformationIcon());
+        UiGenerateUtil uiGenerate = UiGenerateUtil.getInstance(e.getProject());
+        JBPopup commonPopUp = uiGenerate.getCommonPopUp();
+        commonPopUp.showCenteredInCurrentWindow(e.getProject());
     }
 
 }
