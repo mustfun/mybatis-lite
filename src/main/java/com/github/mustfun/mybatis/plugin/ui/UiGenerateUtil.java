@@ -1,15 +1,21 @@
 package com.github.mustfun.mybatis.plugin.ui;
 
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.ui.popup.IconButton;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.CheckBoxList;
+import com.intellij.util.ui.JBInsets;
+import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 
 /**
  * @author yanglin
@@ -29,6 +35,13 @@ public final class UiGenerateUtil {
 
     public static UiGenerateUtil getInstance(@NotNull Project project) {
         return new UiGenerateUtil(project);
+    }
+
+    public DialogWrapperPanel getCommonDialog(){
+        if (null == connectDbSetting) {
+            this.connectDbSetting = new ConnectDbSetting();
+        }
+        return new DialogWrapperPanel(project, true, connectDbSetting);
     }
 
     public JBPopup getCommonPopUp(){
@@ -73,4 +86,17 @@ public final class UiGenerateUtil {
         return popup;
     }
 
+
+
+    @NotNull
+    private BalloonBuilder buildBalloon(JComponent component) {
+        JBInsets BORDER_INSETS = JBUI.insets(20, 20, 20, 20);
+        return JBPopupFactory.getInstance()
+                .createDialogBalloonBuilder(component, null)
+                .setHideOnClickOutside(true)
+                .setShadow(true)
+                .setBlockClicksThroughBalloon(true)
+                .setRequestFocus(true)
+                .setBorderInsets(BORDER_INSETS);
+    }
 }

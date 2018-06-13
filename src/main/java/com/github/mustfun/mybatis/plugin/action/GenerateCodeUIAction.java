@@ -1,10 +1,10 @@
 package com.github.mustfun.mybatis.plugin.action;
 
-import com.github.mustfun.mybatis.plugin.ui.UiGenerateUtil;
+import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopup;
 
 /**
  * @author dengzhiyuan
@@ -17,9 +17,10 @@ public class GenerateCodeUIAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
-        UiGenerateUtil uiGenerate = UiGenerateUtil.getInstance(project);
-        JBPopup commonPopUp = uiGenerate.getCommonPopUp();
-        commonPopUp.showCenteredInCurrentWindow(project);
+        ConnectDbSetting connectDbSetting = new ConnectDbSetting();
+
+        DialogWrapperPanel dialogWrapperPanel = new DialogWrapperPanel(project,true,connectDbSetting);
+        dialogWrapperPanel.show();
     }
 
 }
