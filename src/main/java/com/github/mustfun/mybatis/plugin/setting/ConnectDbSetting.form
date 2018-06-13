@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting">
-  <grid id="27dc6" layout-manager="GridLayoutManager" row-count="2" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="870" height="400"/>
+      <xy x="20" y="20" width="880" height="400"/>
     </constraints>
     <properties/>
-    <border type="none"/>
+    <border type="none">
+      <font/>
+      <color color="-5723992"/>
+    </border>
     <children>
-      <component id="7a3bc" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+      <component id="7a3bc" class="javax.swing.JTextField" binding="address">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -16,7 +19,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="77a45" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+      <component id="77a45" class="javax.swing.JTextField" binding="userName">
         <constraints>
           <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -24,7 +27,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="6bb74" class="javax.swing.JLabel">
+      <component id="6bb74" class="javax.swing.JLabel" binding="addressText">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -32,7 +35,7 @@
           <text value="地址"/>
         </properties>
       </component>
-      <component id="84af7" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+      <component id="84af7" class="javax.swing.JTextField" binding="password">
         <constraints>
           <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -40,7 +43,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="7f308" class="javax.swing.JTextField" binding="a3306TextField" default-binding="true">
+      <component id="7f308" class="javax.swing.JTextField" binding="port">
         <constraints>
           <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
@@ -50,7 +53,7 @@
           <text value="3306"/>
         </properties>
       </component>
-      <component id="ff4b" class="javax.swing.JLabel">
+      <component id="ff4b" class="javax.swing.JLabel" binding="portText">
         <constraints>
           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -58,7 +61,7 @@
           <text value="端口"/>
         </properties>
       </component>
-      <component id="42d14" class="javax.swing.JLabel">
+      <component id="42d14" class="javax.swing.JLabel" binding="userNameText">
         <constraints>
           <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -66,7 +69,7 @@
           <text value="用户名"/>
         </properties>
       </component>
-      <component id="34fb7" class="javax.swing.JLabel">
+      <component id="34fb7" class="javax.swing.JLabel" binding="passwordText">
         <constraints>
           <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -90,7 +93,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="726fb" class="javax.swing.JList" binding="list1" default-binding="true">
+          <component id="726fb" class="javax.swing.JList" binding="tableList">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
@@ -109,14 +112,6 @@
           </vspacer>
         </children>
       </grid>
-      <component id="63f88" class="javax.swing.JEditorPane" binding="editorPane1" default-binding="true">
-        <constraints>
-          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="50"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
     </children>
   </grid>
 </form>
