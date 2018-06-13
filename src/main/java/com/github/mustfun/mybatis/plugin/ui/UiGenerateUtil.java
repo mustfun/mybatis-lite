@@ -18,6 +18,10 @@ import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.util.regex.Pattern.*;
 
 /**
  * @author yanglin
@@ -47,12 +51,16 @@ public final class UiGenerateUtil {
             //监听点击
             String address = connectDbSetting.getAddress().getText();
             String port = connectDbSetting.getPort().getText();
+            String dbName = connectDbSetting.getDbName().getText();
             String userName = connectDbSetting.getUserName().getText();
             String password = connectDbSetting.getPassword().getText();
             DbSourcePo dbSourcePo = new DbSourcePo();
             dbSourcePo.setDbAddress(address);
-            //dbSourcePo.setDbName();
-
+            dbSourcePo.setDbName(dbName);
+            dbSourcePo.setPort(Integer.parseInt(port));
+            dbSourcePo.setUserName(userName);
+            dbSourcePo.setPassword(password);
+            //连接数据库
             DbService.getInstance(project).getConnection(dbSourcePo);
             Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
 

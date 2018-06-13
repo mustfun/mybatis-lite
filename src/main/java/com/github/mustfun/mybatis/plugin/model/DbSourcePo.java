@@ -15,6 +15,7 @@ import java.util.Date;
 @Getter
 public class DbSourcePo {
     private Integer id;
+    private Integer port;
     private String userName;
     private String dbAddress;
     private String password;
