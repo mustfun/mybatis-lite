@@ -1,5 +1,7 @@
 package com.github.mustfun.mybatis.plugin.ui;
 
+import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
+import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.intellij.icons.AllIcons;
@@ -47,7 +49,11 @@ public final class UiGenerateUtil {
             String port = connectDbSetting.getPort().getText();
             String userName = connectDbSetting.getUserName().getText();
             String password = connectDbSetting.getPassword().getText();
+            DbSourcePo dbSourcePo = new DbSourcePo();
+            dbSourcePo.setDbAddress(address);
+            //dbSourcePo.setDbName();
 
+            DbService.getInstance(project).getConnection(dbSourcePo);
             Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
 
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();

@@ -32,6 +32,9 @@ dependencies {
     compile 'org.jetbrains.intellij.plugins:structure-base:3.24'
     compile 'org.jetbrains.intellij.plugins:structure-intellij:3.24'
     compile 'de.undercouch:gradle-download-task:3.4.2'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.39'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+
 
     testCompile gradleTestKit()
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
