@@ -73,10 +73,11 @@ public final class UiGenerateUtil {
             for (LocalTable table : tables) {
                 tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
             }
-            tableCheckBox.addListSelectionListener(e1 -> {
+            /*tableCheckBox.addListSelectionListener(e1 -> {
                 String itemAt = tableCheckBox.getItemAt(e1.getFirstIndex());
                 Messages.showMessageDialog(itemAt, "连接数据库提示", Messages.getInformationIcon());
-            });
+            });*/
+
 
         });
 

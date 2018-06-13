@@ -33,6 +33,8 @@ public class ConnectDbSetting {
     private CheckBoxList<String> tableCheckBox;
     private JTextField dbName;
     private JLabel dbNamePanel;
+    private JBScrollPane templatePanel;
+    private CheckBoxList templateCheckbox;
 
     public ConnectDbSetting(){
         port.addKeyListener(new KeyAdapter(){
