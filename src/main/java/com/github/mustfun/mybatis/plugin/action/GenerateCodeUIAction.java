@@ -3,6 +3,8 @@ package com.github.mustfun.mybatis.plugin.action;
 import com.github.mustfun.mybatis.plugin.ui.UiGenerateUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
 
 /**
@@ -15,9 +17,10 @@ public class GenerateCodeUIAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        UiGenerateUtil uiGenerate = UiGenerateUtil.getInstance(e.getProject());
+        Project project = e.getProject();
+        UiGenerateUtil uiGenerate = UiGenerateUtil.getInstance(project);
         JBPopup commonPopUp = uiGenerate.getCommonPopUp();
-        commonPopUp.showCenteredInCurrentWindow(e.getProject());
+        commonPopUp.showCenteredInCurrentWindow(project);
     }
 
 }

@@ -29,15 +29,18 @@ public final class UiGenerateUtil {
     }
 
     public JBPopup getCommonPopUp(){
-        JPopupMenu jPopupMenu = new JPopupMenu();
-        JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(jPopupMenu, null)
+        JPanel jPanel = new JPanel(new BorderLayout());
+        jPanel.setSize(800,400);
+        JTextField jTextField = new JTextField("hello");
+        JButton jButton = new JButton("连接");
+        jPanel.add(jTextField);
+        jPanel.add(jButton);
+        JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(jPanel, null)
                 .setRequestFocus(true)
                 .setFocusable(true)
                 .setResizable(false)
                 .setMovable(false)
-                .setModalContext(false)
                 .setShowShadow(true)
-                .setShowBorder(false)
                 .setCancelKeyEnabled(true)
                 .setCancelOnClickOutside(true)
                 .setCancelOnOtherWindowOpen(true)
