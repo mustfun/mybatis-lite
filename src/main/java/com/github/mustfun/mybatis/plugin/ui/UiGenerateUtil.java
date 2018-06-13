@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.ui;
 
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
+import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
@@ -18,10 +19,8 @@ import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.*;
+import java.sql.Connection;
+import java.util.List;
 
 /**
  * @author yanglin
@@ -61,14 +60,19 @@ public final class UiGenerateUtil {
             dbSourcePo.setUserName(userName);
             dbSourcePo.setPassword(password);
             //连接数据库
-            DbService.getInstance(project).getConnection(dbSourcePo);
-            Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
-
+            DbService dbService = DbService.getInstance(project);
+            Connection connection = dbService.getConnection(dbSourcePo);
+            if (connection == null) {
+                Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
+                return;
+            }else {
+                //Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
+            }
+            List<LocalTable> tables = dbService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
-            tableCheckBox.addItem("address1",address,false);
-            tableCheckBox.addItem("address2",address,false);
-            tableCheckBox.addItem("address3",address,false);
-            tableCheckBox.addItem("address4",address,false);
+            for (LocalTable table : tables) {
+                tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
+            }
             tableCheckBox.addListSelectionListener(e1 -> {
                 String itemAt = tableCheckBox.getItemAt(e1.getFirstIndex());
                 Messages.showMessageDialog(itemAt, "连接数据库提示", Messages.getInformationIcon());

@@ -19,7 +19,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="localhost"/>
+        </properties>
       </component>
       <component id="77a45" class="javax.swing.JTextField" binding="userName">
         <constraints>
@@ -130,7 +132,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value="biwann"/>
+        </properties>
       </component>
     </children>
   </grid>
