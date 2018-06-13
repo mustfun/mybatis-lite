@@ -1,5 +1,8 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
+import com.intellij.ui.CheckBoxList;
+import com.intellij.ui.components.JBScrollPane;
+
 import javax.swing.*;
 
 /**
@@ -14,12 +17,15 @@ public class ConnectDbSetting {
     private JTextField password;
     private JTextField port;
     private JButton connectButton;
-    private JList<String> tableList;
     private JPanel mainPanel;
     private JLabel addressText;
     private JLabel portText;
     private JLabel userNameText;
     private JLabel passwordText;
+    private JPanel listPanel;
+    private JBScrollPane ScrollPaneList;
+    private CheckBoxList<String> tableCheckBox;
+
 
     public JTextField getAddress() {
         return address;
@@ -61,15 +67,6 @@ public class ConnectDbSetting {
         this.connectButton = connectButton;
     }
 
-
-    public JList<String> getTableList() {
-        return tableList;
-    }
-
-    public void setTableList(JList<String> tableList) {
-        this.tableList = tableList;
-    }
-
     public JPanel getMainPanel() {
         return mainPanel;
     }
@@ -108,5 +105,29 @@ public class ConnectDbSetting {
 
     public void setPasswordText(JLabel passwordText) {
         this.passwordText = passwordText;
+    }
+
+    public JPanel getListPanel() {
+        return listPanel;
+    }
+
+    public void setListPanel(JPanel listPanel) {
+        this.listPanel = listPanel;
+    }
+
+    public JBScrollPane getScrollPaneList() {
+        return ScrollPaneList;
+    }
+
+    public void setScrollPaneList(JBScrollPane scrollPaneList) {
+        ScrollPaneList = scrollPaneList;
+    }
+
+    public CheckBoxList<String> getTableCheckBox() {
+        return tableCheckBox;
+    }
+
+    public void setTableCheckBox(CheckBoxList<String> tableCheckBox) {
+        this.tableCheckBox = tableCheckBox;
     }
 }
