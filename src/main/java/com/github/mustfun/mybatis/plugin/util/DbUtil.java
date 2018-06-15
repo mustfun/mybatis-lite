@@ -1,9 +1,12 @@
 package com.github.mustfun.mybatis.plugin.util;
 
+import com.intellij.openapi.application.PathManager;
+import com.intellij.util.PathUtil;
+
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -58,10 +61,52 @@ public class DbUtil {
         }
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:db/generate_web.db");
-        } catch (SQLException e) {
+            //String realPath = PathManager.getPluginsPath();
+            // File path = PluginManager.getPlugin(PluginId.getId("mybatis-plugin-free")).getPath();
+            //查看是否存在db文件，不存在就创建，存在就直接连
+            String tempPath = PathManager.getPluginsPath()+"/temp/db/generate_web.db";
+            File tempPathFile = new File(tempPath);
+            if (!tempPathFile.exists()){
+                InputStream s = DbUtil.this.getClass().getResourceAsStream("/db/generate_web.db");
+                tempPath = createCustomFontUrl(s);
+            }
+            conn = DriverManager.getConnection("jdbc:sqlite:"+tempPath);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return conn;
+    }
+
+    /**
+     * 将里面的数据库文件转移出来,非常巧妙,非常非常,终于解决难点OK
+     * @param stream
+     * @return
+     */
+    protected String createCustomFontUrl(InputStream stream) {
+        String tempDirPath = PathManager.getPluginsPath()+"/temp";
+        try {
+            File tempFile = new File(tempDirPath + "/db");
+            if (!tempFile.exists()){
+                tempFile.mkdirs();
+            }
+            File targetFile = new File(tempFile,"generate_web.db");
+            System.out.println("creating temp db File file: " + targetFile.getAbsolutePath());
+
+            FileOutputStream fileOutputStream = new FileOutputStream(targetFile);
+            byte[] buffer = new byte[32768];
+            int length;
+            while ((length = stream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, length);
+            }
+            fileOutputStream.close();
+            stream.close();
+
+            return targetFile.getPath();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
