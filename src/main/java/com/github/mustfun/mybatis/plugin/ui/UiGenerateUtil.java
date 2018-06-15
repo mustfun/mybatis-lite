@@ -6,7 +6,9 @@ import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
+import com.github.mustfun.mybatis.plugin.ui.custom.TemplateCodeEditPanel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
@@ -21,6 +23,8 @@ import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.Connection;
 import java.util.List;
 
@@ -81,6 +85,17 @@ public final class UiGenerateUtil {
             CheckBoxList templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
                 templateCheckbox.addItem(template.getId(),template.getTepName(),true);
+                templateCheckbox.addFocusListener(new FocusListener() {
+                    @Override
+                    public void focusGained(FocusEvent e) {
+                        new TemplateCodeEditPanel(project,true,new TemplateEdit()).show();
+                    }
+
+                    @Override
+                    public void focusLost(FocusEvent e) {
+
+                    }
+                });
             }
         });
 
