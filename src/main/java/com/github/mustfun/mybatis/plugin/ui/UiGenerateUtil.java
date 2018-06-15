@@ -2,6 +2,7 @@ package com.github.mustfun.mybatis.plugin.ui;
 
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
+import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
@@ -72,15 +73,15 @@ public final class UiGenerateUtil {
             List<LocalTable> tables = dbService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
-                tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
+                tableCheckBox.addItem(table.getTableName(),table.getTableName(),true);
             }
-            /*tableCheckBox.addListSelectionListener(e1 -> {
-                String itemAt = tableCheckBox.getItemAt(e1.getFirstIndex());
-                Messages.showMessageDialog(itemAt, "连接数据库提示", Messages.getInformationIcon());
-            });*/
             Connection sqlLiteConnection = dbService.getSqlLiteConnection(dbSourcePo);
-            SqlLiteService.getInstance(sqlLiteConnection).queryTemplate(5);
-
+            SqlLiteService sqlLiteService =  SqlLiteService.getInstance(sqlLiteConnection);
+            List<Template> templates = sqlLiteService.queryTemplateList();
+            CheckBoxList templateCheckbox = connectDbSetting.getTemplateCheckbox();
+            for (Template template : templates) {
+                templateCheckbox.addItem(template.getId(),template.getTepName(),true);
+            }
         });
 
         return new DialogWrapperPanel(project,true,connectDbSetting);

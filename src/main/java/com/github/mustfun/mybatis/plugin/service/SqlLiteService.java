@@ -1,9 +1,13 @@
 package com.github.mustfun.mybatis.plugin.service;
 
+import com.github.mustfun.mybatis.plugin.model.Template;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dengzhiyuan
@@ -29,7 +33,7 @@ public class SqlLiteService {
     }
 
 
-    public void queryTemplate(Integer id){
+    public void queryTemplateById(Integer id){
         try {
             String sql = "select\n" +
                     "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
@@ -53,4 +57,27 @@ public class SqlLiteService {
     }
 
 
+    public List<Template> queryTemplateList() {
+        try {
+            String sql = "select\n" +
+                    "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
+                    "        from template";
+            ResultSet rs = statement.executeQuery(sql);
+            List<Template> list = new ArrayList<>();
+            while (rs.next()) {
+                Template template = new Template();
+                template.setId(rs.getInt("id"));
+                template.setTepName(rs.getString("tep_name"));
+                template.setTepDesc(rs.getString("tep_desc"));
+                template.setTepContent(rs.getString("tep_content"));
+                template.setDbType(rs.getInt("db_type"));
+                template.setVmType(rs.getInt("vm_type"));
+                list.add(template);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
