@@ -3,6 +3,7 @@ package com.github.mustfun.mybatis.plugin.ui;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.service.DbService;
+import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.intellij.icons.AllIcons;
@@ -77,7 +78,8 @@ public final class UiGenerateUtil {
                 String itemAt = tableCheckBox.getItemAt(e1.getFirstIndex());
                 Messages.showMessageDialog(itemAt, "连接数据库提示", Messages.getInformationIcon());
             });*/
-
+            Connection sqlLiteConnection = dbService.getSqlLiteConnection(dbSourcePo);
+            SqlLiteService.getInstance(sqlLiteConnection).queryTemplate(5);
 
         });
 

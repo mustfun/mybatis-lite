@@ -3,6 +3,7 @@ package com.github.mustfun.mybatis.plugin.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -39,6 +40,25 @@ public class DbUtil {
         props.setProperty("useInformationSchema", "true");
         try {
             conn = DriverManager.getConnection(url, props);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Connection getSqlliteConnection(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:db/generate_web.db");
         } catch (SQLException e) {
             e.printStackTrace();
         }

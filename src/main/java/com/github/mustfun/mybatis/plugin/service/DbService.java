@@ -32,6 +32,11 @@ public class DbService {
         return dbUtil.getConnection();
     }
 
+    public  Connection getSqlLiteConnection(DbSourcePo configPo) {
+        DbUtil dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+        return dbUtil.getSqlliteConnection();
+    }
+
     public List<LocalTable> getTables(Connection connection) {
         DatabaseMetaData dbMetData;
         List<LocalTable> localTables = new ArrayList<>();
