@@ -89,7 +89,7 @@ public final class UiGenerateUtil {
             for (Template template : templates) {
                 templateCheckbox.addItem(template.getId(),template.getTepName(),true);
             }
-            templateCheckbox.addMouseListener(new CheckMouseListener(project,1));
+            templateCheckbox.addMouseListener(new CheckMouseListener(project,1,templates.get(2)));
         });
 
         return new DialogWrapperPanel(project,true,connectDbSetting);

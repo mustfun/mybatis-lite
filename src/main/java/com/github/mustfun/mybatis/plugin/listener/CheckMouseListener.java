@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.listener;
 
+import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateCodeEditPanel;
 import com.intellij.openapi.project.Project;
@@ -19,10 +20,12 @@ public class CheckMouseListener implements MouseListener {
 
     private Integer checkBoxId;
     private Project project;
+    private Template template;
 
-    public CheckMouseListener(Project project,Integer checkBoxId){
+    public CheckMouseListener(Project project,Integer checkBoxId,Template template){
         this.checkBoxId = checkBoxId;
         this.project = project;
+        this.template = template;
     }
 
     @Override
@@ -30,7 +33,10 @@ public class CheckMouseListener implements MouseListener {
         int clickTimes = e.getClickCount();
         CheckBoxList list = (CheckBoxList) e.getSource();
         if (clickTimes == 2) {
-            new TemplateCodeEditPanel(project, true, new TemplateEdit()).show();
+            TemplateEdit templateEdit = new TemplateEdit();
+            templateEdit.getCodeArea().setText(template.getTepContent());
+            TemplateCodeEditPanel templateCodeEditPanel = new TemplateCodeEditPanel(project, true, templateEdit);
+            templateCodeEditPanel.show();
         }
     }
 

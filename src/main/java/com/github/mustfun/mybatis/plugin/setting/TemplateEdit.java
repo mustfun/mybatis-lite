@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
+import com.intellij.ui.components.JBScrollPane;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,5 @@ import javax.swing.*;
 public class TemplateEdit {
     private JPanel mainPanel;
     private JTextArea codeArea;
+    private JBScrollPane scrollCodeAreaPane;
 }
