@@ -25,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.util.List;
 
@@ -85,14 +87,32 @@ public final class UiGenerateUtil {
             CheckBoxList templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
                 templateCheckbox.addItem(template.getId(),template.getTepName(),true);
-                templateCheckbox.addFocusListener(new FocusListener() {
+                templateCheckbox.addMouseListener(new MouseListener() {
                     @Override
-                    public void focusGained(FocusEvent e) {
-                        new TemplateCodeEditPanel(project,true,new TemplateEdit()).show();
+                    public void mouseClicked(MouseEvent e) {
+                        int clickTimes = e.getClickCount();
+                        if (clickTimes == 2) {
+                            new TemplateCodeEditPanel(project, true, new TemplateEdit()).show();
+                        }
                     }
 
                     @Override
-                    public void focusLost(FocusEvent e) {
+                    public void mousePressed(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
 
                     }
                 });
