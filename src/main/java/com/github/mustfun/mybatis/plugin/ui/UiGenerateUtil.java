@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.ui;
 
+import com.github.mustfun.mybatis.plugin.listener.CheckMouseListener;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.model.Template;
@@ -87,36 +88,8 @@ public final class UiGenerateUtil {
             CheckBoxList templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
                 templateCheckbox.addItem(template.getId(),template.getTepName(),true);
-                templateCheckbox.addMouseListener(new MouseListener() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        int clickTimes = e.getClickCount();
-                        if (clickTimes == 2) {
-                            new TemplateCodeEditPanel(project, true, new TemplateEdit()).show();
-                        }
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-
-                    }
-                });
             }
+            templateCheckbox.addMouseListener(new CheckMouseListener(project,1));
         });
 
         return new DialogWrapperPanel(project,true,connectDbSetting);
