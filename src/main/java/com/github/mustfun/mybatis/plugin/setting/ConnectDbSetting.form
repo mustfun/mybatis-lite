@@ -149,7 +149,7 @@
           </component>
         </children>
       </scrollpane>
-      <grid id="840b4" binding="configPanel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="840b4" binding="configPanel" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="1" column="4" row-span="1" col-span="6" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -157,7 +157,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="39775" class="com.intellij.ui.components.JBLabel">
+          <component id="39775" class="com.intellij.ui.components.JBLabel" binding="packageLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -165,7 +165,7 @@
               <text value="包        名"/>
             </properties>
           </component>
-          <component id="fbc5c" class="com.intellij.ui.components.JBTextField">
+          <component id="fbc5c" class="com.intellij.ui.components.JBTextField" binding="packageInput">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -173,7 +173,7 @@
             </constraints>
             <properties/>
           </component>
-          <component id="4b538" class="com.intellij.ui.components.JBLabel">
+          <component id="4b538" class="com.intellij.ui.components.JBLabel" binding="daoLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
@@ -182,18 +182,40 @@
               <text value="dao层路径"/>
             </properties>
           </component>
-          <component id="71621" class="com.intellij.ui.components.JBTextField">
+          <component id="71621" class="com.intellij.ui.components.JBTextField" binding="daoInput">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
           </component>
-          <component id="5d5b" class="javax.swing.JButton" binding="button1" default-binding="true">
+          <component id="5d5b" class="javax.swing.JButton" binding="daoButton">
             <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="2" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <label value="..."/>
+              <text value="..."/>
+            </properties>
+          </component>
+          <component id="eedd2" class="com.intellij.ui.components.JBLabel" binding="mapperLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Mapper层路径"/>
+            </properties>
+          </component>
+          <component id="9bb63" class="com.intellij.ui.components.JBTextField" binding="mapperInput">
+            <constraints>
+              <grid row="3" column="1" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="4c690" class="javax.swing.JButton" binding="mapperButton">
+            <constraints>
+              <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
               <text value="..."/>
             </properties>
           </component>

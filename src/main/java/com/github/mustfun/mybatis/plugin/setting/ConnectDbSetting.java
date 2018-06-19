@@ -1,7 +1,9 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
 import com.intellij.ui.CheckBoxList;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.components.JBTextField;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +40,15 @@ public class ConnectDbSetting {
     private JPanel configPanel;
     private JPanel generatePanel;
     private JButton button1;
+    private JButton button2;
+    private JBLabel mapperLabel;
+    private JBTextField packageInput;
+    private JBTextField daoInput;
+    private JBTextField mapperInput;
+    private JButton mapperButton;
+    private JButton daoButton;
+    private JBLabel daoLabel;
+    private JBLabel packageLabel;
 
     public ConnectDbSetting(){
         port.addKeyListener(new KeyAdapter(){
