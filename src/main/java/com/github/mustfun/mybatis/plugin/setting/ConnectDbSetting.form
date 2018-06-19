@@ -220,7 +220,9 @@
               </component>
               <component id="5a55a" class="javax.swing.JButton" binding="daoButton">
                 <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="..."/>
@@ -256,7 +258,9 @@
               </component>
               <component id="60fb5" class="javax.swing.JButton" binding="mapperButton">
                 <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="..."/>
@@ -300,7 +304,9 @@
                   </component>
                   <component id="99e47" class="javax.swing.JButton" binding="poButton">
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="10" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <text value="..."/>
