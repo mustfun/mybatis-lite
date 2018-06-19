@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBList;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Vector;
 
 /**
@@ -24,12 +25,17 @@ public class TemplateEditMenuAction extends AnAction {
         TemplateListForm templateListForm = new TemplateListForm(project);
         JBList templateList = templateListForm.getTemplateList();
         Vector vector = new Vector();
-        vector.add("button1");
-        vector.add("button2");
-        vector.add("button3");
-        vector.add("button4");
+        vector.add("data1");
+        vector.add("data2");
+        vector.add("data3");
+        vector.add("data4");
         templateList.setListData(vector);
-        templateList.validate();
+        JPanel buttonPanel = templateListForm.getButtonPanel();
+        buttonPanel.add(new Button("button1"));
+        buttonPanel.add(new Button("button2"));
+        buttonPanel.add(new Button("button3"));
+        buttonPanel.add(new Button("button4"));
+        buttonPanel.validate();
         TemplateListPanel templateListPanel = new TemplateListPanel(project, true, templateListForm);
         templateListPanel.show();
     }

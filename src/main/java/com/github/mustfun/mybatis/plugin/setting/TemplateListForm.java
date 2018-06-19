@@ -30,6 +30,7 @@ public class TemplateListForm {
     private JBScrollPane mainScrollPane;
     private JBList templateList;
     private JPanel firstPanel;
+    private JPanel buttonPanel;
 
     public TemplateListForm(Project project){
         this.project = project;
