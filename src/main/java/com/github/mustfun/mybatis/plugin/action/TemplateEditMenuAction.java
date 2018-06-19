@@ -5,6 +5,10 @@ import com.github.mustfun.mybatis.plugin.ui.custom.TemplateListPanel;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.components.JBList;
+
+import javax.swing.*;
+import java.util.Vector;
 
 /**
  * @author dengzhiyuan
@@ -17,7 +21,16 @@ public class TemplateEditMenuAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
-        TemplateListPanel templateListPanel = new TemplateListPanel(project, true, new TemplateListForm());
+        TemplateListForm templateListForm = new TemplateListForm(project);
+        JBList templateList = templateListForm.getTemplateList();
+        Vector vector = new Vector();
+        vector.add("button1");
+        vector.add("button2");
+        vector.add("button3");
+        vector.add("button4");
+        templateList.setListData(vector);
+        templateList.validate();
+        TemplateListPanel templateListPanel = new TemplateListPanel(project, true, templateListForm);
         templateListPanel.show();
     }
 

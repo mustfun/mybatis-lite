@@ -1,6 +1,5 @@
 package com.github.mustfun.mybatis.plugin.ui.custom;
 
-import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
