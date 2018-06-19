@@ -53,7 +53,6 @@ public class ConnectDbSetting {
     private JPanel daoPanel;
     private JPanel mapperPanel;
     private JPanel packagePanel;
-    private JBLabel blankLabel;
     private JButton button1;
     private JButton button2;
 
