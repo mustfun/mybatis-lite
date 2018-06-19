@@ -37,6 +37,7 @@ public class ConnectDbSetting {
     private CheckBoxList templateCheckbox;
     private JPanel configPanel;
     private JPanel generatePanel;
+    private JButton button1;
 
     public ConnectDbSetting(){
         port.addKeyListener(new KeyAdapter(){
