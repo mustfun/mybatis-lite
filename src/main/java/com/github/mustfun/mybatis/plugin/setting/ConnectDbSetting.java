@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.Visibility;
 
 /**
  * @author dengzhiyuan
@@ -53,8 +54,7 @@ public class ConnectDbSetting {
     private JPanel daoPanel;
     private JPanel mapperPanel;
     private JPanel packagePanel;
-    private JButton button1;
-    private JButton button2;
+    private JPanel poPanel;
 
     public ConnectDbSetting(){
         port.addKeyListener(new KeyAdapter(){
