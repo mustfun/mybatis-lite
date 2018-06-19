@@ -98,6 +98,10 @@ public final class UiGenerateUtil {
         daoPanel.addActionListener(e -> {
             VirtualFile baseDir = project.getBaseDir();
             VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getDaoInput().setText(path);
         });
 
         return new DialogWrapperPanel(project,true,connectDbSetting);
