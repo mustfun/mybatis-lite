@@ -18,16 +18,14 @@ import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.ui.popup.IconButton;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.util.ui.JBInsets;
 import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.util.List;
 
@@ -55,6 +53,7 @@ public final class UiGenerateUtil {
     }
 
     public DialogWrapperPanel getCommonDialog(){
+        UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
         }
@@ -95,7 +94,11 @@ public final class UiGenerateUtil {
             templateCheckbox.addMouseListener(new CheckMouseListener(project,1,templates.get(2)));
         });
 
-        connectDbSetting.getDaoPanel();
+        JButton daoPanel = connectDbSetting.getDaoButton();
+        daoPanel.addActionListener(e -> {
+            VirtualFile baseDir = project.getBaseDir();
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
+        });
 
         return new DialogWrapperPanel(project,true,connectDbSetting);
     }
