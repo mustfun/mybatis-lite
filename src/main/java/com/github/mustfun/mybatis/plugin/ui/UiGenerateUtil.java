@@ -109,7 +109,7 @@ public final class UiGenerateUtil {
         JButton daoPanel = connectDbSetting.getDaoButton();
         daoPanel.addActionListener(e -> {
             VirtualFile baseDir = project.getBaseDir();
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", baseDir, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
@@ -119,8 +119,8 @@ public final class UiGenerateUtil {
         JButton mapperButton = connectDbSetting.getMapperButton();
 
         mapperButton.addActionListener(e->{
-            VirtualFile baseDir = project.getBaseDir();
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
+            VirtualFile baseDir = project.getBaseDir().findChild("product-dal");
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", baseDir, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
