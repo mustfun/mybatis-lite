@@ -39,16 +39,14 @@ public class ConnectDbSetting {
     private CheckBoxList templateCheckbox;
     private JPanel configPanel;
     private JPanel generatePanel;
-    private JButton button1;
-    private JButton button2;
-    private JBLabel mapperLabel;
+    private JBLabel packageLabel;
     private JBTextField packageInput;
-    private JBTextField daoInput;
-    private JBTextField mapperInput;
-    private JButton mapperButton;
     private JButton daoButton;
     private JBLabel daoLabel;
-    private JBLabel packageLabel;
+    private JBTextField daoInput;
+    private JBLabel mapperLabel;
+    private JButton button1;
+    private JButton button2;
 
     public ConnectDbSetting(){
         port.addKeyListener(new KeyAdapter(){
