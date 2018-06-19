@@ -45,6 +45,11 @@ public class ConnectDbSetting {
     private JBLabel daoLabel;
     private JBTextField daoInput;
     private JBLabel mapperLabel;
+    private JBTextField mapperInput;
+    private JButton mapperButton;
+    private JBLabel poLabel;
+    private JBTextField poInput;
+    private JButton poButton;
     private JButton button1;
     private JButton button2;
 
