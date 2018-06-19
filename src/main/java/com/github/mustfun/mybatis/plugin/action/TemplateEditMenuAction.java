@@ -31,10 +31,11 @@ public class TemplateEditMenuAction extends AnAction {
         vector.add("data4");
         templateList.setListData(vector);
         JPanel buttonPanel = templateListForm.getButtonPanel();
-        buttonPanel.add(new Button("button1"));
-        buttonPanel.add(new Button("button2"));
-        buttonPanel.add(new Button("button3"));
-        buttonPanel.add(new Button("button4"));
+        buttonPanel.setLayout(new GridLayout());
+        buttonPanel.add(new JButton("button1"));
+        buttonPanel.add(new JButton("button2"));
+        buttonPanel.add(new JButton("button3"));
+        buttonPanel.add(new JButton("button4"));
         buttonPanel.validate();
         TemplateListPanel templateListPanel = new TemplateListPanel(project, true, templateListForm);
         templateListPanel.show();

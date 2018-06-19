@@ -31,6 +31,7 @@ public class TemplateListForm {
     private JBList templateList;
     private JPanel firstPanel;
     private JPanel buttonPanel;
+    private JLabel alertLabel;
 
     public TemplateListForm(Project project){
         this.project = project;
