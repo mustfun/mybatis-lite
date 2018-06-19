@@ -167,7 +167,9 @@
             <children>
               <component id="87db1" class="com.intellij.ui.components.JBLabel" binding="packageLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="100" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="包名"/>
@@ -176,7 +178,7 @@
               <component id="ce424" class="com.intellij.ui.components.JBTextField" binding="packageInput">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="200" height="-1"/>
+                    <preferred-size width="250" height="-1"/>
                   </grid>
                 </constraints>
                 <properties/>
@@ -198,7 +200,9 @@
             <children>
               <component id="3e706" class="com.intellij.ui.components.JBLabel" binding="daoLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="100" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Dao层位置"/>
@@ -210,7 +214,9 @@
                     <preferred-size width="200" height="-1"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <text value=""/>
+                </properties>
               </component>
               <component id="5a55a" class="javax.swing.JButton" binding="daoButton">
                 <constraints>
@@ -232,7 +238,9 @@
             <children>
               <component id="b9ed" class="com.intellij.ui.components.JBLabel" binding="mapperLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="100" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties>
                   <text value="Mapper层位置"/>
@@ -274,7 +282,9 @@
                 <children>
                   <component id="9f6" class="com.intellij.ui.components.JBLabel" binding="poLabel">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <text value="Po层位置"/>
