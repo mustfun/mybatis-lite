@@ -95,6 +95,8 @@ public final class UiGenerateUtil {
             templateCheckbox.addMouseListener(new CheckMouseListener(project,1,templates.get(2)));
         });
 
+        connectDbSetting.getDaoPanel();
+
         return new DialogWrapperPanel(project,true,connectDbSetting);
     }
 

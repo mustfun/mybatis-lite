@@ -50,6 +50,9 @@ public class ConnectDbSetting {
     private JBLabel poLabel;
     private JBTextField poInput;
     private JButton poButton;
+    private JPanel daoPanel;
+    private JPanel mapperPanel;
+    private JPanel packagePanel;
     private JButton button1;
     private JButton button2;
 
