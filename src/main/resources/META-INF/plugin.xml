@@ -1,4 +1,4 @@
-<idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
+<idea-plugin url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis plugin</name>
     <version>2.01</version>
@@ -91,15 +91,17 @@
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
                text="Mybatis Plugin" description="逆向生成Code" icon="/images/logo_16.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
-            <action id="GenerateCodeMainUI" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeUIAction"
-                    text="Generate Code" description="生成code">
-                <add-to-group group-id="MybatisPluginActionGroup" anchor="first"/>
-            </action>
-            <action id="TemplateEditMenuAction" class="com.github.mustfun.mybatis.plugin.action.TemplateEditMenuAction"
-                    text="Edit template" description="修改template">
-                <add-to-group group-id="MybatisPluginActionGroup" anchor="after"/>
-            </action>
         </group>
+
+        <action id="MybatisPluginActionGroup.GenerateCodeMainUI" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeUIAction"
+                text="Generate Code" description="生成code">
+            <add-to-group group-id="MybatisPluginActionGroup" anchor="first"/>
+        </action>
+
+        <action id="MybatisPluginActionGroup.TemplateEditMenuAction" class="com.github.mustfun.mybatis.plugin.action.TemplateEditMenuAction"
+                text="Edit Template" description="修改template">
+            <add-to-group group-id="MybatisPluginActionGroup" anchor="last"/>
+        </action>
 
     </actions>
 </idea-plugin>
