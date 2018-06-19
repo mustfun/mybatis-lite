@@ -10,15 +10,26 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateCodeEditPanel;
+import com.github.mustfun.mybatis.plugin.util.MapperUtils;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.ui.popup.IconButton;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.impl.file.PsiDirectoryImpl;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.util.ui.JBInsets;
 import com.intellij.util.ui.JBUI;
@@ -26,8 +37,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 import java.sql.Connection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author itar
@@ -104,8 +116,21 @@ public final class UiGenerateUtil {
             connectDbSetting.getDaoInput().setText(path);
         });
 
+        JButton mapperButton = connectDbSetting.getMapperButton();
+
+        mapperButton.addActionListener(e->{
+            VirtualFile baseDir = project.getBaseDir();
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getDaoInput().setText(path);
+        });
+
+
         return new DialogWrapperPanel(project,true,connectDbSetting);
     }
+
 
     public JBPopup getCommonPopUp(){
         if (null == connectDbSetting) {
