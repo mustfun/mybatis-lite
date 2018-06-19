@@ -32,7 +32,10 @@ import java.sql.Connection;
 import java.util.List;
 
 /**
- * @author yanglin
+ * @author itar
+ * @date 2018/6/12
+ * @version 1.0
+ * @since jdk1.8
  */
 public final class UiGenerateUtil {
 

@@ -95,6 +95,10 @@
                     text="Generate Code" description="生成code">
                 <add-to-group group-id="MybatisPluginActionGroup" anchor="first"/>
             </action>
+            <action id="TemplateEditMenuAction" class="com.github.mustfun.mybatis.plugin.action.TemplateEditMenuAction"
+                    text="Edit template" description="修改template">
+                <add-to-group group-id="MybatisPluginActionGroup" anchor="after"/>
+            </action>
         </group>
 
     </actions>
