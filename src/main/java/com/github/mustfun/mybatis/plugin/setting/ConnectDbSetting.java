@@ -37,7 +37,7 @@ public class ConnectDbSetting {
     private JTextField dbName;
     private JLabel dbNamePanel;
     private JBScrollPane templatePanel;
-    private CheckBoxList templateCheckbox;
+    private CheckBoxList<String> templateCheckbox;
     private JPanel configPanel;
     private JPanel generatePanel;
     private JBLabel packageLabel;

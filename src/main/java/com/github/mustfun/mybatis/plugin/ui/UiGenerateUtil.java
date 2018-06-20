@@ -134,7 +134,7 @@ public final class UiGenerateUtil {
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
-            connectDbSetting.getDaoInput().setText(path);
+            connectDbSetting.getMapperInput().setText(path);
         });
 
         connectDbSetting.getPoButton().addActionListener(e->{
@@ -147,7 +147,7 @@ public final class UiGenerateUtil {
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
-            connectDbSetting.getDaoInput().setText(path);
+            connectDbSetting.getPoInput().setText(path);
         });
 
 

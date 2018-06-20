@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.action;
 
 import com.github.mustfun.mybatis.plugin.ui.UiGenerateUtil;
+import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -16,7 +17,10 @@ public class GenerateCodeUIAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
-        UiGenerateUtil.getInstance(project).getCommonDialog().show();
+        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(project).getCommonDialog();
+        commonDialog.show();
     }
+
+
 
 }
