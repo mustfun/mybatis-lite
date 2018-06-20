@@ -53,6 +53,9 @@ public final class UiComponentFacade {
         if (null != roots) {
             descriptor.setRoots(roots);
         }
+        descriptor.setHideIgnored(true);
+        descriptor.setShowFileSystemRoots(true);
+
         return FileChooser.chooseFile(descriptor, project, toSelect);
     }
 

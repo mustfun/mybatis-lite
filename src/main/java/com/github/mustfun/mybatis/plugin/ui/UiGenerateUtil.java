@@ -10,6 +10,7 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateCodeEditPanel;
+import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -109,7 +110,12 @@ public final class UiGenerateUtil {
         JButton daoPanel = connectDbSetting.getDaoButton();
         daoPanel.addActionListener(e -> {
             VirtualFile baseDir = project.getBaseDir();
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", baseDir, baseDir);
+            //找出dao层所在目录
+            VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir, "Mapper.java","Dao.java");
+            if (daoPath==null){
+                daoPath = baseDir;
+            }
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", daoPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
@@ -119,8 +125,25 @@ public final class UiGenerateUtil {
         JButton mapperButton = connectDbSetting.getMapperButton();
 
         mapperButton.addActionListener(e->{
-            VirtualFile baseDir = project.getBaseDir().findChild("product-dal");
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", baseDir, baseDir);
+            VirtualFile baseDir = project.getBaseDir();
+            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "Mapper.xml","Dao.xml");
+            if (mapperPath==null){
+                mapperPath = baseDir;
+            }
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", mapperPath, baseDir);
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getDaoInput().setText(path);
+        });
+
+        connectDbSetting.getPoButton().addActionListener(e->{
+            VirtualFile baseDir = project.getBaseDir();
+            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "Po.java","model/po/","model/");
+            if (mapperPath==null){
+                mapperPath = baseDir;
+            }
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择实体层存放目录", mapperPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);

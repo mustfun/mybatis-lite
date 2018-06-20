@@ -6,19 +6,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -178,4 +167,32 @@ public final class JavaUtils {
         }
     }
 
+    /**
+     * 找出Mapper等文件可能所在的路径所在路径
+     * @param base
+     * @param patten 多个进行匹配,或者关系, 如DemoDao.java或者DemoMapper.java都可以
+     * @return
+     */
+    public static VirtualFile getFilePattenPath(VirtualFile base, String... patten){
+        if (base.getPath().contains("/.git/")||base.getPath().contains("/.idea/")){
+            return null;
+        }
+        for (String s : patten) {
+            if (base.getPath().contains(s)){
+                return base.getParent();
+            }
+        }
+        if (base.getChildren().length!=0){
+            for (VirtualFile virtualFile : base.getChildren()) {
+                //这个地方不应该直接return，存在多个文件夹的情况
+                VirtualFile filePattenPath = getFilePattenPath(virtualFile, patten);
+                if (filePattenPath!=null){
+                    return filePattenPath;
+                }else{
+                    continue;
+                }
+            }
+        }
+        return null;
+    }
 }
