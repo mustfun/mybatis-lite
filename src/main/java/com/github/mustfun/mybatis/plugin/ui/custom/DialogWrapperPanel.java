@@ -38,7 +38,7 @@ public class DialogWrapperPanel extends DialogWrapper {
         super.doOKAction();
         //然后做自己的事情,准备生成代码了
         CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
-        CheckBoxList<String> templateCheckbox = connectDbSetting.getTemplateCheckbox();
+        CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
         List<JCheckBox> selectedValuesList = tableCheckBox.getSelectedValuesList();
         for (JCheckBox jCheckBox : selectedValuesList) {
             String text = jCheckBox.getText();

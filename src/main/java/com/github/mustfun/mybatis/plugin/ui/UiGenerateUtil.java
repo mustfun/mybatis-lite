@@ -100,7 +100,7 @@ public final class UiGenerateUtil {
             Connection sqlLiteConnection = dbService.getSqlLiteConnection(dbSourcePo);
             SqlLiteService sqlLiteService =  SqlLiteService.getInstance(sqlLiteConnection);
             List<Template> templates = sqlLiteService.queryTemplateList();
-            CheckBoxList templateCheckbox = connectDbSetting.getTemplateCheckbox();
+            CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
                 templateCheckbox.addItem(template.getId(),template.getTepName(),true);
             }
