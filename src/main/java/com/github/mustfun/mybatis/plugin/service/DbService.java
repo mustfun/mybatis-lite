@@ -200,8 +200,8 @@ public class DbService {
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
         map.put("package", packageName);
-        map.put("author", sqlLiteService.queryPluginConfigByKey("author"));
-        map.put("email", sqlLiteService.queryPluginConfigByKey("email"));
+        map.put("author", sqlLiteService.queryPluginConfigByKey("author").getValue());
+        map.put("email", sqlLiteService.queryPluginConfigByKey("email").getValue());
         map.put("datetime", DateUtils.format(new Date(), DbService.DATE_TIME_PATTERN));
         VelocityContext context = new VelocityContext(map);
 
@@ -225,15 +225,60 @@ public class DbService {
                 }
                 //添加到zip
                 String fileName = getFileName(template.getVmType(), table.getClassName(), packageName);
-                FileProviderFactory fileFactory = new FileProviderFactory(project,connectDbSetting.getDaoInput().getText());
-                fileFactory.getInstance("java").create(sw.toString(),fileName);
-
+                String outPath = getRealPath(template.getVmType(),connectDbSetting);
+                FileProviderFactory fileFactory = new FileProviderFactory(project,outPath);
+                if (template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
+                    fileFactory.getInstance("xml").create(sw.toString(), fileName);
+                }else {
+                    fileFactory.getInstance("java").create(sw.toString(), fileName);
+                }
 
             } catch (IOException e) {
                 System.out.println("渲染模板发生异常{}e = " + e);
                 throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
         }
+    }
+
+    private static String getRealPath(Integer template, ConnectDbSetting connectDbSetting) {
+        if (template.equals(VmTypeEnums.RESULT.getCode())) {
+            return  connectDbSetting.getPoInput().getText();
+        }
+        if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
+            return  connectDbSetting.getPoInput().getText()+"/Po";
+        }
+
+        if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
+            return  connectDbSetting.getPoInput().getText()+"/Bo";
+        }
+
+        if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
+            return  connectDbSetting.getPoInput().getText()+"/Bo";
+        }
+
+        if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
+            return  connectDbSetting.getPoInput().getText()+"/Resp";
+        }
+        if (template.equals(VmTypeEnums.DAO.getCode())) {
+            return  connectDbSetting.getDaoInput().getText();
+        }
+
+        if (template.equals(VmTypeEnums.SERVICE.getCode())) {
+            return  connectDbSetting.getServiceInput().getText();
+        }
+
+        if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
+            return  connectDbSetting.getServiceInput().getText()+"/impl";
+        }
+
+        if (template.equals(VmTypeEnums.CONTROLLER.getCode())) {
+            return  connectDbSetting.getPoInput().getText();
+        }
+
+        if (template.equals(VmTypeEnums.MAPPER.getCode())) {
+            return  connectDbSetting.getMapperInput().getText();
+        }
+        return null;
     }
 
     /**
@@ -270,44 +315,33 @@ public class DbService {
      * 获取文件名
      */
     public static String getFileName(Integer template, String className, String packageName) {
-
         if (template.equals(VmTypeEnums.RESULT.getCode())) {
-            return  "Result.java";
+            return "Result.java";
         }
-
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            return  className + "Po.java";
+            return className + "Po.java";
         }
-
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            return  className + "Bo.java";
+            return className + "Bo.java";
         }
-
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
             return className + "Req.java";
         }
-
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            return  className + "Resp.java";
+            return className + "Resp.java";
         }
-
-
         if (template.equals(VmTypeEnums.DAO.getCode())) {
             return className + "Dao.java";
         }
-
         if (template.equals(VmTypeEnums.SERVICE.getCode())) {
             return className + "Service.java";
         }
-
         if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
-            return  className + "ServiceImpl.java";
+            return className + "ServiceImpl.java";
         }
-
         if (template.equals(VmTypeEnums.CONTROLLER.getCode())) {
-            return  className + "Controller.java";
+            return className + "Controller.java";
         }
-
         if (template.equals(VmTypeEnums.MAPPER.getCode())) {
             return className + "Dao.xml";
         }
