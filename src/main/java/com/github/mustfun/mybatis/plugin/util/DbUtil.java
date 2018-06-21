@@ -26,6 +26,10 @@ public class DbUtil {
         this.password = password;
     }
 
+    public DbUtil(){
+
+    }
+
 
     public Connection getConnection() {
         Connection conn = null;

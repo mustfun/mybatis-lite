@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.service;
 
+import com.github.mustfun.mybatis.plugin.model.PluginConfig;
 import com.github.mustfun.mybatis.plugin.model.Template;
 
 import java.sql.Connection;
@@ -33,19 +34,27 @@ public class SqlLiteService {
     }
 
 
-    public void queryTemplateById(Integer id){
+    public Template queryTemplateById(Integer id){
         try {
             String sql = "select\n" +
                     "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
                     "        from template\n" +
                     "        where id = "+id;
             ResultSet rs = statement.executeQuery(sql);
+            Template template = new Template();
             while (rs.next()) {
-                System.out.println("id=>" + rs.getInt("id") + ", tep_name=>" + rs.getString("tep_name"));
+                template.setId(rs.getInt("id"));
+                template.setTepName(rs.getString("tep_name"));
+                template.setTepDesc(rs.getString("tep_desc"));
+                template.setTepContent(rs.getString("tep_content"));
+                template.setDbType(rs.getInt("db_type"));
+                template.setVmType(rs.getInt("vm_type"));
             }
+            return template;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public void deleteTemplate(){
@@ -80,4 +89,48 @@ public class SqlLiteService {
         }
         return null;
     }
+
+
+    public List<PluginConfig> queryPluginConfigList(){
+        try {
+            String sql = "select\n" +
+                    "        id,key,value\n" +
+                    "        from plugin_config";
+            List<PluginConfig> list = new ArrayList<>();
+
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                PluginConfig template = new PluginConfig();
+                template.setId(rs.getInt("id"));
+                template.setKey(rs.getString("key"));
+                template.setValue(rs.getString("value"));
+                list.add(template);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public PluginConfig queryPluginConfigByKey(String key){
+        try {
+            String sql = "select\n" +
+                    "        id,key,value\n" +
+                    "        from plugin_config where key='"+key+"'limit 1";
+
+            ResultSet rs = statement.executeQuery(sql);
+            PluginConfig template = new PluginConfig();
+            while (rs.next()) {
+                template.setId(rs.getInt("id"));
+                template.setKey(rs.getString("key"));
+                template.setValue(rs.getString("value"));
+            }
+            return template;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
