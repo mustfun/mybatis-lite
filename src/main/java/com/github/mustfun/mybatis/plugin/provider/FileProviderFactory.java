@@ -10,6 +10,7 @@ import com.intellij.sql.SqlFileType;
  * 文件提供者工厂
  * @author hehaiyangwork@gmail.com
  * @date 2017/3/17
+ * @update itar
  */
 public class FileProviderFactory {
 
