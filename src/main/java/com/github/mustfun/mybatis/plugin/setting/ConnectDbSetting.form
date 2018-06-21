@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="11" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1088" height="338"/>
+      <xy x="20" y="20" width="1088" height="357"/>
     </constraints>
     <properties>
       <preferredSize width="870" height="400"/>
@@ -257,7 +257,7 @@
                 <constraints/>
                 <properties>
                   <preferredSize width="100" height="17"/>
-                  <text value="Po层位置"/>
+                  <text value="Model层位置"/>
                 </properties>
               </component>
               <component id="c7f47" class="com.intellij.ui.components.JBTextField" binding="poInput">
@@ -275,23 +275,63 @@
               </component>
             </children>
           </grid>
-          <grid id="de9fe" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="de9fe" binding="controllerPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
-            <children/>
+            <children>
+              <component id="d88e9" class="com.intellij.ui.components.JBLabel" binding="controllerLabel">
+                <constraints/>
+                <properties>
+                  <preferredSize width="100" height="17"/>
+                  <text value="Controller层位置"/>
+                </properties>
+              </component>
+              <component id="e14d6" class="com.intellij.ui.components.JBTextField" binding="controllerInput">
+                <constraints/>
+                <properties>
+                  <preferredSize width="250" height="30"/>
+                </properties>
+              </component>
+              <component id="b2586" class="javax.swing.JButton" binding="controllerButton">
+                <constraints/>
+                <properties>
+                  <preferredSize width="20" height="30"/>
+                  <text value="..."/>
+                </properties>
+              </component>
+            </children>
           </grid>
-          <grid id="30fc4" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="30fc4" binding="servicePanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
-            <children/>
+            <children>
+              <component id="33a26" class="com.intellij.ui.components.JBLabel" binding="serviceLabel">
+                <constraints/>
+                <properties>
+                  <preferredSize width="100" height="17"/>
+                  <text value="Service层位置"/>
+                </properties>
+              </component>
+              <component id="ca7e3" class="com.intellij.ui.components.JBTextField" binding="serviceInput">
+                <constraints/>
+                <properties>
+                  <preferredSize width="250" height="30"/>
+                </properties>
+              </component>
+              <component id="c69f4" class="javax.swing.JButton" binding="serviceButton">
+                <constraints/>
+                <properties>
+                  <preferredSize width="20" height="30"/>
+                  <text value="..."/>
+                </properties>
+              </component>
+            </children>
           </grid>
           <grid id="b1726" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
