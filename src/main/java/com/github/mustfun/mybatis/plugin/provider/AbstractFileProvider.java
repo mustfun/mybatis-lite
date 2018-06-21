@@ -36,9 +36,8 @@ public abstract class AbstractFileProvider {
 
     protected PsiFile createFile(Project project, @NotNull PsiDirectory psiDirectory, String fileName, String context, LanguageFileType fileType) {
 
-        final String lineSeparator = System.getProperty("line.separator");
         //+        final String simpleContent = XmlSorterUtil.replaceAllByRegex(content, ">" + lineSeparator + "*\\s+?<", "><");
-        String replace = StringUtils.replace(context, "\\r\\n", lineSeparator);
+        String replace = context.replaceAll("\r\n", "\n");
 
         PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(fileName, fileType, replace);
         // reformat class
