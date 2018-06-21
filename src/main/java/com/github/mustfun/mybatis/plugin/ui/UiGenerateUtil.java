@@ -138,6 +138,34 @@ public final class UiGenerateUtil {
             connectDbSetting.getPoInput().setText(path);
         });
 
+        // service
+        connectDbSetting.getServiceButton().addActionListener(e->{
+            VirtualFile baseDir = project.getBaseDir();
+            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "service.java","service/");
+            if (mapperPath==null){
+                mapperPath = baseDir;
+            }
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Service层存放目录", mapperPath, baseDir);
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getServiceInput().setText(path);
+        });
+
+        //controller
+        connectDbSetting.getControllerButton().addActionListener(e->{
+            VirtualFile baseDir = project.getBaseDir();
+            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "controller.java","controller/");
+            if (mapperPath==null){
+                mapperPath = baseDir;
+            }
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Controller层存放目录", mapperPath, baseDir);
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getControllerInput().setText(path);
+        });
+
 
         return new DialogWrapperPanel(project,true,connectDbSetting);
     }

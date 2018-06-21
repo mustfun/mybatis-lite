@@ -55,7 +55,6 @@ public class ConnectDbSetting {
     private JPanel mapperPanel;
     private JPanel packagePanel;
     private JPanel poPanel;
-    private JButton button1;
     private JBLabel controllerLabel;
     private JBTextField controllerInput;
     private JPanel controllerPanel;
