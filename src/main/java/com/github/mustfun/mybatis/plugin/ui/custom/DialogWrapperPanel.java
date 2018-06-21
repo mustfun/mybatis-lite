@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.ui.custom;
 
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.CheckBoxList;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,20 +37,22 @@ public class DialogWrapperPanel extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        super.doOKAction();
+
         //然后做自己的事情,准备生成代码了
         CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
         CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
-        List<JCheckBox> selectedValuesList = tableCheckBox.getSelectedValuesList();
-        for (JCheckBox jCheckBox : selectedValuesList) {
-            String text = jCheckBox.getText();
-            System.out.println("text = " + text);
-        }
-        int[] selectedIndices = templateCheckbox.getSelectedIndices();
-        for (int selectedIndex : selectedIndices) {
-            System.out.println("selectedIndex = " + selectedIndex);
+        List collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
+        List collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
+
+        for (Object o : collectTableBoxList) {
+            System.out.println("o = " + o);
         }
 
+        for (Object o : collectTemplateList) {
+            System.out.println("o = " + o);
+        }
+
+        //super.doOKAction();
     }
 
     @NotNull

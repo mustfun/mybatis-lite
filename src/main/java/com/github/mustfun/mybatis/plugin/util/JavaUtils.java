@@ -12,11 +12,13 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 
+import com.intellij.ui.CheckBoxList;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -194,5 +196,18 @@ public final class JavaUtils {
             }
         }
         return null;
+    }
+
+
+
+    public static List collectSelectedCheckBox(CheckBoxList checkBoxList) {
+        List list = new ArrayList<>();
+        for (int i = 0; i < checkBoxList.getItemsCount(); i++) {
+            Object itemAt = checkBoxList.getItemAt(i);
+            if (checkBoxList.isItemSelected(itemAt)) {
+                list.add(itemAt);
+            }
+        }
+        return list;
     }
 }
