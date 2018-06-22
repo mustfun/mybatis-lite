@@ -250,7 +250,7 @@ public class DbService {
                 }else {
                     psiFile = fileFactory.getInstance("java").create(sw.toString(), fileName);
                 }
-                fileHashMap.put(templateId, psiFile);
+                fileHashMap.put(template.getVmType(), psiFile);
                 if (psiFile!=null&&psiFile instanceof PsiJavaFile){
                     importNeedClass(psiFile,template.getVmType());
                 }
@@ -264,11 +264,11 @@ public class DbService {
 
 
 
-    private static void importNeedClass(PsiFile psiFile,Integer template){
-        if (template.equals(VmTypeEnums.SERVICE.getCode())) {
+    private static void importNeedClass(PsiFile psiFile,Integer vmType){
+        if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
 
         }
-        if (template.equals(VmTypeEnums.DAO.getCode())) {
+        if (vmType.equals(VmTypeEnums.DAO.getCode())) {
             //dao层引入model
             JavaService.getInstance(project).importClazz((PsiJavaFile) psiFile, fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()).getName());
         }

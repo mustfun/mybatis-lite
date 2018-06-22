@@ -9,8 +9,8 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 
@@ -256,5 +256,14 @@ public final class JavaUtils {
             return  "/impl";
         }
         return null;
+    }
+
+    /**
+     * 通过类名找一个类
+     * @return
+     */
+    // FIXME: 2018/6/22
+    public PsiClass[] findClassByName(){
+        return PsiShortNamesCache.getInstance(null).getClassesByName(null,null);
     }
 }

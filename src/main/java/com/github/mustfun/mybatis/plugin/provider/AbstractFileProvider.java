@@ -39,7 +39,10 @@ public abstract class AbstractFileProvider {
 
         //+        final String simpleContent = XmlSorterUtil.replaceAllByRegex(content, ">" + lineSeparator + "*\\s+?<", "><");
         String replace = context.replaceAll("\r\n", "\n");
-
+        PsiFile file = psiDirectory.findFile(fileName);
+        if (file!=null){
+            file.delete();
+        }
         PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(fileName, fileType, replace);
         // reformat class
         CodeStyleManager.getInstance(project).reformat(psiFile);
