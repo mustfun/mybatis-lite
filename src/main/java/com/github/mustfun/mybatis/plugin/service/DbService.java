@@ -8,8 +8,14 @@ import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.provider.FileProviderFactory;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
+import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.tools.ant.util.DateUtils;
@@ -207,7 +213,7 @@ public class DbService {
 
         //获取模板列表
         for (Integer templateId : vmList) {
-            //取出模板
+                  //取出模板
             com.github.mustfun.mybatis.plugin.model.Template template = sqlLiteService.queryTemplateById(templateId);
             if(!checkNeedGenerate(template.getVmType())){
                 continue;
@@ -216,16 +222,22 @@ public class DbService {
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
 
+                String fileName = getFileName(template.getVmType(), table.getClassName(), packageName);
+                String outPath = getRealPath(template.getVmType(),connectDbSetting);
+
+
+                VirtualFile vFile = VfsUtil.createDirectoryIfMissing(outPath);
+                PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
+                String packageName1 = JavaUtils.getPackageName(directory, templateId);
+                map.put("packageName", packageName1);
+
+
+                //merge 操作
                 repo.putStringResource(template.getTepName()+"_"+template.getId(), template.getTepContent());
                 Template tpl = engine.getTemplate(template.getTepName()+"_"+template.getId(),"UTF-8");
                 tpl.merge(context, sw);
 
-                if (packageName==null||StringUtils.isEmpty(packageName)){
-                    packageName = sqlLiteService.queryPluginConfigByKey("package").getValue();
-                }
-                //添加到zip
-                String fileName = getFileName(template.getVmType(), table.getClassName(), packageName);
-                String outPath = getRealPath(template.getVmType(),connectDbSetting);
+
                 FileProviderFactory fileFactory = new FileProviderFactory(project,outPath);
                 if (template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
                     fileFactory.getInstance("xml").create(sw.toString(), fileName);
@@ -245,19 +257,19 @@ public class DbService {
             return  connectDbSetting.getPoInput().getText();
         }
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/Po";
+            return  connectDbSetting.getPoInput().getText()+"/po";
         }
 
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/Bo";
+            return  connectDbSetting.getPoInput().getText()+"/bo";
         }
 
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/Bo";
+            return  connectDbSetting.getPoInput().getText()+"/req";
         }
 
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/Resp";
+            return  connectDbSetting.getPoInput().getText()+"/resp";
         }
         if (template.equals(VmTypeEnums.DAO.getCode())) {
             return  connectDbSetting.getDaoInput().getText();

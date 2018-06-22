@@ -114,7 +114,7 @@ public final class UiGenerateUtil {
 
         mapperButton.addActionListener(e->{
             VirtualFile baseDir = project.getBaseDir();
-            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "Mapper.xml","Dao.xml");
+            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "Mapper.xml","Dao.xml","mapper/");
             if (mapperPath==null){
                 mapperPath = baseDir;
             }
@@ -127,7 +127,7 @@ public final class UiGenerateUtil {
 
         connectDbSetting.getPoButton().addActionListener(e->{
             VirtualFile baseDir = project.getBaseDir();
-            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "Po.java","model/po/","model/");
+            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "model/");
             if (mapperPath==null){
                 mapperPath = baseDir;
             }

@@ -2,12 +2,14 @@ package com.github.mustfun.mybatis.plugin.util;
 
 import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
+import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -180,7 +182,7 @@ public final class JavaUtils {
             return null;
         }
         for (String s : patten) {
-            if (base.getPath().contains(s)){
+            if (base.getPath().toUpperCase().contains(s.toUpperCase())){
                 return base.getParent();
             }
         }
@@ -209,5 +211,50 @@ public final class JavaUtils {
             }
         }
         return list;
+    }
+
+    public static String getPackageName(PsiDirectory psiDirectory,Integer vmType){
+        PsiFile[] files = psiDirectory.getFiles();
+        if (files.length!=0){
+            if (!(files[0] instanceof PsiJavaFile)){
+                return "com.github.mustfun";
+            }
+            PsiJavaFile file = (PsiJavaFile) files[0];
+            return file.getPackageName();
+        }
+        //如果下面没有文件,就上一层找，暂时不考虑新建很多层那种复杂情况
+        PsiDirectory parent = psiDirectory.getParent();
+        PsiFile[] pare = parent.getFiles();
+        if (pare.length!=0){
+            if (!(files[0] instanceof PsiJavaFile)){
+                return "com.github.mustfun";
+            }
+            PsiJavaFile file = (PsiJavaFile) files[0];
+            return file.getPackageName()+getClassType(vmType);
+        }
+        return "com.github.mustfun";
+    }
+
+    public static String getClassType(Integer template){
+        if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
+            return  "/po";
+        }
+
+        if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
+            return  "/bo";
+        }
+
+        if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
+            return  "/req";
+        }
+
+        if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
+            return  "/resp";
+        }
+
+        if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
+            return  "/impl";
+        }
+        return null;
     }
 }
