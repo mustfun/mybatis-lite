@@ -51,6 +51,7 @@ public abstract class AbstractFileProvider {
             styleManager.optimizeImports(psiFile);
             styleManager.shortenClassReferences(psiFile);
         }
+        //加载到磁盘中
         psiDirectory.add(psiFile);
         return psiFile;
     }

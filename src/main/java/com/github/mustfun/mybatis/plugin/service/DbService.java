@@ -18,6 +18,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.tools.ant.util.DateUtils;
@@ -52,9 +53,9 @@ public class DbService {
 
     private static ConcurrentHashMap<Integer, Integer> templateGenerateTimeMap = new ConcurrentHashMap<>(10);
     /**
-     * 存放生成的file文件的
+     * 存放PackageName路径文件的
      */
-    private static ConcurrentHashMap<Integer, PsiFile> fileHashMap = new ConcurrentHashMap<>(10);
+    private static ConcurrentHashMap<Integer, String> fileHashMap = new ConcurrentHashMap<>(10);
 
     private static Project project;
 
@@ -215,7 +216,7 @@ public class DbService {
         VelocityContext context = new VelocityContext(map);
 
         //vmList排序
-        vmList.sort((o1, o2) -> sqlLiteService.queryTemplateById(o1).getVmType()<sqlLiteService.queryTemplateById(o2).getVmType()?1:0);
+        vmList.sort(Comparator.comparing(o -> sqlLiteService.queryTemplateById(o).getVmType()));
 
         //获取模板列表
         for (Integer templateId : vmList) {
@@ -234,7 +235,10 @@ public class DbService {
 
                 VirtualFile vFile = VfsUtil.createDirectoryIfMissing(outPath);
                 PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
-                String packageName1 = JavaUtils.getPackageName(directory, templateId);
+                String realPackageName = JavaUtils.getPackageName(directory, templateId);
+
+                fileHashMap.put(template.getVmType(), realPackageName+"."+fileName.split("\\.")[0]);
+                importNeedClass(context,template.getVmType());
 
 
                 //merge 操作
@@ -244,15 +248,10 @@ public class DbService {
 
 
                 FileProviderFactory fileFactory = new FileProviderFactory(project,outPath);
-                PsiFile psiFile;
                 if (template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
-                    psiFile = fileFactory.getInstance("xml").create(sw.toString(), fileName);
+                    fileFactory.getInstance("xml").create(sw.toString(), fileName);
                 }else {
-                    psiFile = fileFactory.getInstance("java").create(sw.toString(), fileName);
-                }
-                fileHashMap.put(template.getVmType(), psiFile);
-                if (psiFile!=null&&psiFile instanceof PsiJavaFile){
-                    importNeedClass(psiFile,template.getVmType());
+                    fileFactory.getInstance("java").create(sw.toString(), fileName);
                 }
 
             } catch (IOException e) {
@@ -264,13 +263,13 @@ public class DbService {
 
 
 
-    private static void importNeedClass(PsiFile psiFile,Integer vmType){
+    private static void importNeedClass(VelocityContext context, Integer vmType){
         if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
 
         }
         if (vmType.equals(VmTypeEnums.DAO.getCode())) {
             //dao层引入model
-            JavaService.getInstance(project).importClazz((PsiJavaFile) psiFile, fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()).getName());
+            context.internalPut("package", fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
         }
     }
 

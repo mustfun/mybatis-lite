@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.service;
 
+import com.intellij.application.options.CodeStyle;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.formatting.FormatTextRanges;
 import com.intellij.openapi.components.ServiceManager;
@@ -34,7 +35,7 @@ public class EditorService {
   }
 
   public void format(@NotNull PsiFile file, @NotNull PsiElement element) {
-    this.codeFormatterFacade = new CodeFormatterFacade(CodeStyleSettingsManager.getSettings(element.getProject()), element.getLanguage());
+    this.codeFormatterFacade = new CodeFormatterFacade(CodeStyle.getSettings(element.getProject()), element.getLanguage());
     codeFormatterFacade.processText(file, new FormatTextRanges(element.getTextRange(), true), true);
   }
 
