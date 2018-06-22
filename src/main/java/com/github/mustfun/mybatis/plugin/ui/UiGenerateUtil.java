@@ -82,7 +82,7 @@ public final class UiGenerateUtil {
             List<LocalTable> tables = dbService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
-                tableCheckBox.addItem(table.getTableName(),table.getTableName(),true);
+                tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
             }
             Connection sqlLiteConnection = dbService.getSqlLiteConnection();
             ConnectionHolder.addConnection("sqlLiteConnection",sqlLiteConnection);
@@ -90,7 +90,7 @@ public final class UiGenerateUtil {
             List<Template> templates = sqlLiteService.queryTemplateList();
             CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
-                templateCheckbox.addItem(template.getId(),template.getTepName(),true);
+                templateCheckbox.addItem(template.getId(),template.getTepName(),false);
             }
             templateCheckbox.addMouseListener(new CheckMouseListener(project,1,templates.get(2)));
         });
