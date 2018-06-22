@@ -233,11 +233,15 @@ public class DbService {
                 String outPath = getRealPath(template.getVmType(),connectDbSetting);
 
 
-                VirtualFile vFile = VfsUtil.createDirectoryIfMissing(outPath);
-                PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
-                String realPackageName = JavaUtils.getPackageName(directory, templateId);
+                String realPackageName="com.github.mustfun";
+                if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())){
+                    VirtualFile vFile = VfsUtil.createDirectoryIfMissing(outPath);
+                    PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
+                    realPackageName = JavaUtils.getPackageName(directory, templateId);
+                }
 
                 fileHashMap.put(template.getVmType(), realPackageName+"."+fileName.split("\\.")[0]);
+                //给VM填充
                 importNeedClass(context,template.getVmType());
 
 
@@ -262,15 +266,37 @@ public class DbService {
     }
 
 
-
+    /**
+     * 导入包
+     * @param context
+     * @param vmType
+     */
     private static void importNeedClass(VelocityContext context, Integer vmType){
+        ArrayList<String> arrayList = new ArrayList<>();
         if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
-
+            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            arrayList.add(fileHashMap.get(VmTypeEnums.DAO.getCode()));
+            context.internalPut("needImports", arrayList);
         }
         if (vmType.equals(VmTypeEnums.DAO.getCode())) {
-            //dao层引入model
-            context.internalPut("package", fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            context.internalPut("needImports", arrayList);
         }
+        if (vmType.equals(VmTypeEnums.CONTROLLER.getCode())) {
+            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            arrayList.add(fileHashMap.get(VmTypeEnums.SERVICE.getCode()));
+            arrayList.add(fileHashMap.get(VmTypeEnums.RESULT.getCode()));
+            context.internalPut("needImports", arrayList);
+        }
+        if (vmType.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
+            arrayList.add(fileHashMap.get(VmTypeEnums.DAO.getCode()));
+            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            context.internalPut("needImports", arrayList);
+        }
+        if (vmType.equals(VmTypeEnums.MAPPER.getCode())) {
+            context.internalPut("daoImport", fileHashMap.get(VmTypeEnums.DAO.getCode()));
+        }
+
     }
 
     private static String getRealPath(Integer template, ConnectDbSetting connectDbSetting) {

@@ -226,10 +226,10 @@ public final class JavaUtils {
         PsiDirectory parent = psiDirectory.getParent();
         PsiFile[] pare = parent.getFiles();
         if (pare.length!=0){
-            if (!(files[0] instanceof PsiJavaFile)){
+            if (!(pare[0] instanceof PsiJavaFile)){
                 return "com.github.mustfun";
             }
-            PsiJavaFile file = (PsiJavaFile) files[0];
+            PsiJavaFile file = (PsiJavaFile) pare[0];
             return file.getPackageName()+getClassType(vmType);
         }
         return "com.github.mustfun";
