@@ -7,7 +7,7 @@ package com.github.mustfun.mybatis.plugin.model.enums;
  * @since 1.0
  */
 public enum VmTypeEnums {
-
+    RESULT(4,"Result层"),
     MODEL_PO(5,"Po层"),
     MODEL_BO(6,"Bo层"),
     MODEL_REQ(7,"请求Model层"),
@@ -17,8 +17,7 @@ public enum VmTypeEnums {
     SERVICE(11,"Service层"),
     SERVICE_IMPL(12,"ServiceImpl实现层"),
     CONTROLLER(13,"Controller层"),
-    CONTROLLER_IMPL(14,"ControllerImpl实现层"),
-    RESULT(15,"Result层");
+    CONTROLLER_IMPL(14,"ControllerImpl实现层");
 
     private Integer code;
     private String  mgs;
