@@ -192,7 +192,7 @@ public class DbService {
         engine.setProperty(Velocity.RESOURCE_LOADER, "string");
         engine.addProperty("string.resource.loader.class", StringResourceLoader.class.getName());
         engine.addProperty("string.resource.loader.repository.static", "false");
-        //  engine.addProperty("string.resource.loader.modificationCheckInterval", "1");
+
         engine.init();
         StringResourceRepository repo = (StringResourceRepository) engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT);
 
@@ -213,6 +213,9 @@ public class DbService {
         map.put("email", sqlLiteService.queryPluginConfigByKey("email").getValue());
         map.put("datetime", DateUtils.format(new Date(), DbService.DATE_TIME_PATTERN));
         VelocityContext context = new VelocityContext(map);
+
+        //vmList排序
+        vmList.sort((o1, o2) -> sqlLiteService.queryTemplateById(o1).getVmType()<sqlLiteService.queryTemplateById(o2).getVmType()?1:0);
 
         //获取模板列表
         for (Integer templateId : vmList) {

@@ -99,7 +99,7 @@ public final class UiGenerateUtil {
         daoPanel.addActionListener(e -> {
             VirtualFile baseDir = project.getBaseDir();
             //找出dao层所在目录
-            VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir, "Mapper.java","Dao.java");
+            VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir, "dao/","dal/","Mapper.java","Dao.java");
             if (daoPath==null){
                 daoPath = baseDir;
             }
