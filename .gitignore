@@ -14,3 +14,6 @@ output
 .idea
 .mvn
 git
+build
+.gradle
+out
