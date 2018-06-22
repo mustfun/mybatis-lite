@@ -331,7 +331,11 @@ public class DbService {
         }
 
         if (template.equals(VmTypeEnums.CONTROLLER.getCode())) {
-            return  connectDbSetting.getPoInput().getText();
+            return  connectDbSetting.getControllerInput().getText();
+        }
+
+        if (template.equals(VmTypeEnums.CONTROLLER_IMPL.getCode())) {
+            return  connectDbSetting.getControllerInput().getText()+"/impl";
         }
 
         if (template.equals(VmTypeEnums.MAPPER.getCode())) {
