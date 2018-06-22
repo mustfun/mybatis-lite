@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.service;
 
+import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
@@ -14,6 +15,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -48,6 +51,10 @@ public class DbService {
     public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     private static ConcurrentHashMap<Integer, Integer> templateGenerateTimeMap = new ConcurrentHashMap<>(10);
+    /**
+     * 存放生成的file文件的
+     */
+    private static ConcurrentHashMap<Integer, PsiFile> fileHashMap = new ConcurrentHashMap<>(10);
 
     private static Project project;
 
@@ -202,7 +209,6 @@ public class DbService {
         map.put("columns", table.getColumnList());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
-        map.put("package", packageName);
         map.put("author", sqlLiteService.queryPluginConfigByKey("author").getValue());
         map.put("email", sqlLiteService.queryPluginConfigByKey("email").getValue());
         map.put("datetime", DateUtils.format(new Date(), DbService.DATE_TIME_PATTERN));
@@ -226,7 +232,6 @@ public class DbService {
                 VirtualFile vFile = VfsUtil.createDirectoryIfMissing(outPath);
                 PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
                 String packageName1 = JavaUtils.getPackageName(directory, templateId);
-                map.put("packageName", packageName1);
 
 
                 //merge 操作
@@ -236,16 +241,33 @@ public class DbService {
 
 
                 FileProviderFactory fileFactory = new FileProviderFactory(project,outPath);
+                PsiFile psiFile;
                 if (template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
-                    fileFactory.getInstance("xml").create(sw.toString(), fileName);
+                    psiFile = fileFactory.getInstance("xml").create(sw.toString(), fileName);
                 }else {
-                    fileFactory.getInstance("java").create(sw.toString(), fileName);
+                    psiFile = fileFactory.getInstance("java").create(sw.toString(), fileName);
+                }
+                fileHashMap.put(templateId, psiFile);
+                if (psiFile!=null&&psiFile instanceof PsiJavaFile){
+                    importNeedClass(psiFile,template.getVmType());
                 }
 
             } catch (IOException e) {
                 System.out.println("渲染模板发生异常{}e = " + e);
                 throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
+        }
+    }
+
+
+
+    private static void importNeedClass(PsiFile psiFile,Integer template){
+        if (template.equals(VmTypeEnums.SERVICE.getCode())) {
+
+        }
+        if (template.equals(VmTypeEnums.DAO.getCode())) {
+            //dao层引入model
+            JavaService.getInstance(project).importClazz((PsiJavaFile) psiFile, fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()).getName());
         }
     }
 

@@ -50,6 +50,8 @@ public class DialogWrapperPanel extends DialogWrapper {
         CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
         List collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
         List collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
+        //tempLateList需要根据vmType排个顺序
+        
         String packageName = connectDbSetting.getPackageInput().getText();
         //连接数据库
         DbService dbService = DbService.getInstance(project);

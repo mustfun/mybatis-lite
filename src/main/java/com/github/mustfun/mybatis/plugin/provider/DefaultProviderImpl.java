@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 
 /**
@@ -29,7 +30,9 @@ public class DefaultProviderImpl extends AbstractFileProvider {
     }
 
     @Override
-    public void create(String fullFile,String fileName){
+    public PsiFile create(String fullFile,String fileName){
+
+        final PsiFile[] psiFile = {null};
 
         WriteCommandAction.runWriteCommandAction(this.project, () -> {
             try {
@@ -39,11 +42,12 @@ public class DefaultProviderImpl extends AbstractFileProvider {
 
                 //PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
 
-                createFile(project, psiDirectory, fileName , fullFile, this.languageFileType);
+                psiFile[0] = createFile(project, psiDirectory, fileName , fullFile, this.languageFileType);
             } catch (Exception e) {
                 LOGGER.error(e);
             }
         });
+        return psiFile[0];
     }
 
 }

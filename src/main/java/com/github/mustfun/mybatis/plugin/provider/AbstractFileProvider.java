@@ -1,6 +1,8 @@
 package com.github.mustfun.mybatis.plugin.provider;
 
 
+import com.github.mustfun.mybatis.plugin.annotation.Annotation;
+import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
@@ -31,8 +33,7 @@ public abstract class AbstractFileProvider {
         this.outputPath = outputPath;
     }
 
-    public abstract void create(String fullFile,String fileName);
-
+    public abstract PsiFile create(String fullFile,String fileName);
 
     protected PsiFile createFile(Project project, @NotNull PsiDirectory psiDirectory, String fileName, String context, LanguageFileType fileType) {
 
