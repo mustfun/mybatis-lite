@@ -1,6 +1,5 @@
 package com.github.mustfun.mybatis.plugin.service;
 
-import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
@@ -15,10 +14,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.tools.ant.util.DateUtils;
@@ -291,10 +287,12 @@ public class DbService {
         if (vmType.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
             arrayList.add(fileHashMap.get(VmTypeEnums.DAO.getCode()));
             arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            arrayList.add(fileHashMap.get(VmTypeEnums.SERVICE.getCode()));
             context.internalPut("needImports", arrayList);
         }
         if (vmType.equals(VmTypeEnums.MAPPER.getCode())) {
             context.internalPut("daoImport", fileHashMap.get(VmTypeEnums.DAO.getCode()));
+            context.internalPut("poImport", fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
         }
 
     }

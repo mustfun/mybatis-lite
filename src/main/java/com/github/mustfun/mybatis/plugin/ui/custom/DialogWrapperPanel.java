@@ -8,14 +8,12 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.CheckBoxList;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -45,6 +43,7 @@ public class DialogWrapperPanel extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
+        super.doOKAction();
 
         //然后做自己的事情,准备生成代码了
         CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
@@ -76,8 +75,8 @@ public class DialogWrapperPanel extends DialogWrapper {
             System.out.println("o = " + o);
         }
 
-        //super.doOKAction();
-        //ConnectionHolder.remove();
+
+        ConnectionHolder.remove();
     }
 
     @NotNull
