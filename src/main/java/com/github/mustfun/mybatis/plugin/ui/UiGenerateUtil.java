@@ -202,20 +202,27 @@ public final class UiGenerateUtil {
         try {
             Properties properties = new Properties();
             properties.load(new FileInputStream(file));
+            boolean findUserName=true,findPassword=true,findUrl=true;
             for (Map.Entry<Object, Object> objectObjectEntry : properties.entrySet()) {
                 Object key = objectObjectEntry.getKey();
                 boolean isMatchUserName = Pattern.matches(".*?druid(.*)(username$)", (String)key);
-                if (isMatchUserName){
+                if (isMatchUserName&&findUserName){
+                    findUserName = false;
                     Object value = objectObjectEntry.getValue();
                     connectDbSetting.getUserName().setText((String)value);
                 }
                 boolean isMatchPassword = Pattern.matches(".*?druid(.*)(password$)", (String)key);
-                if (isMatchPassword){
-                    Object value = objectObjectEntry.getValue();
-                    connectDbSetting.getUserName().setText((String)value);
+                if (isMatchPassword&&findPassword){
+                    findPassword = false;
+                    String password = (String) objectObjectEntry.getValue();
+                    if (password!=null&&password.length()>=64){
+                        password  = ConfigTools.decrypt(password);
+                    }
+                    connectDbSetting.getPassword().setText(password);
                 }
                 boolean isMatchUrl = Pattern.matches(".*?druid(.*)(url$)", (String)key);
-                if (isMatchUrl){
+                if (isMatchUrl&&findUrl){
+                    findUrl = false;
                     Object value = objectObjectEntry.getValue();
                     String[] s = ((String)value).split("/");
                     String[] split = s[2].split(":");
