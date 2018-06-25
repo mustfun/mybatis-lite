@@ -103,71 +103,79 @@ public final class UiGenerateUtil {
             templateCheckbox.addMouseListener(new CheckMouseListener(project,1,templates.get(2)));
         });
 
+
+        //找出dao层所在目录
         JButton daoPanel = connectDbSetting.getDaoButton();
+        VirtualFile baseDir = project.getBaseDir();
+        VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir, "/dao/","/dal/","Mapper.java","Dao.java");
+        if (daoPath==null){
+            daoPath = baseDir;
+        }
+        connectDbSetting.getDaoInput().setText(daoPath.getPath());
+        VirtualFile finalDaoPath = daoPath;
         daoPanel.addActionListener(e -> {
-            VirtualFile baseDir = project.getBaseDir();
-            //找出dao层所在目录
-            VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir, "/dao/","/dal/","Mapper.java","Dao.java");
-            if (daoPath==null){
-                daoPath = baseDir;
-            }
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", daoPath, baseDir);
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", finalDaoPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
             connectDbSetting.getDaoInput().setText(path);
         });
 
+        //找出Mapper层所在目录
         JButton mapperButton = connectDbSetting.getMapperButton();
-
+        VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "/mapper/","Mapper.xml","Dao.xml");
+        if (mapperPath==null){
+            mapperPath = baseDir;
+        }
+        connectDbSetting.getMapperInput().setText(mapperPath.getPath());
+        VirtualFile finalMapperPath = mapperPath;
         mapperButton.addActionListener(e->{
-            VirtualFile baseDir = project.getBaseDir();
-            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "/mapper/","Mapper.xml","Dao.xml");
-            if (mapperPath==null){
-                mapperPath = baseDir;
-            }
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", mapperPath, baseDir);
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", finalMapperPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
             connectDbSetting.getMapperInput().setText(path);
         });
 
+        //找出model所在的目录
+        VirtualFile modelPath = JavaUtils.getFilePattenPath(baseDir, "/model/");
+        if (modelPath==null){
+            modelPath = baseDir;
+        }
+        VirtualFile finalModelPath = modelPath;
+        connectDbSetting.getPoInput().setText(modelPath.getPath());
         connectDbSetting.getPoButton().addActionListener(e->{
-            VirtualFile baseDir = project.getBaseDir();
-            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "/model/");
-            if (mapperPath==null){
-                mapperPath = baseDir;
-            }
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择实体层存放目录", mapperPath, baseDir);
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择实体层存放目录", finalModelPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
             connectDbSetting.getPoInput().setText(path);
         });
 
-        // service
+        // 找出Service所在的目录
+        VirtualFile servicePath = JavaUtils.getFilePattenPath(baseDir,"/service/","service.java");
+        if (servicePath==null){
+            servicePath = baseDir;
+        }
+        VirtualFile finalServicePath = servicePath;
+        connectDbSetting.getServiceInput().setText(servicePath.getPath());
         connectDbSetting.getServiceButton().addActionListener(e->{
-            VirtualFile baseDir = project.getBaseDir();
-            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir,"/service/","service.java");
-            if (mapperPath==null){
-                mapperPath = baseDir;
-            }
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Service层存放目录", mapperPath, baseDir);
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Service层存放目录", finalServicePath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
             connectDbSetting.getServiceInput().setText(path);
         });
 
-        //controller
+        // 找出controller所在的目录
+        VirtualFile controllerPath = JavaUtils.getFilePattenPath(baseDir, "/facade/","/controller/","controller.java");
+        if (controllerPath==null){
+            controllerPath = baseDir;
+        }
+        VirtualFile finalControllerPath = controllerPath;
+        connectDbSetting.getControllerInput().setText(controllerPath.getPath());
         connectDbSetting.getControllerButton().addActionListener(e->{
-            VirtualFile baseDir = project.getBaseDir();
-            VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "/facade/","/controller/","controller.java");
-            if (mapperPath==null){
-                mapperPath = baseDir;
-            }
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Controller层存放目录", mapperPath, baseDir);
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Controller层存放目录", finalControllerPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
