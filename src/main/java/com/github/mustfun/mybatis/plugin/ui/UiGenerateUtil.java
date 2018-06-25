@@ -86,8 +86,6 @@ public final class UiGenerateUtil {
             if (connection == null) {
                 Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
                 return;
-            }else {
-                //Messages.showMessageDialog("连接成功", "连接数据库提示", Messages.getInformationIcon());
             }
             List<LocalTable> tables = dbService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();

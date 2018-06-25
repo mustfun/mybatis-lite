@@ -7,6 +7,7 @@ import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.CheckBoxList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,13 +44,17 @@ public class DialogWrapperPanel extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        super.doOKAction();
 
         //然后做自己的事情,准备生成代码了
         CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
         CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
         List collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
         List collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
+        if (collectTableBoxList.size()==0||collectTemplateList.size()==0){
+            Messages.showErrorDialog("请至少勾选一个表和一个模板","错误提示");
+            return ;
+        }
+        super.doOKAction();
         //tempLateList需要根据vmType排个顺序
         String packageName = connectDbSetting.getPackageInput().getText();
         //连接数据库
