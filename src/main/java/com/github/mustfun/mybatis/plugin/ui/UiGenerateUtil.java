@@ -64,9 +64,9 @@ public final class UiGenerateUtil {
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
         }
-        connectDbSetting.getTemplateCheckbox().removeAll();
-        connectDbSetting.getTableCheckBox().removeAll();
         connectDbSetting.getConnectButton().addActionListener(e -> {
+            connectDbSetting.getTemplateCheckbox().clear();
+            connectDbSetting.getTableCheckBox().clear();
             //监听点击
             String address = connectDbSetting.getAddress().getText();
             String port = connectDbSetting.getPort().getText();
