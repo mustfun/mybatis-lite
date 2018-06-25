@@ -10,6 +10,7 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileEditor.FileEditorManager;
@@ -28,7 +29,6 @@ import org.yaml.snakeyaml.Yaml;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -64,6 +64,8 @@ public final class UiGenerateUtil {
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
         }
+        connectDbSetting.getTemplateCheckbox().removeAll();
+        connectDbSetting.getTableCheckBox().removeAll();
         connectDbSetting.getConnectButton().addActionListener(e -> {
             //监听点击
             String address = connectDbSetting.getAddress().getText();
@@ -200,7 +202,7 @@ public final class UiGenerateUtil {
     private void insertPanelUseProperties(ConnectDbSetting connectDbSetting, File file) {
         //读取properties类型文件
         try {
-            Properties properties = new Properties();
+            OrderedProperties properties = new OrderedProperties();
             properties.load(new FileInputStream(file));
             boolean findUserName=true,findPassword=true,findUrl=true;
             for (Map.Entry<Object, Object> objectObjectEntry : properties.entrySet()) {
