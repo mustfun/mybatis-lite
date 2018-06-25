@@ -20,9 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author yanglin
@@ -201,6 +199,37 @@ public final class JavaUtils {
     }
 
 
+    /**
+     * getFileByPattenName
+     * @param base
+     * @param patten
+     * @return
+     */
+    public static VirtualFile getFileByPattenName(VirtualFile base, String... patten){
+        if (base.getPath().contains("/.git/")||base.getPath().contains("/.idea/")
+                ||base.getPath().contains("/.target/")){
+            return null;
+        }
+        for (String s : patten) {
+            if (base.getPath().toUpperCase().contains(s.toUpperCase())){
+                return base;
+            }
+        }
+        if (base.getChildren().length!=0){
+            for (VirtualFile virtualFile : base.getChildren()) {
+                //这个地方不应该直接return，存在多个文件夹的情况
+                VirtualFile filePattenPath = getFileByPattenName(virtualFile, patten);
+                if (filePattenPath!=null){
+                    return filePattenPath;
+                }else{
+                    continue;
+                }
+            }
+        }
+        return null;
+    }
+
+
 
     public static List collectSelectedCheckBox(CheckBoxList checkBoxList) {
         List list = new ArrayList<>();
@@ -265,5 +294,26 @@ public final class JavaUtils {
     // FIXME: 2018/6/22
     public PsiClass[] findClassByName(){
         return PsiShortNamesCache.getInstance(null).getClassesByName(null,null);
+    }
+
+    /**
+     * 在yaml中遍历一个节点
+     * @param hashMap
+     */
+    public static void findYamlValueByTag(LinkedHashMap hashMap) {
+        for (Object o : hashMap.entrySet()) {
+            Map.Entry entry = (Map.Entry)o;
+            String key = (String) entry.getKey();
+            Object val = entry.getValue();
+            if (val instanceof LinkedHashMap){
+                findYamlValueByTag((LinkedHashMap)val);
+            }else{
+                if(key.equals("username") | key.equals("password")){
+                    System.out.println("------map------");
+                    String string = (String)val;
+                    System.out.println("ket:value "+key+":"+string);
+                }
+            }
+        }
     }
 }

@@ -23,10 +23,15 @@ import com.intellij.ui.CheckBoxList;
 import com.intellij.util.ui.JBInsets;
 import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
-
+import org.yaml.snakeyaml.Yaml;
 import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author itar
@@ -166,9 +171,34 @@ public final class UiGenerateUtil {
             connectDbSetting.getControllerInput().setText(path);
         });
 
+        //读取ymal或者property进行填充
+        fillPanelText(connectDbSetting);
+
 
         return new DialogWrapperPanel(project,true,connectDbSetting);
     }
+
+
+    private void fillPanelText(ConnectDbSetting connectDbSetting) {
+        VirtualFile baseDir = project.getBaseDir();
+        VirtualFile file = JavaUtils.getFileByPattenName(baseDir, "application.properties","application-dev.properties","application.yml","application-dev.yml");
+        if(file==null){
+            return ;
+        }
+        //读取yml文件
+        File ymlFile = new File(file.getPath());
+        try {
+            Yaml yaml = new Yaml();
+            //读入文件
+            Iterable<Object> result = yaml.loadAll(new FileInputStream(ymlFile));
+            while (result.iterator().hasNext()){
+                JavaUtils.findYamlValueByTag((LinkedHashMap) result.iterator().next());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public JBPopup getCommonPopUp(){
