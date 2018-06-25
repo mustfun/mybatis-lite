@@ -174,6 +174,9 @@ public class DbService {
             if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED")){
                 column.setDataType("BIGINT");
             }
+            if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED")){
+                column.setDataType("INTEGER");
+            }
             columnsList.add(column);
         }
         table.setColumnList(columnsList);
