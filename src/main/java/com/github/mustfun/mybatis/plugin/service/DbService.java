@@ -167,7 +167,8 @@ public class DbService {
             //列的数据类型，转换成Java类型
             String attrType = sqlLiteService.queryPluginConfigByKey(column.getDataType().toUpperCase()).getValue();
             column.setAttrType(attrType);
-            if (!hasBigDecimal && attrType.equals("BigDecimal" )) {
+            transAttrTypePath(attrType,column);
+            if (!hasBigDecimal && attrType.equals("BigDecimal")) {
                 hasBigDecimal = true;
             }
             //BIGINT处理一下
@@ -261,6 +262,15 @@ public class DbService {
                 System.out.println("渲染模板发生异常{}e = " + e);
                 throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
+        }
+    }
+
+    private static void transAttrTypePath(String attrType, LocalColumn column) {
+        if("Integer".equals(attrType)){
+            column.setAttrTypePath("java.lang.Integer");
+        }
+        if ("Long".equals(attrType)){
+            column.setAttrTypePath("java.lang.Long");
         }
     }
 
