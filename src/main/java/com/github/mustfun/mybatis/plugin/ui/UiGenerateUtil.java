@@ -200,7 +200,16 @@ public final class UiGenerateUtil {
                 if (password!=null&&password.length()>=64){
                     password  = ConfigTools.decrypt(password);
                 }
-                connectDbSetting.getPassword().setText(password==null?"root":password);
+                connectDbSetting.getPassword().setText(password);
+                String url = JavaUtils.findYamlValueByTag((LinkedHashMap)next,"url");
+                if (url!=null&&url.contains("jdbc:mysql")){
+                    String[] s = url.split("/");
+                    String[] split = s[2].split(":");
+                    connectDbSetting.getAddress().setText(split[0]);
+                    connectDbSetting.getPort().setText(split[1]);
+                    String s1 = s[3].split("\\?")[0];
+                    connectDbSetting.getDbName().setText(s1);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
