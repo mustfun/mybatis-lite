@@ -34,6 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * @author itar
@@ -200,10 +201,29 @@ public final class UiGenerateUtil {
         //读取properties类型文件
         try {
             Properties properties = new Properties();
-            properties.load(UiGenerateUtil.class.getResourceAsStream(file.getPath()));
+            properties.load(new FileInputStream(file));
             for (Map.Entry<Object, Object> objectObjectEntry : properties.entrySet()) {
                 Object key = objectObjectEntry.getKey();
-
+                boolean isMatchUserName = Pattern.matches(".*?druid(.*)(username$)", (String)key);
+                if (isMatchUserName){
+                    Object value = objectObjectEntry.getValue();
+                    connectDbSetting.getUserName().setText((String)value);
+                }
+                boolean isMatchPassword = Pattern.matches(".*?druid(.*)(password$)", (String)key);
+                if (isMatchPassword){
+                    Object value = objectObjectEntry.getValue();
+                    connectDbSetting.getUserName().setText((String)value);
+                }
+                boolean isMatchUrl = Pattern.matches(".*?druid(.*)(url$)", (String)key);
+                if (isMatchUrl){
+                    Object value = objectObjectEntry.getValue();
+                    String[] s = ((String)value).split("/");
+                    String[] split = s[2].split(":");
+                    connectDbSetting.getAddress().setText(split[0]);
+                    connectDbSetting.getPort().setText(split[1]);
+                    String s1 = s[3].split("\\?")[0];
+                    connectDbSetting.getDbName().setText(s1);
+                }
             }
 
         } catch (Exception e) {
