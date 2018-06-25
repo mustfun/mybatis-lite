@@ -33,6 +33,7 @@ import java.sql.Connection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author itar
@@ -188,6 +189,29 @@ public final class UiGenerateUtil {
         }
         //读取yml文件
         File ymlFile = new File(file.getPath());
+        if (file.getPath().contains(".yml")||file.getPath().contains(".yaml")){
+            insertPanelUseYaml(connectDbSetting, ymlFile);
+        }else if(file.getPath().contains(".properties")){
+            insertPanelUseProperties(connectDbSetting, ymlFile);
+        }
+    }
+
+    private void insertPanelUseProperties(ConnectDbSetting connectDbSetting, File file) {
+        //读取properties类型文件
+        try {
+            Properties properties = new Properties();
+            properties.load(UiGenerateUtil.class.getResourceAsStream(file.getPath()));
+            for (Map.Entry<Object, Object> objectObjectEntry : properties.entrySet()) {
+                Object key = objectObjectEntry.getKey();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void insertPanelUseYaml(ConnectDbSetting connectDbSetting, File ymlFile) {
         try {
             Yaml yaml = new Yaml();
             //读入文件
@@ -215,7 +239,6 @@ public final class UiGenerateUtil {
             e.printStackTrace();
         }
     }
-
 
 
     public JBPopup getCommonPopUp(){
