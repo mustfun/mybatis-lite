@@ -300,20 +300,26 @@ public final class JavaUtils {
      * 在yaml中遍历一个节点
      * @param hashMap
      */
-    public static void findYamlValueByTag(LinkedHashMap hashMap) {
+    public static String findYamlValueByTag(LinkedHashMap hashMap,String... keywords) {
         for (Object o : hashMap.entrySet()) {
             Map.Entry entry = (Map.Entry)o;
             String key = (String) entry.getKey();
             Object val = entry.getValue();
             if (val instanceof LinkedHashMap){
-                findYamlValueByTag((LinkedHashMap)val);
+                String yamlValueByTag = findYamlValueByTag((LinkedHashMap) val,keywords);
+                if (yamlValueByTag==null){
+                    continue;
+                }else{
+                    return yamlValueByTag;
+                }
             }else{
-                if(key.equals("username") | key.equals("password")){
-                    System.out.println("------map------");
-                    String string = (String)val;
-                    System.out.println("ket:value "+key+":"+string);
+                for (String keyword : keywords) {
+                    if(key.equals(keyword)){
+                        return (String)val;
+                    }
                 }
             }
         }
+        return null;
     }
 }

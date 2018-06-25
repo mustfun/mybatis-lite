@@ -10,6 +10,7 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
@@ -192,9 +193,16 @@ public final class UiGenerateUtil {
             //读入文件
             Iterable<Object> result = yaml.loadAll(new FileInputStream(ymlFile));
             while (result.iterator().hasNext()){
-                JavaUtils.findYamlValueByTag((LinkedHashMap) result.iterator().next());
+                Object next = result.iterator().next();
+                String username = JavaUtils.findYamlValueByTag((LinkedHashMap)next ,"username");
+                connectDbSetting.getUserName().setText(username==null?"root":username);
+                String password = JavaUtils.findYamlValueByTag((LinkedHashMap)next,"password");
+                if (password!=null&&password.length()>=64){
+                    password  = ConfigTools.decrypt(password);
+                }
+                connectDbSetting.getPassword().setText(password==null?"root":password);
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
