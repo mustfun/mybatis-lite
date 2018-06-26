@@ -19,33 +19,33 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditorService {
 
-  private Project project;
+    private Project project;
 
-  private FileEditorManager fileEditorManager;
+    private FileEditorManager fileEditorManager;
 
-  private CodeFormatterFacade codeFormatterFacade;
+    private CodeFormatterFacade codeFormatterFacade;
 
-  public EditorService(Project project) {
-    this.project = project;
-    this.fileEditorManager = FileEditorManager.getInstance(project);
-  }
-
-  public static EditorService getInstance(@NotNull Project project) {
-    return ServiceManager.getService(project, EditorService.class);
-  }
-
-  public void format(@NotNull PsiFile file, @NotNull PsiElement element) {
-    this.codeFormatterFacade = new CodeFormatterFacade(CodeStyle.getSettings(element.getProject()), element.getLanguage());
-    codeFormatterFacade.processText(file, new FormatTextRanges(element.getTextRange(), true), true);
-  }
-
-  public void scrollTo(@NotNull PsiElement element, int offset) {
-    NavigationUtil.activateFileWithPsiElement(element, true);
-    Editor editor = fileEditorManager.getSelectedTextEditor();
-    if (null != editor) {
-      editor.getCaretModel().moveToOffset(offset);
-      editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+    public EditorService(Project project) {
+        this.project = project;
+        this.fileEditorManager = FileEditorManager.getInstance(project);
     }
-  }
+
+    public static EditorService getInstance(@NotNull Project project) {
+        return ServiceManager.getService(project, EditorService.class);
+    }
+
+    public void format(@NotNull PsiFile file, @NotNull PsiElement element) {
+        this.codeFormatterFacade = new CodeFormatterFacade(CodeStyle.getSettings(element.getProject()), element.getLanguage());
+        codeFormatterFacade.processText(file, new FormatTextRanges(element.getTextRange(), true), true);
+    }
+
+    public void scrollTo(@NotNull PsiElement element, int offset) {
+        NavigationUtil.activateFileWithPsiElement(element, true);
+        Editor editor = fileEditorManager.getSelectedTextEditor();
+        if (null != editor) {
+            editor.getCaretModel().moveToOffset(offset);
+            editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+        }
+    }
 
 }

@@ -67,7 +67,7 @@ public class TemplateEditMenuAction extends AnAction {
                     //处理button事件写在这里...
                     String tepName = (String) table.getValueAt(row, 0);
                     Template template = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().get();
-
+                    
                 }
             }
         });
