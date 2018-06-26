@@ -96,8 +96,8 @@ public class TemplateEditMenuAction extends AnAction {
                             psiDirectory.add(psiFile);
                         }
                         //再打开
-                        PsiFile psiFile1 = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(template.getTepName() + ".vm")).findAny().get();
-                        new OpenFileDescriptor(project, psiFile1.getVirtualFile()).navigateInEditor(project, true);
+                        PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(template.getTepName() + ".vm")).findAny().get();
+                        new OpenFileDescriptor(project, realPsiFile.getVirtualFile()).navigateInEditor(project, true);
                         templateListPanel.doCancelAction();
                     });
                 }
