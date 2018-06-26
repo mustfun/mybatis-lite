@@ -8,21 +8,25 @@ import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.MyTableModel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateListPanel;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
+import com.intellij.AppTopics;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.table.JBTable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -98,6 +102,19 @@ public class TemplateEditMenuAction extends AnAction {
                         //再打开
                         PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(template.getTepName() + ".vm")).findAny().get();
                         new OpenFileDescriptor(project, realPsiFile.getVirtualFile()).navigateInEditor(project, true);
+
+
+                        ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerAdapter() {
+                            @Override
+                            public void beforeDocumentSaving(@NotNull final Document document) {
+                                final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+
+                                if (openProjects.length > 0) {
+                                    final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
+                                    System.out.println("psiFile = " + psiFile.getName());
+                                }
+                            }
+                        });
                         templateListPanel.doCancelAction();
                     });
                 }
