@@ -1,10 +1,11 @@
 package com.github.mustfun.mybatis.plugin.action;
 
 import com.github.mustfun.mybatis.plugin.model.Template;
+import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
-import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.*;
+import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.MyTableModel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateListPanel;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -12,6 +13,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.table.JBTable;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.util.List;
 
@@ -41,7 +44,7 @@ public class TemplateEditMenuAction extends AnAction {
             Object[] objects= new Object[4];
             objects[0] = template.getTepName();
             objects[1] = template.getCreateBy()==null?"":template.getCreateBy();
-            objects[2] = template.getVmType();
+            objects[2] = VmTypeEnums.findVmNameByVmType(template.getVmType()).getMgs();
             objects[3] = button;
             obj[i] = objects;
         }
@@ -49,7 +52,25 @@ public class TemplateEditMenuAction extends AnAction {
         templateListForm.getMainPanel().validate();
         TemplateListPanel templateListPanel = new TemplateListPanel(project, true, templateListForm);
         templateListPanel.setTitle("编辑模板");
+        addHandler(templateList,templates);
         templateListPanel.show();
+    }
+
+    private void addHandler(JBTable table, List<Template> templates){
+        //添加事件
+        table.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.getSelectedRow();
+                int column = table.getSelectedColumn();
+                if(column==3){
+                    //处理button事件写在这里...
+                    String tepName = (String) table.getValueAt(row, 0);
+                    Template template = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().get();
+
+                }
+            }
+        });
     }
 
 

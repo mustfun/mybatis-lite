@@ -82,11 +82,9 @@ public class TemplateListForm {
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            if (columnIndex == 3 || columnIndex == 4) {
-                return false;
-            }
-            return true;
+            return false;
         }
+
     }
 
     class ComboBoxCellRenderer implements TableCellRenderer {
@@ -96,6 +94,9 @@ public class TemplateListForm {
                                                        boolean isSelected, boolean hasFocus, int row, int column) {
             JButton cmb = (JButton) value;
             cmb.setFont(table.getFont());
+            if (isSelected){
+
+            }
             return cmb;
         }
     }

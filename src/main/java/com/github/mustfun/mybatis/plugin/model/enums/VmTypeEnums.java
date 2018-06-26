@@ -27,6 +27,15 @@ public enum VmTypeEnums {
         this.mgs = mgs;
     }
 
+    public static VmTypeEnums findVmNameByVmType(Integer code){
+        for (VmTypeEnums vmTypeEnums : VmTypeEnums.values()) {
+            if (vmTypeEnums.getCode().equals(code)){
+                return vmTypeEnums;
+            }
+        }
+        return VmTypeEnums.RESULT;
+    }
+
     public Integer getCode() {
         return code;
     }
