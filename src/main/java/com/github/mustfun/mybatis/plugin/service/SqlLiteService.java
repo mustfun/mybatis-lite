@@ -80,6 +80,7 @@ public class SqlLiteService {
                 template.setTepDesc(rs.getString("tep_desc"));
                 template.setTepContent(rs.getString("tep_content"));
                 template.setDbType(rs.getInt("db_type"));
+                template.setCreateBy(rs.getString("create_by"));
                 template.setVmType(rs.getInt("vm_type"));
                 list.add(template);
             }

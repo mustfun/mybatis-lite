@@ -42,8 +42,8 @@ public class TemplateListForm {
 
 
     public static class MyTableModel extends AbstractTableModel {
-        private String headName[];
-        private Object obj[][];
+        private String[] headName;
+        private Object[][] obj;
 
         public MyTableModel() {
             super();
@@ -95,38 +95,8 @@ public class TemplateListForm {
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int row, int column) {
             JButton cmb = (JButton) value;
-            if (isSelected) {
-                cmb.setForeground(table.getSelectionForeground());
-                cmb.setBackground(table.getSelectionBackground());
-            } else {
-                cmb.setForeground((unselectedForeground != null) ? unselectedForeground
-                        : table.getForeground());
-                cmb.setBackground((unselectedBackground != null) ? unselectedBackground
-                        : table.getBackground());
-            }
             cmb.setFont(table.getFont());
-            if (hasFocus) {
-                cmb.setBorder(UIManager
-                        .getBorder("Table.focusCellHighlightBorder"));
-                if (!isSelected && table.isCellEditable(row, column)) {
-                    Color col;
-                    col = UIManager.getColor("Table.focusCellForeground");
-                    if (col != null) {
-                        cmb.setForeground(col);
-                    }
-                    col = UIManager.getColor("Table.focusCellBackground");
-                    if (col != null) {
-                        cmb.setBackground(col);
-                    }
-                }
-            } else {
-                cmb.setBorder(noFocusBorder);
-            }
             return cmb;
         }
-
-        protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
-        private Color unselectedForeground;
-        private Color unselectedBackground;
     }
 }
