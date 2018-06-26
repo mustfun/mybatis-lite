@@ -28,4 +28,14 @@ public class TemplateListPanel extends DialogWrapper {
     protected JComponent createCenterPanel() {
         return templateEdit.getMainPanel();
     }
+
+    @Override
+    public void doCancelAction() {
+        super.doCancelAction();
+    }
+
+    @Override
+    protected void doOKAction() {
+        super.doOKAction();
+    }
 }
