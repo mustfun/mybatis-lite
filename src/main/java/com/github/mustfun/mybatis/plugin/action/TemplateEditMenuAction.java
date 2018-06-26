@@ -7,14 +7,24 @@ import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.MyTableModel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateListPanel;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtil;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.table.JBTable;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
@@ -52,11 +62,11 @@ public class TemplateEditMenuAction extends AnAction {
         templateListForm.getMainPanel().validate();
         TemplateListPanel templateListPanel = new TemplateListPanel(project, true, templateListForm);
         templateListPanel.setTitle("编辑模板");
-        addHandler(templateList,templates);
+        addHandler(templateList,templates,project);
         templateListPanel.show();
     }
 
-    private void addHandler(JBTable table, List<Template> templates){
+    private void addHandler(JBTable table, List<Template> templates, Project project){
         //添加事件
         table.addMouseListener(new MouseAdapter(){
             @Override
@@ -67,7 +77,18 @@ public class TemplateEditMenuAction extends AnAction {
                     //处理button事件写在这里...
                     String tepName = (String) table.getValueAt(row, 0);
                     Template template = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().get();
-                    
+                    PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(template.getTepName()+".vm", JavaFileType.INSTANCE, template.getTepContent());
+                    //先保存，再打开，再删除
+                    VirtualFile vFile = null;
+                    try {
+                        vFile = VfsUtil.createDirectoryIfMissing(MybatisConstants.TEMP_DIR_PATH+"/tmp/"+template.getTepName()+".vm");
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    PsiDirectory psiDirectory = PsiDirectoryFactory.getInstance(project).createDirectory(vFile);
+                    psiDirectory.add(psiFile);
+                    //再打开
+                    new OpenFileDescriptor(project, vFile).navigate(true);
                 }
             }
         });

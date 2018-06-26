@@ -1,11 +1,14 @@
 package com.github.mustfun.mybatis.plugin.util;
 
+import com.intellij.openapi.application.PathManager;
 import com.intellij.psi.util.ReferenceSetBase;
 
 /**
  * @author yanglin
  */
 public final class MybatisConstants {
+
+  public static final String TEMP_DIR_PATH = PathManager.getPluginsPath() + "/temp";
 
   private MybatisConstants() {
     throw new UnsupportedOperationException();

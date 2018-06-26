@@ -68,7 +68,7 @@ public class DbUtil {
             //String realPath = PathManager.getPluginsPath();
             // File path = PluginManager.getPlugin(PluginId.getId("mybatis-plugin-free")).getPath();
             //查看是否存在db文件，不存在就创建，存在就直接连
-            String tempPath = PathManager.getPluginsPath()+"/temp/db/generate_web.db";
+            String tempPath = MybatisConstants.TEMP_DIR_PATH+"/db/generate_web.db";
             File tempPathFile = new File(tempPath);
             if (!tempPathFile.exists()){
                 InputStream s = DbUtil.this.getClass().getResourceAsStream("/db/generate_web.db");
@@ -87,7 +87,7 @@ public class DbUtil {
      * @return
      */
     protected String createCustomFontUrl(InputStream stream) {
-        String tempDirPath = PathManager.getPluginsPath()+"/temp";
+        String tempDirPath = MybatisConstants.TEMP_DIR_PATH;
         try {
             File tempFile = new File(tempDirPath + "/db");
             if (!tempFile.exists()){

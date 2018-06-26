@@ -1,8 +1,6 @@
 package com.github.mustfun.mybatis.plugin.provider;
 
 
-import com.github.mustfun.mybatis.plugin.annotation.Annotation;
-import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDirectory;
@@ -11,8 +9,6 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.formatter.java.JavaFormatterUtil;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
