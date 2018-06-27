@@ -3,7 +3,6 @@ package com.github.mustfun.mybatis.plugin.service;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
-import com.github.mustfun.mybatis.plugin.model.PluginConfig;
 import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.provider.FileProviderFactory;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
@@ -138,20 +137,20 @@ public class DbService {
     }
 
 
-    public void generateCodeUseTemplate(ConnectDbSetting connectDbSetting, Connection connection, LocalTable columns, String packageName, List<Integer> vmList) {
-        generatorCode(connectDbSetting,connection,columns,columns.getColumnList(),packageName,vmList);
+    public void generateCodeUseTemplate(ConnectDbSetting connectDbSetting, Connection connection, LocalTable columns, String tablePrefix, List<Integer> vmList) {
+        generatorCode(connectDbSetting,connection,columns,columns.getColumnList(),tablePrefix,vmList);
     }
 
 
     public static void generatorCode(ConnectDbSetting connectDbSetting, Connection connection, LocalTable table,
-                                     List<LocalColumn> columns, String packageName, List<Integer> vmList) {
+                                     List<LocalColumn> columns, String tablePrefix, List<Integer> vmList) {
 
         SqlLiteService sqlLiteService =  SqlLiteService.getInstance(connection);
 
         boolean hasBigDecimal = false;
         //表名转换成Java类名
-        PluginConfig tablePrefix = sqlLiteService.queryPluginConfigByKey("tablePrefix");
-        String className = tableToJava(table.getTableName(), tablePrefix==null?"t":tablePrefix.getValue());
+        //PluginConfig tablePrefix = sqlLiteService.queryPluginConfigByKey("tablePrefix");
+        String className = tableToJava(table.getTableName(), tablePrefix);
         table.setClassName(className);
         table.setClassLittleName(StringUtils.uncapitalize(className));
 
@@ -229,7 +228,7 @@ public class DbService {
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
 
-                String fileName = getFileName(template.getVmType(), table.getClassName(), packageName);
+                String fileName = getFileName(template.getVmType(), table.getClassName());
                 String outPath = getRealPath(template.getVmType(),connectDbSetting);
 
 
@@ -287,20 +286,22 @@ public class DbService {
         String daoImport = fileHashMap.get(VmTypeEnums.DAO.getCode());
         String serverImport = fileHashMap.get(VmTypeEnums.SERVICE.getCode());
         String resultImport = fileHashMap.get(VmTypeEnums.RESULT.getCode());
-        //这里找不到都会报空指针，需要用多套模板解决，暂留
         // FIXME: 2018/6/27
         if (StringUtils.isEmpty(poImport)){
             VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "po.java",className+".java");
-            poImport = filePattenPath.getPath();
+            poImport = filePattenPath==null?null:filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(daoImport)){
-            daoImport = JavaUtils.getFilePattenPath(project.getBaseDir(), className+"Dao.java").getPath();
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "Dao.java");
+            daoImport = filePattenPath==null?null:filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(serverImport)){
-            serverImport = JavaUtils.getFilePattenPath(project.getBaseDir(), className+"Service.java").getPath();
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "Service.java");
+            serverImport = filePattenPath==null?null:filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(resultImport)){
-            resultImport = JavaUtils.getFilePattenPath(project.getBaseDir(), "Result.java","BaseResult.java","BaseResponse.java","Response.java").getPath();
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), "Result.java", "BaseResult.java", "BaseResponse.java", "Response.java");
+            resultImport = filePattenPath==null?null:filePattenPath.getPath();
         }
         if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
             arrayList.add(poImport);
@@ -325,7 +326,7 @@ public class DbService {
         }
         if (vmType.equals(VmTypeEnums.MAPPER.getCode())) {
             context.internalPut("daoImport", daoImport);
-            context.internalPut("poImport", daoImport);
+            context.internalPut("poImport", poImport);
         }
 
     }
@@ -380,6 +381,9 @@ public class DbService {
      */
     public static String tableToJava(String tableName, String tablePrefix) {
         if (StringUtils.isNotBlank(tablePrefix)) {
+            if (!tablePrefix.contains("_")){
+                tablePrefix += "_";
+            }
             tableName = tableName.replaceFirst(tablePrefix, "" );
         }
         return columnToJava(tableName);
@@ -408,7 +412,7 @@ public class DbService {
     /**
      * 获取文件名
      */
-    public static String getFileName(Integer template, String className, String packageName) {
+    public static String getFileName(Integer template, String className) {
         if (template.equals(VmTypeEnums.RESULT.getCode())) {
             return "Result.java";
         }

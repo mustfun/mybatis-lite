@@ -57,7 +57,7 @@ public class DialogWrapperPanel extends DialogWrapper {
         }
         super.doOKAction();
         //tempLateList需要根据vmType排个顺序
-        String packageName = connectDbSetting.getPackageInput().getText();
+        String tablePrefix = connectDbSetting.getTablePrefixInput().getText();
         //连接数据库
         DbService dbService = DbService.getInstance(project);
         Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
@@ -71,7 +71,7 @@ public class DialogWrapperPanel extends DialogWrapper {
                     table = dbService.initLocalTable(connection, rs);
                 }
                 //生成代码啦，替换模板
-                dbService.generateCodeUseTemplate(connectDbSetting,sqlLiteConnection,table,packageName,collectTemplateList);
+                dbService.generateCodeUseTemplate(connectDbSetting,sqlLiteConnection,table,tablePrefix,collectTemplateList);
             }
         } catch (Exception e) {
             e.printStackTrace();

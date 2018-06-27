@@ -157,21 +157,21 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="3fcbc" binding="packagePanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+          <grid id="3fcbc" binding="tablePrefixPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
             <children>
-              <component id="87db1" class="com.intellij.ui.components.JBLabel" binding="packageLabel">
+              <component id="87db1" class="com.intellij.ui.components.JBLabel" binding="tablePrefixLabel">
                 <constraints/>
                 <properties>
                   <preferredSize width="100" height="17"/>
-                  <text value="包名"/>
+                  <text value="表前缀（可不填）"/>
                 </properties>
               </component>
-              <component id="ce424" class="com.intellij.ui.components.JBTextField" binding="packageInput">
+              <component id="ce424" class="com.intellij.ui.components.JBTextField" binding="tablePrefixInput">
                 <constraints/>
                 <properties>
                   <margin top="0" left="0" bottom="0" right="0"/>

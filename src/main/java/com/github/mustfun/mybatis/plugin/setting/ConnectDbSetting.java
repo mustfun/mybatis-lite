@@ -40,8 +40,8 @@ public class ConnectDbSetting {
     private CheckBoxList<Integer> templateCheckbox;
     private JPanel configPanel;
     private JPanel generatePanel;
-    private JBLabel packageLabel;
-    private JBTextField packageInput;
+    private JBLabel tablePrefixLabel;
+    private JBTextField tablePrefixInput;
     private JButton daoButton;
     private JBLabel daoLabel;
     private JBTextField daoInput;
@@ -53,7 +53,7 @@ public class ConnectDbSetting {
     private JButton poButton;
     private JPanel daoPanel;
     private JPanel mapperPanel;
-    private JPanel packagePanel;
+    private JPanel tablePrefixPanel;
     private JPanel poPanel;
     private JBLabel controllerLabel;
     private JBTextField controllerInput;
