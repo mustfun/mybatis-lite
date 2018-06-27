@@ -242,7 +242,7 @@ public class DbService {
 
                 fileHashMap.put(template.getVmType(), realPackageName+"."+fileName.split("\\.")[0]);
                 //给VM填充
-                importNeedClass(context,template.getVmType());
+                importNeedClass(context,template.getVmType(),table.getClassName());
 
 
                 //merge 操作
@@ -279,33 +279,53 @@ public class DbService {
      * 导入包
      * @param context
      * @param vmType
+     * @param className
      */
-    private static void importNeedClass(VelocityContext context, Integer vmType){
+    private static void importNeedClass(VelocityContext context, Integer vmType, String className){
         ArrayList<String> arrayList = new ArrayList<>();
+        String poImport = fileHashMap.get(VmTypeEnums.MODEL_PO.getCode());
+        String daoImport = fileHashMap.get(VmTypeEnums.DAO.getCode());
+        String serverImport = fileHashMap.get(VmTypeEnums.SERVICE.getCode());
+        String resultImport = fileHashMap.get(VmTypeEnums.RESULT.getCode());
+        //这里找不到都会报空指针，需要用多套模板解决，暂留
+        // FIXME: 2018/6/27
+        if (StringUtils.isEmpty(poImport)){
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "po.java",className+".java");
+            poImport = filePattenPath.getPath();
+        }
+        if (StringUtils.isEmpty(daoImport)){
+            daoImport = JavaUtils.getFilePattenPath(project.getBaseDir(), className+"Dao.java").getPath();
+        }
+        if (StringUtils.isEmpty(serverImport)){
+            serverImport = JavaUtils.getFilePattenPath(project.getBaseDir(), className+"Service.java").getPath();
+        }
+        if (StringUtils.isEmpty(resultImport)){
+            resultImport = JavaUtils.getFilePattenPath(project.getBaseDir(), "Result.java","BaseResult.java","BaseResponse.java","Response.java").getPath();
+        }
         if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
-            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
-            arrayList.add(fileHashMap.get(VmTypeEnums.DAO.getCode()));
+            arrayList.add(poImport);
+            arrayList.add(daoImport);
             context.internalPut("needImports", arrayList);
         }
         if (vmType.equals(VmTypeEnums.DAO.getCode())) {
-            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            arrayList.add(poImport);
             context.internalPut("needImports", arrayList);
         }
         if (vmType.equals(VmTypeEnums.CONTROLLER.getCode())) {
-            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
-            arrayList.add(fileHashMap.get(VmTypeEnums.SERVICE.getCode()));
-            arrayList.add(fileHashMap.get(VmTypeEnums.RESULT.getCode()));
+            arrayList.add(poImport);
+            arrayList.add(serverImport);
+            arrayList.add(resultImport);
             context.internalPut("needImports", arrayList);
         }
         if (vmType.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
-            arrayList.add(fileHashMap.get(VmTypeEnums.DAO.getCode()));
-            arrayList.add(fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
-            arrayList.add(fileHashMap.get(VmTypeEnums.SERVICE.getCode()));
+            arrayList.add(daoImport);
+            arrayList.add(poImport);
+            arrayList.add(serverImport);
             context.internalPut("needImports", arrayList);
         }
         if (vmType.equals(VmTypeEnums.MAPPER.getCode())) {
-            context.internalPut("daoImport", fileHashMap.get(VmTypeEnums.DAO.getCode()));
-            context.internalPut("poImport", fileHashMap.get(VmTypeEnums.MODEL_PO.getCode()));
+            context.internalPut("daoImport", daoImport);
+            context.internalPut("poImport", daoImport);
         }
 
     }
