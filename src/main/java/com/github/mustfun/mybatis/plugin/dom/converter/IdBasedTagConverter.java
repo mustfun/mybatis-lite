@@ -123,6 +123,7 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
         @Override
         public Collection<? extends IdDomElement> getValue() {
             List<IdDomElement> result = Lists.newArrayList();
+            //找到所有的xml文件
             Collection<Mapper> mappers = MapperUtils.findMappers(context.getProject());
             for (Mapper mapper : mappers) {
                 result.addAll(getComparisons(mapper, context));
