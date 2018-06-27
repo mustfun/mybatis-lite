@@ -109,33 +109,40 @@ public class TemplateEditMenuAction extends AnAction {
                         PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(template.getTepName() + ".vm")).findAny().get();
                         new OpenFileDescriptor(project, realPsiFile.getVirtualFile()).navigateInEditor(project, true);
 
-
-                        ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerAdapter() {
-                            @Override
-                            public void beforeDocumentSaving(@NotNull final Document document) {
-                                final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
-
-                                if (openProjects.length > 0) {
-                                    final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
-                                    String text = psiFile.getText();
-                                    if (StringUtils.isEmpty(text)){
-                                        Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
-                                        return ;
-                                    }
-                                    if (DigestUtils.md5(text).equals(DigestUtils.md5(template.getTepContent()))){
-                                        return ;
-                                    }
-                                    Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
-                                    SqlLiteService instance = SqlLiteService.getInstance(connection);
-                                    Template updatePo = new Template();
-                                    updatePo.setId(template.getId());
-                                    updatePo.setTepContent(text);
-                                    instance.updateTemplate(updatePo);
-
-                                }
-                            }
-                        });
                         templateListPanel.doCancelAction();
+                    });
+
+                    /**
+                     * 添加监听事件
+                     */
+                    ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerAdapter() {
+
+                        @Override
+                        public void beforeDocumentSaving(@NotNull final Document document) {
+                            final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+
+                            if (openProjects.length > 0) {
+                                final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
+                                String text = psiFile.getText();
+                                if (StringUtils.isEmpty(text)){
+                                    return ;
+                                }
+                                if (StringUtils.isEmpty(document.getText())){
+                                    Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
+                                    return ;
+                                }
+                                if (DigestUtils.md5(text).equals(DigestUtils.md5(template.getTepContent()))){
+                                    return ;
+                                }
+                                Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+                                SqlLiteService instance = SqlLiteService.getInstance(connection);
+                                Template updatePo = new Template();
+                                updatePo.setId(template.getId());
+                                updatePo.setTepContent(text);
+                                instance.updateTemplate(updatePo);
+
+                            }
+                        }
                     });
                 }
             }
