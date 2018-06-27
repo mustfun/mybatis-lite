@@ -17,7 +17,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.apache.tools.ant.util.DateUtils;
+import org.apache.http.client.utils.DateUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -212,7 +212,7 @@ public class DbService {
         map.put("mainPath", mainPath);
         map.put("author", sqlLiteService.queryPluginConfigByKey("author").getValue());
         map.put("email", sqlLiteService.queryPluginConfigByKey("email").getValue());
-        map.put("datetime", DateUtils.format(new Date(), DbService.DATE_TIME_PATTERN));
+        map.put("datetime", DateUtils.formatDate(new Date(), DbService.DATE_TIME_PATTERN));
         VelocityContext context = new VelocityContext(map);
 
         //vmList排序

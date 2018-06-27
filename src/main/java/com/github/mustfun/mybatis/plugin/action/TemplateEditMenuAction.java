@@ -7,6 +7,7 @@ import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.MyTableModel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateListPanel;
+import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.AppTopics;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -18,6 +19,7 @@ import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -26,6 +28,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.table.JBTable;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -54,6 +58,8 @@ public class TemplateEditMenuAction extends AnAction {
         DbService dbService = DbService.getInstance(project);
         Connection connection = dbService.getSqlLiteConnection();
         SqlLiteService sqlLiteService =  SqlLiteService.getInstance(connection);
+        ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION,connection);
+
         List<Template> templates = sqlLiteService.queryTemplateList();
         Object[][] obj = new Object[templates.size()][];
         for (int i = 0; i < templates.size(); i++) {
@@ -111,7 +117,21 @@ public class TemplateEditMenuAction extends AnAction {
 
                                 if (openProjects.length > 0) {
                                     final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
-                                    System.out.println("psiFile = " + psiFile.getName());
+                                    String text = psiFile.getText();
+                                    if (StringUtils.isEmpty(text)){
+                                        Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
+                                        return ;
+                                    }
+                                    if (DigestUtils.md5(text).equals(DigestUtils.md5(template.getTepContent()))){
+                                        return ;
+                                    }
+                                    Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+                                    SqlLiteService instance = SqlLiteService.getInstance(connection);
+                                    Template updatePo = new Template();
+                                    updatePo.setId(template.getId());
+                                    updatePo.setTepContent(text);
+                                    instance.updateTemplate(updatePo);
+
                                 }
                             }
                         });

@@ -57,9 +57,17 @@ public class SqlLiteService {
         return null;
     }
 
-    public void deleteTemplate(){
+    public void deleteTemplate(Integer id){
         try {
-            statement.executeUpdate("DROP TABLE IF EXISTS person");
+            statement.executeUpdate("delete from template where id="+id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTemplate(Template template){
+        try {
+            statement.executeUpdate("update template set tep_content='"+template.getTepContent()+"' where id="+template.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

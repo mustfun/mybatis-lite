@@ -1,7 +1,8 @@
 package com.github.mustfun.mybatis.plugin.util;
 
 
-import org.gradle.internal.impldep.org.apache.commons.codec.digest.DigestUtils;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.Connection;
 import java.util.concurrent.ConcurrentHashMap;

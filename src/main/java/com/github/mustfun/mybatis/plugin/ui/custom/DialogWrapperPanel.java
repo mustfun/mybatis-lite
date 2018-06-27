@@ -5,6 +5,7 @@ import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -59,8 +60,8 @@ public class DialogWrapperPanel extends DialogWrapper {
         String packageName = connectDbSetting.getPackageInput().getText();
         //连接数据库
         DbService dbService = DbService.getInstance(project);
-        Connection connection = ConnectionHolder.getConnection("mysqlDbConnection");
-        Connection sqlLiteConnection = ConnectionHolder.getConnection("sqlLiteConnection");
+        Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
+        Connection sqlLiteConnection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         try {
             for (Object s : collectTableBoxList) {
                 System.out.println("需要生成代码的表{} = " + s);

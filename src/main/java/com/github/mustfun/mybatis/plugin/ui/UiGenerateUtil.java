@@ -10,6 +10,7 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.icons.AllIcons;
@@ -82,7 +83,7 @@ public final class UiGenerateUtil {
             //连接数据库
             DbService dbService = DbService.getInstance(project);
             Connection connection = dbService.getConnection(dbSourcePo);
-            ConnectionHolder.addConnection("mysqlDbConnection",connection);
+            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION,connection);
             if (connection == null) {
                 Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
                 return;
@@ -93,7 +94,7 @@ public final class UiGenerateUtil {
                 tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
             }
             Connection sqlLiteConnection = dbService.getSqlLiteConnection();
-            ConnectionHolder.addConnection("sqlLiteConnection",sqlLiteConnection);
+            ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION,sqlLiteConnection);
             SqlLiteService sqlLiteService =  SqlLiteService.getInstance(sqlLiteConnection);
             List<Template> templates = sqlLiteService.queryTemplateList();
             CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
