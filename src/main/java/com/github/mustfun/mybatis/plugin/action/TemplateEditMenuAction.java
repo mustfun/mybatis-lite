@@ -124,14 +124,14 @@ public class TemplateEditMenuAction extends AnAction {
                             if (openProjects.length > 0) {
                                 final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
                                 String text = psiFile.getText();
-                                if (StringUtils.isEmpty(text)){
-                                    return ;
-                                }
                                 if (StringUtils.isEmpty(document.getText())){
                                     Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
                                     return ;
                                 }
-                                if (DigestUtils.md5(text).equals(DigestUtils.md5(template.getTepContent()))){
+                                if (StringUtils.isEmpty(text)){
+                                    return ;
+                                }
+                                if (DigestUtils.md5Hex(text).equals(DigestUtils.md5Hex(template.getTepContent()))){
                                     return ;
                                 }
                                 Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
