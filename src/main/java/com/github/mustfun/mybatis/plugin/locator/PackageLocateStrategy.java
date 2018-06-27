@@ -10,20 +10,20 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class PackageLocateStrategy extends LocateStrategy{
+public class PackageLocateStrategy extends LocateStrategy {
 
-  private PackageProvider provider = new MapperXmlPackageProvider();
+    private PackageProvider provider = new MapperXmlPackageProvider();
 
-  @Override
-  public boolean apply(@NotNull PsiClass clazz) {
-    String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
-    PsiPackage pkg = JavaPsiFacade.getInstance(clazz.getProject()).findPackage(packageName);
-    for (PsiPackage tmp : provider.getPackages(clazz.getProject())) {
-      if (tmp.equals(pkg)) {
-        return true;
-      }
+    @Override
+    public boolean apply(@NotNull PsiClass clazz) {
+        String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+        PsiPackage pkg = JavaPsiFacade.getInstance(clazz.getProject()).findPackage(packageName);
+        for (PsiPackage tmp : provider.getPackages(clazz.getProject())) {
+            if (tmp.equals(pkg)) {
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
 }

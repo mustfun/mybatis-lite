@@ -17,53 +17,53 @@ import java.util.List;
  */
 public interface Mapper extends DomElement {
 
-  @NotNull
-  @SubTagsList({"insert", "update", "delete", "select"})
-  public List<IdDomElement> getDaoElements();
+    @NotNull
+    @SubTagsList({"insert", "update", "delete", "select"})
+    public List<IdDomElement> getDaoElements();
 
-  @Required
-  @NameValue
-  @NotNull
-  @Attribute("namespace")
-  public GenericAttributeValue<String> getNamespace();
+    @Required
+    @NameValue
+    @NotNull
+    @Attribute("namespace")
+    public GenericAttributeValue<String> getNamespace();
 
-  @NotNull
-  @SubTagList("resultMap")
-  public List<ResultMap> getResultMaps();
+    @NotNull
+    @SubTagList("resultMap")
+    public List<ResultMap> getResultMaps();
 
-  @NotNull
-  @SubTagList("parameterMap")
-  public List<ParameterMap> getParameterMaps();
+    @NotNull
+    @SubTagList("parameterMap")
+    public List<ParameterMap> getParameterMaps();
 
-  @NotNull
-  @SubTagList("sql")
-  public List<Sql> getSqls();
+    @NotNull
+    @SubTagList("sql")
+    public List<Sql> getSqls();
 
-  @NotNull
-  @SubTagList("insert")
-  public List<Insert> getInserts();
+    @NotNull
+    @SubTagList("insert")
+    public List<Insert> getInserts();
 
-  @NotNull
-  @SubTagList("update")
-  public List<Update> getUpdates();
+    @NotNull
+    @SubTagList("update")
+    public List<Update> getUpdates();
 
-  @NotNull
-  @SubTagList("delete")
-  public List<Delete> getDeletes();
+    @NotNull
+    @SubTagList("delete")
+    public List<Delete> getDeletes();
 
-  @NotNull
-  @SubTagList("select")
-  public List<Select> getSelects();
+    @NotNull
+    @SubTagList("select")
+    public List<Select> getSelects();
 
-  @SubTagList("select")
-  public Select addSelect();
+    @SubTagList("select")
+    public Select addSelect();
 
-  @SubTagList("update")
-  public Update addUpdate();
+    @SubTagList("update")
+    public Update addUpdate();
 
-  @SubTagList("insert")
-  public Insert addInsert();
+    @SubTagList("insert")
+    public Insert addInsert();
 
-  @SubTagList("delete")
-  public Delete addDelete();
+    @SubTagList("delete")
+    public Delete addDelete();
 }

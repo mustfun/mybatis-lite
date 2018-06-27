@@ -21,28 +21,31 @@ import java.util.Set;
 /**
  * @author yanglin
  */
-public class MapperXmlPackageProvider extends PackageProvider{
+public class MapperXmlPackageProvider extends PackageProvider {
 
-  @NotNull @Override
-  public Set<PsiPackage> getPackages(@NotNull Project project) {
-    HashSet<PsiPackage> res = Sets.newHashSet();
-    Collection<Mapper> mappers = MapperUtils.findMappers(project);
-    JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
-    for (Mapper mapper : mappers) {
-      String namespace = MapperUtils.getNamespace(mapper);
-      PsiClass clazz = javaPsiFacade.findClass(namespace, GlobalSearchScope.allScope(project));
-      if (null != clazz) {
-        PsiFile file = clazz.getContainingFile();
-        if (file instanceof PsiJavaFile) {
-          String packageName = ((PsiJavaFile) file).getPackageName();
-          PsiPackage pkg = javaPsiFacade.findPackage(packageName);
-          if (null != pkg) {
-            res.add(pkg);
-          }
+    @NotNull
+    @Override
+    public Set<PsiPackage> getPackages(@NotNull Project project) {
+        HashSet<PsiPackage> res = Sets.newHashSet();
+        //找到所有的mapper文件
+        Collection<Mapper> mappers = MapperUtils.findMappers(project);
+        //findClass、package的一个Service
+        JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
+        for (Mapper mapper : mappers) {
+            String namespace = MapperUtils.getNamespace(mapper);
+            PsiClass clazz = javaPsiFacade.findClass(namespace, GlobalSearchScope.allScope(project));
+            if (null != clazz) {
+                PsiFile file = clazz.getContainingFile();
+                if (file instanceof PsiJavaFile) {
+                    String packageName = ((PsiJavaFile) file).getPackageName();
+                    PsiPackage pkg = javaPsiFacade.findPackage(packageName);
+                    if (null != pkg) {
+                        res.add(pkg);
+                    }
+                }
+            }
         }
-      }
+        return res;
     }
-    return res;
-  }
 
 }
