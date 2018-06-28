@@ -8,13 +8,18 @@ import com.intellij.util.xml.Required;
 
 /**
  * @author yanglin
+ * @update 通用的dom元素 -  id
  */
 public interface IdDomElement extends DomElement{
 
+  /**
+   * 通用的属性值
+   * @return
+   */
   @Required
   @NameValue
   @Attribute("id")
-  public GenericAttributeValue<String> getId();
+  GenericAttributeValue<String> getId();
 
-  public void setValue(String content);
+  void setValue(String content);
 }

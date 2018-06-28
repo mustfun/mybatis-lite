@@ -17,23 +17,25 @@ import java.util.List;
 
 /**
  * @author yanglin
+ * xml中的一些节点，parameterMap , parameterType
  */
-public interface GroupTwo extends GroupOne, IdDomElement{
+public interface GroupTwo extends GroupOne, IdDomElement {
 
-  @SubTagList("bind")
-  public List<Bind> getBinds();
+    @SubTagList("bind")
+    List<Bind> getBinds();
 
-  @NotNull
-  @Attribute("parameterMap")
-  @Convert(ParameterMapConverter.class)
-  public GenericAttributeValue<XmlTag> getParameterMap();
+    @NotNull
+    @Attribute("parameterMap")
+    @Convert(ParameterMapConverter.class)
+    GenericAttributeValue<XmlTag> getParameterMap();
 
-  @Attribute("id")
-  @Convert(DaoMethodConverter.class)
-  public GenericAttributeValue<String> getId();
+    @Override
+    @Attribute("id")
+    @Convert(DaoMethodConverter.class)
+    GenericAttributeValue<String> getId();
 
-  @NotNull
-  @Attribute("parameterType")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getParameterType();
+    @NotNull
+    @Attribute("parameterType")
+    @Convert(AliasConverter.class)
+    GenericAttributeValue<PsiClass> getParameterType();
 }

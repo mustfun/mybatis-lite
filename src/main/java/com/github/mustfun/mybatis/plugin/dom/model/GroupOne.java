@@ -9,35 +9,37 @@ import java.util.List;
 
 /**
  * @author yanglin
+ * @update: itar
+ * @function xml中的一系列dom节点，包括include, trim , where 等标签
  */
-public interface GroupOne extends DomElement{
+public interface GroupOne extends DomElement {
 
-  @NotNull
-  @SubTagList("include")
-  public List<Include> getIncludes();
+    @NotNull
+    @SubTagList("include")
+    List<Include> getIncludes();
 
-  @NotNull
-  @SubTagList("trim")
-  public List<Trim> getTrims();
+    @NotNull
+    @SubTagList("trim")
+    List<Trim> getTrims();
 
-  @NotNull
-  @SubTagList("where")
-  public List<Where> getWheres();
+    @NotNull
+    @SubTagList("where")
+    List<Where> getWheres();
 
-  @NotNull
-  @SubTagList("set")
-  public List<Set> getSets();
+    @NotNull
+    @SubTagList("set")
+    List<Set> getSets();
 
-  @NotNull
-  @SubTagList("foreach")
-  public List<Foreach> getForeachs();
+    @NotNull
+    @SubTagList("foreach")
+    List<Foreach> getForeachs();
 
-  @NotNull
-  @SubTagList("choose")
-  public List<Choose> getChooses();
+    @NotNull
+    @SubTagList("choose")
+    List<Choose> getChooses();
 
-  @NotNull
-  @SubTagList("if")
-  public List<If> getIfs();
+    @NotNull
+    @SubTagList("if")
+    List<If> getIfs();
 
 }
