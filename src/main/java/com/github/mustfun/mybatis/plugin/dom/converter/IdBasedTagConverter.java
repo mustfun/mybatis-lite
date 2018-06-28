@@ -39,7 +39,7 @@ import java.util.Set;
  * @update itar
  * @since jdk1.8
  */
-public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
+public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
 
     private final boolean crossMapperSupported;
 
@@ -175,6 +175,9 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
         }
     }
 
+    /**
+     * 引用代码
+     */
     private class ValueReference extends PsiReferenceBase<PsiElement> {
 
         private ConvertContext context;

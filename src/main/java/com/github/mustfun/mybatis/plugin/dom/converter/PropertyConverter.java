@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  */
-public class PropertyConverter extends ConverterAdaptor<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
+public class PropertyConverter extends AbstractConverterAdaptor<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
 
   @NotNull @Override
   public PsiReference[] createReferences(GenericDomValue<XmlAttributeValue> value, PsiElement element, ConvertContext context) {
