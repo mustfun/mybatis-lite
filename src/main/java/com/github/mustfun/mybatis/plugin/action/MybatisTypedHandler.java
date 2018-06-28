@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  * @update itar
+ * 主要是自动补全用
  */
 public class MybatisTypedHandler extends TypedHandlerDelegate {
 
@@ -46,7 +47,8 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     /**
      * 当特殊符号被输入时候被唤醒
      * 作用条件: #{}  唤醒自动补全
-     * 同样也没用啊,没写完吗?....
+     * 系统会自动去找 CompletionContributor
+     * @see com.intellij.codeInsight.completion.CompletionContributor
      * @param c
      * @param project
      * @param editor
@@ -92,7 +94,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
             public void run() {
                 //当前文件是否最新，没有未提交的
                 if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
-                    //唤醒代码自动补全
+                    //唤醒代码自动补全 ， CompletionContributor
                     new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
                 }
             }

@@ -62,8 +62,11 @@
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
         <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
         <applicationService serviceInterface="com.github.mustfun.mybatis.plugin.setting.MybatisSetting" serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
+
+        <!--代码补全贡献方-->
         <completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.TestParamContributor"/>
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
+
         <fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
         <typedHandler implementation="com.github.mustfun.mybatis.plugin.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
