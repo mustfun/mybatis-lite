@@ -45,6 +45,8 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
 
     /**
      * 当特殊符号被输入时候被唤醒
+     * 作用条件: #{}  唤醒自动补全
+     * 同样也没用啊,没写完吗?....
      * @param c
      * @param project
      * @param editor
@@ -55,6 +57,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     @Override
     public Result charTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
         int index = editor.getCaretModel().getOffset() - 2;
+        //比如sqlFile 顶层 file 就是xmlFile
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(project).getTopLevelFile(file);
         boolean parameterCase = c == '{' &&
                 index >= 0 &&
