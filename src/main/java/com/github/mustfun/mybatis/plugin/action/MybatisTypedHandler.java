@@ -8,6 +8,7 @@ import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
@@ -41,6 +42,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
         return super.checkAutoPopup(charTyped, project, editor, file);
     }
 
+
     /**
      * 当特殊符号被输入时候被唤醒
      * @param c
@@ -49,8 +51,9 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
      * @param file
      * @return
      */
+    @NotNull
     @Override
-    public Result charTyped(char c,@NotNull final Project project, @NotNull final Editor editor, @NotNull PsiFile file) {
+    public Result charTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
         int index = editor.getCaretModel().getOffset() - 2;
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(project).getTopLevelFile(file);
         boolean parameterCase = c == '{' &&
@@ -63,6 +66,21 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
             return Result.STOP;
         }
         return super.charTyped(c, project, editor, file);
+    }
+
+    /**
+     * 当特殊符号被输入qian被唤醒
+     * @param c
+     * @param project
+     * @param editor
+     * @param file
+     * @param fileType
+     * @return
+     */
+    @NotNull
+    @Override
+    public Result beforeCharTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, @NotNull FileType fileType) {
+        return super.beforeCharTyped(c, project, editor, file, fileType);
     }
 
     private static void autoPopupParameter(final Project project, final Editor editor) {
