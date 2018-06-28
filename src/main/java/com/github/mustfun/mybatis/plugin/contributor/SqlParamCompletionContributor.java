@@ -40,6 +40,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
     }
 
     private void process(PsiFile xmlFile, CompletionResultSet result, PsiElement position) {
+        //总而言之是为了拿到documentWindows
         VirtualFile virtualFile = position.getContainingFile().getVirtualFile();
         DocumentWindow documentWindow = ((VirtualFileWindow)virtualFile).getDocumentWindow();
         int offset = documentWindow.injectedToHost(position.getTextOffset());
@@ -54,7 +55,9 @@ public class SqlParamCompletionContributor extends CompletionContributor {
         String text = file.getText();
         for (int i = offset - 1; i > 0; i--) {
             char c = text.charAt(i);
-            if (c == '{' && text.charAt(i - 1) == '#') return true;
+            if (c == '{' && text.charAt(i - 1) == '#') {
+                return true;
+            }
         }
         return false;
     }

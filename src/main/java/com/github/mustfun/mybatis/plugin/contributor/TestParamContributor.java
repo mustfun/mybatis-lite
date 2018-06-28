@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @update itar
  */
 public class TestParamContributor extends CompletionContributor {
 
@@ -30,7 +31,7 @@ public class TestParamContributor extends CompletionContributor {
               @Override
               protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement position = parameters.getPosition();
-                addElementForPsiParameter(position.getProject(), result, MapperUtils.findParentIdDomElement(position).orElse(null));
+                addElementForPsiParameter(position.getProject(), result, MapperUtils.findParentIdDomElement(position).orNull());
               }
     });
   }
