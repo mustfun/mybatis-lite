@@ -38,6 +38,11 @@ public final class DomUtils {
         });
     }
 
+    /**
+     * 是否是xml mapper file
+     * @param file
+     * @return
+     */
     public static boolean isMybatisFile(@Nullable PsiFile file) {
         if (!isXmlFile(file)) {
             return false;
