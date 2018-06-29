@@ -57,17 +57,19 @@
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.DbService"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.alias.AliasFacade"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.locator.MapperLocator"/>
-        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
+
+        <!--实现跳转的lineMarkerProvider-->
+        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
         <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
         <applicationService serviceInterface="com.github.mustfun.mybatis.plugin.setting.MybatisSetting" serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
-
+-->
         <!--代码补全贡献方-->
         <completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.TestParamContributor"/>
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
 
-        <fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
+        <!--<fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
         <typedHandler implementation="com.github.mustfun.mybatis.plugin.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
         <refactoring.elementListenerProvider implementation="com.github.mustfun.mybatis.plugin.refactoring.MapperRefactoringProvider"/>
@@ -77,22 +79,22 @@
         <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Mapper xml inspection"
                          groupName="Mybatis"
                          implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperXmlInspection"/>
-        <intentionAction>
+        --><!--<intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateParamAnnotationIntention</className>
-        </intentionAction>
+        </intentionAction>-->
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.LombokIntentionAction</className>
         </intentionAction>
-        <intentionAction>
+        <!--<intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateStatementIntention</className>
         </intentionAction>
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateMapperIntention</className>
-        </intentionAction>
+        </intentionAction>-->
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
-               text="Mybatis Plugin" description="逆向生成Code" icon="/images/logo_16.png">
+               text="Mybatis Plugin Free" description="逆向生成Code" icon="/images/logo_16.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
 
