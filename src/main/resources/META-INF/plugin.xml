@@ -1,18 +1,21 @@
-<idea-plugin url="https://github.com/seventh7/intellij-mybatis-plugin">
+<idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Plugin Free</name>
     <version>2.01</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
-          Plugin for mybatis <br/>
-          Feel free to feedback
+          Plugin for mybatis to generate controller,service,dao,mapper and model <br/>
+          Feel free to feedback , thanks.
       ]]></description>
 
     <change-notes><![CDATA[
       <h4>1.0.0</h4>
       <ul>
-          <li>Support correct result type for select statement in mapper xml</li>
+          <li>Support generate controller,service,dao,mapper and model</li>
+          <li>Support generate @Getter and @Setter</li>
+          <li>Support spring boot,spring cloud and normal spring applications</li>
+          <li>feel free to contact me ,thanks</li>
       </ul>
       ]]>
     </change-notes>

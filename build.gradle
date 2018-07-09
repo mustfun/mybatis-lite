@@ -48,8 +48,8 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>Most HTML tags may be used</em>"""
+      first submit.<br>
+      <em>add template support</em>"""
 }
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
