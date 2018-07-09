@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Plugin Free</name>
-    <version>2.01</version>
+    <version>1.0.1</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,7 +10,7 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.0.0</h4>
+      <h4>1.0.1</h4>
       <ul>
           <li>Support generate controller,service,dao,mapper and model</li>
           <li>Support generate @Getter and @Setter</li>
