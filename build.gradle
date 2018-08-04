@@ -14,7 +14,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.0.1'
+version '1.0.2'
 
 sourceCompatibility = 1.8
 
@@ -42,7 +42,7 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2018.1.1'
+    version = 'IU-2018.2'
     plugins = ['coverage','Spring','DatabaseTools']
     pluginName = 'Mybatis-Plugin-Free'
 }

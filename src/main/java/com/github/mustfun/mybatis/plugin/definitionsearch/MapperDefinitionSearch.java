@@ -16,22 +16,23 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MapperDefinitionSearch extends QueryExecutorBase<XmlElement, PsiElement> {
 
-  public MapperDefinitionSearch() {
-    super(true);
-  }
+    public MapperDefinitionSearch() {
+        super(true);
+    }
 
-  @Override
-  public void processQuery(@NotNull PsiElement element, @NotNull final Processor<XmlElement> consumer) {
+    @Override
+    public void processQuery(@NotNull PsiElement element, @NotNull Processor<? super XmlElement> consumer) {
+        if (!(element instanceof PsiTypeParameterListOwner)) {
+            return;
+        }
 
-    if (!(element instanceof PsiTypeParameterListOwner)) return;
+        Processor<DomElement> processor = new Processor<DomElement>() {
+            @Override
+            public boolean process(DomElement domElement) {
+                return consumer.process(domElement.getXmlElement());
+            }
+        };
 
-    Processor<DomElement> processor = new Processor<DomElement>() {
-      @Override
-      public boolean process(DomElement domElement) {
-        return consumer.process(domElement.getXmlElement());
-      }
-    };
-
-    JavaService.getInstance(element.getProject()).process(element, processor);
-  }
+        JavaService.getInstance(element.getProject()).process(element, processor);
+    }
 }

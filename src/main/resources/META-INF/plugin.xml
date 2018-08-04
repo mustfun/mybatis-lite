@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Plugin Free</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -20,7 +20,7 @@
       ]]>
     </change-notes>
 
-    <idea-version since-build="132.947"/>
+    <idea-version since-build="132.947" until-build="182.*"/>
     <depends optional="true">com.intellij.database</depends>
     <depends optional="true">com.intellij.spring</depends>
 
