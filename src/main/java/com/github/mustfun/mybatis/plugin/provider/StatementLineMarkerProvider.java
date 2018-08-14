@@ -20,54 +20,60 @@ import javax.swing.*;
 
 /**
  * @author yanglin
+ * @update itar
+ * @function
  */
-public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag, PsiMethod>{
+public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag, PsiMethod> {
 
-  private static final ImmutableList<Class<? extends GroupTwo>> TARGET_TYPES = ImmutableList.of(
-      Select.class,
-      Update.class,
-      Insert.class,
-      Delete.class
-  );
+    private static final ImmutableList<Class<? extends GroupTwo>> TARGET_TYPES = ImmutableList.of(
+            Select.class,
+            Update.class,
+            Insert.class,
+            Delete.class
+    );
 
-  @Override
-  public boolean isTheElement(@NotNull PsiElement element) {
-    return element instanceof XmlTag
-           && MapperUtils.isElementWithinMybatisFile(element)
-           && isTargetType(element);
-  }
-
-  @SuppressWarnings("unchecked")
-  @NotNull
-  @Override
-  public Optional<PsiMethod> apply(@NotNull XmlTag from) {
-    DomElement domElement = DomUtil.getDomElement(from);
-    return null == domElement ? Optional.<PsiMethod>absent() : JavaUtils.findMethod(from.getProject(), (IdDomElement)domElement);
-  }
-
-  private boolean isTargetType(PsiElement element) {
-    DomElement domElement = DomUtil.getDomElement(element);
-    for (Class<?> clazz : TARGET_TYPES) {
-      if(clazz.isInstance(domElement))
-        return true;
+    @Override
+    public boolean isTheElement(@NotNull PsiElement element) {
+        return element instanceof XmlTag
+                && MapperUtils.isElementWithinMybatisFile(element)
+                && isTargetType(element);
     }
-    return false;
-  }
 
-  @SuppressWarnings("unchecked")
-  @NotNull @Override
-  public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiMethod target) {
-    return (Navigatable)target.getNavigationElement();
-  }
+    @SuppressWarnings("unchecked")
+    @NotNull
+    @Override
+    public Optional<PsiMethod> apply(@NotNull XmlTag from) {
+        DomElement domElement = DomUtil.getDomElement(from);
+        return null == domElement ? Optional.<PsiMethod>absent() : JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement);
+    }
 
-  @NotNull @Override
-  public String getTooltip(@NotNull XmlTag from, @NotNull PsiMethod target) {
-    return "Data access object found - " + target.getContainingClass().getQualifiedName();
-  }
+    private boolean isTargetType(PsiElement element) {
+        DomElement domElement = DomUtil.getDomElement(element);
+        for (Class<?> clazz : TARGET_TYPES) {
+            if (clazz.isInstance(domElement)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-  @NotNull @Override
-  public Icon getIcon() {
-    return Icons.STATEMENT_LINE_MARKER_ICON;
-  }
+    @SuppressWarnings("unchecked")
+    @NotNull
+    @Override
+    public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiMethod target) {
+        return (Navigatable) target.getNavigationElement();
+    }
+
+    @NotNull
+    @Override
+    public String getTooltip(@NotNull XmlTag from, @NotNull PsiMethod target) {
+        return "Data access object found - " + target.getContainingClass().getQualifiedName();
+    }
+
+    @NotNull
+    @Override
+    public Icon getIcon() {
+        return Icons.STATEMENT_LINE_MARKER_ICON;
+    }
 
 }

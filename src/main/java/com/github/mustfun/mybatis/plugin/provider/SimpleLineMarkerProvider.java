@@ -21,59 +21,64 @@ import javax.swing.*;
 
 /**
  * @author yanglin
+ * @update itar
+ * @function 自定义lineMarkerProvider
  */
 public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends MarkerProviderAdaptor {
 
-  @Override
-  public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-  }
+    @Override
+    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
+    }
 
-  @SuppressWarnings("unchecked")
-  @Nullable @Override
-  public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
-    if (!isTheElement(element)) return null;
+    @SuppressWarnings("unchecked")
+    @Nullable
+    @Override
+    public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
+        if (!isTheElement(element)) {
+            return null;
+        }
 
-    Optional<T> processResult = apply((F)element);
-    return processResult.isPresent() ? new LineMarkerInfo<F>(
-              (F)element,
-              element.getTextRange(),
-              getIcon(),
-              Pass.UPDATE_ALL,
-              getTooltipProvider(processResult.get()),
-              getNavigationHandler(processResult.get()),
-              GutterIconRenderer.Alignment.CENTER
-    ) : null;
-  }
+        Optional<T> processResult = apply((F) element);
+        return processResult.isPresent() ? new LineMarkerInfo<F>(
+                (F) element,
+                element.getTextRange(),
+                getIcon(),
+                Pass.UPDATE_ALL,
+                getTooltipProvider(processResult.get()),
+                getNavigationHandler(processResult.get()),
+                GutterIconRenderer.Alignment.CENTER
+        ) : null;
+    }
 
-  private Function<F, String> getTooltipProvider(final T target) {
-    return new Function<F, String>() {
-      @Override
-      public String fun(F from) {
-        return getTooltip(from, target);
-      }
-    };
-  }
+    private Function<F, String> getTooltipProvider(final T target) {
+        return new Function<F, String>() {
+            @Override
+            public String fun(F from) {
+                return getTooltip(from, target);
+            }
+        };
+    }
 
-  private GutterIconNavigationHandler<F> getNavigationHandler(final T target) {
-    return new GutterIconNavigationHandler<F>() {
-      @Override
-      public void navigate(MouseEvent e, F from) {
-          getNavigatable(from, target).navigate(true);
-      }
-    };
-  }
+    private GutterIconNavigationHandler<F> getNavigationHandler(final T target) {
+        return new GutterIconNavigationHandler<F>() {
+            @Override
+            public void navigate(MouseEvent e, F from) {
+                getNavigatable(from, target).navigate(true);
+            }
+        };
+    }
 
-  public abstract boolean isTheElement(@NotNull PsiElement element);
+    public abstract boolean isTheElement(@NotNull PsiElement element);
 
-  @NotNull
-  public abstract Optional<T> apply(@NotNull F from);
+    @NotNull
+    public abstract Optional<T> apply(@NotNull F from);
 
-  @NotNull
-  public abstract Navigatable getNavigatable(@NotNull F from, @NotNull T target);
+    @NotNull
+    public abstract Navigatable getNavigatable(@NotNull F from, @NotNull T target);
 
-  @NotNull
-  public abstract String getTooltip(@NotNull F from, @NotNull T target);
+    @NotNull
+    public abstract String getTooltip(@NotNull F from, @NotNull T target);
 
-  @NotNull
-  public abstract Icon getIcon();
+    @NotNull
+    public abstract Icon getIcon();
 }
