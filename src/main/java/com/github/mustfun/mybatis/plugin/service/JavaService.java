@@ -27,90 +27,101 @@ import com.intellij.util.xml.DomElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 /**
  * @author yanglin
+ * @update itar
+ * @function 主要是运行后台服务的一个service类
  */
 public class JavaService {
 
-  private Project project;
+    private Project project;
 
-  private JavaPsiFacade javaPsiFacade;
+    private JavaPsiFacade javaPsiFacade;
 
-  private EditorService editorService;
+    private EditorService editorService;
 
-  public JavaService(Project project) {
-    this.project = project;
-    this.javaPsiFacade = JavaPsiFacade.getInstance(project);
-    this.editorService = EditorService.getInstance(project);
-  }
-
-  public static JavaService getInstance(@NotNull Project project) {
-    return ServiceManager.getService(project, JavaService.class);
-  }
-
-  public Optional<PsiClass> getReferenceClazzOfPsiField(@NotNull PsiElement field) {
-    if (!(field instanceof PsiField)) {
-      return Optional.absent();
+    public JavaService(Project project) {
+        this.project = project;
+        this.javaPsiFacade = JavaPsiFacade.getInstance(project);
+        this.editorService = EditorService.getInstance(project);
     }
-    PsiType type = ((PsiField)field).getType();
-    return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve()) : Optional.<PsiClass>absent();
-  }
 
-  public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
-    CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
-    process(method, processor);
-    return processor.isFound() ? Optional.fromNullable(processor.getFoundValue()) : Optional.<DomElement>absent();
-  }
+    public static JavaService getInstance(@NotNull Project project) {
+        return ServiceManager.getService(project, JavaService.class);
+    }
 
-  @SuppressWarnings("unchecked")
-  public void process(@NotNull PsiMethod psiMethod, @NotNull Processor<IdDomElement> processor) {
-    PsiClass psiClass = psiMethod.getContainingClass();
-    if (null == psiClass) return;
-    String id = psiClass.getQualifiedName() + "." + psiMethod.getName();
-    for (Mapper mapper : MapperUtils.findMappers(psiMethod.getProject())) {
-      for (IdDomElement idDomElement : mapper.getDaoElements()) {
-        if (MapperUtils.getIdSignature(idDomElement).equals(id)) {
-          processor.process(idDomElement);
+    public Optional<PsiClass> getReferenceClazzOfPsiField(@NotNull PsiElement field) {
+        if (!(field instanceof PsiField)) {
+            return Optional.absent();
         }
-      }
+        PsiType type = ((PsiField) field).getType();
+        return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve()) : Optional.<PsiClass>absent();
     }
-  }
 
-  @SuppressWarnings("unchecked")
-  public void process(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
-    String ns = clazz.getQualifiedName();
-    for (Mapper mapper : MapperUtils.findMappers(clazz.getProject())) {
-      if (MapperUtils.getNamespace(mapper).equals(ns)) {
-        processor.process(mapper);
-      }
+    public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
+        CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
+        process(method, processor);
+        return processor.isFound() ? Optional.fromNullable(processor.getFoundValue()) : Optional.<DomElement>absent();
     }
-  }
 
-  public void process(@NotNull PsiElement target, @NotNull Processor processor) {
-    if (target instanceof PsiMethod) {
-      process((PsiMethod) target, processor);
-    } else if (target instanceof PsiClass){
-      process((PsiClass)target, processor);
+    @SuppressWarnings("unchecked")
+    public void process(@NotNull PsiMethod psiMethod, @NotNull Processor<IdDomElement> processor) {
+        PsiClass psiClass = psiMethod.getContainingClass();
+        if (null == psiClass) {
+            return;
+        }
+        //id为 全限定名 + 方法名称
+        String id = psiClass.getQualifiedName() + "." + psiMethod.getName();
+        //找出所有的mapper文件
+        Collection<Mapper> mappers = MapperUtils.findMappers(psiMethod.getProject());
+        for (Mapper mapper : mappers) {
+            for (IdDomElement idDomElement : mapper.getDaoElements()) {
+                //如果在mapper中找到的id签名和这个方法一致，就加入processor的list里面
+                if (MapperUtils.getIdSignature(idDomElement).equals(id)) {
+                    processor.process(idDomElement);
+                }
+            }
+        }
     }
-  }
 
-  public <T> Optional<T> findWithFindFirstProcessor(@NotNull PsiElement target) {
-    CommonProcessors.FindFirstProcessor<T> processor = new CommonProcessors.FindFirstProcessor<T>();
-    process(target, processor);
-    return Optional.fromNullable(processor.getFoundValue());
-  }
-
-  public void importClazz(PsiJavaFile file, String clazzName) {
-    if (!JavaUtils.hasImportClazz(file, clazzName)) {
-      Optional<PsiClass> clazz = JavaUtils.findClazz(project, clazzName);
-      PsiImportList importList = file.getImportList();
-      if (clazz.isPresent() && null != importList) {
-        PsiElementFactory elementFactory = javaPsiFacade.getElementFactory();
-        PsiImportStatement statement = elementFactory.createImportStatement(clazz.get());
-        importList.add(statement);
-        editorService.format(file, statement);
-      }
+    @SuppressWarnings("unchecked")
+    public void process(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
+        String ns = clazz.getQualifiedName();
+        for (Mapper mapper : MapperUtils.findMappers(clazz.getProject())) {
+            if (MapperUtils.getNamespace(mapper).equals(ns)) {
+                processor.process(mapper);
+            }
+        }
     }
-  }
+
+    @SuppressWarnings("unchecked")
+    public void process(@NotNull PsiElement target, @NotNull Processor processor) {
+        if (target instanceof PsiMethod) {
+            process((PsiMethod) target, processor);
+        } else if (target instanceof PsiClass) {
+            process((PsiClass) target, processor);
+        }
+    }
+
+    public <T> Optional<T> findWithFindFirstProcessor(@NotNull PsiElement target) {
+        CommonProcessors.FindFirstProcessor<T> processor = new CommonProcessors.FindFirstProcessor<T>();
+        process(target, processor);
+        return Optional.fromNullable(processor.getFoundValue());
+    }
+
+    public void importClazz(PsiJavaFile file, String clazzName) {
+        if (!JavaUtils.hasImportClazz(file, clazzName)) {
+            Optional<PsiClass> clazz = JavaUtils.findClazz(project, clazzName);
+            PsiImportList importList = file.getImportList();
+            if (clazz.isPresent() && null != importList) {
+                PsiElementFactory elementFactory = javaPsiFacade.getElementFactory();
+                PsiImportStatement statement = elementFactory.createImportStatement(clazz.get());
+                importList.add(statement);
+                editorService.format(file, statement);
+            }
+        }
+    }
 }
 

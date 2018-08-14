@@ -20,34 +20,41 @@ import com.intellij.util.xml.DomElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * @author yanglin
+ * @update itar
+ * @function Go to related symbol
  */
 public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
-  private static final Function<DomElement, XmlTag> FUN = new Function<DomElement, XmlTag>() {
-    @Override
-    public XmlTag apply(DomElement domElement) {
-      return domElement.getXmlTag();
-    }
-  };
+    private static final Function<DomElement, XmlTag> FUN = new Function<DomElement, XmlTag>() {
+        @Override
+        public XmlTag apply(DomElement domElement) {
+            return domElement.getXmlTag();
+        }
+    };
 
-  @Override
-  protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-    if (element instanceof PsiNameIdentifierOwner && JavaUtils.isElementWithinInterface(element)) {
-      CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<IdDomElement>();
-      JavaService.getInstance(element.getProject()).process(element, processor);
-      Collection<IdDomElement> results = processor.getResults();
-      if (!results.isEmpty()) {
-        NavigationGutterIconBuilder<PsiElement> builder  =
-            NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
-                .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                .setTargets(Collections2.transform(results, FUN))
-                .setTooltipTitle("Navigation to target in mapper xml");
-        result.add(builder.createLineMarkerInfo(((PsiNameIdentifierOwner) element).getNameIdentifier()));
-      }
+    @Override
+    protected void collectNavigationMarkers(@NotNull PsiElement element,@NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
+        //如果element是PsiNameIdentifierOwner对象，且是接口
+        if (element instanceof PsiNameIdentifierOwner && JavaUtils.isElementWithinInterface(element)) {
+            //表示ID元素的一个集合列表
+            CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<>();
+            JavaService.getInstance(element.getProject()).process(element, processor);
+            Collection<IdDomElement> results = processor.getResults();
+            if (!results.isEmpty()) {
+
+                //构建导航图标的builder
+                NavigationGutterIconBuilder<PsiElement> builder =
+                        NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
+                                .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                                .setTargets(Collections2.transform(results, FUN))
+                                .setTooltipTitle("Navigation to target in mapper xml");
+                result.add(builder.createLineMarkerInfo(Objects.requireNonNull(((PsiNameIdentifierOwner) element).getNameIdentifier())));
+            }
+        }
     }
-  }
 
 }

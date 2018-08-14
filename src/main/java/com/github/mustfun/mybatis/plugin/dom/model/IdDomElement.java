@@ -8,7 +8,8 @@ import com.intellij.util.xml.Required;
 
 /**
  * @author yanglin
- * @update 通用的dom元素 -  id
+ * @update itar
+ * @function 通用的dom元素 -  id
  */
 public interface IdDomElement extends DomElement{
 

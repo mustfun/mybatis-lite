@@ -36,12 +36,12 @@
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.locator.MapperLocator"/>
 
         <!--实现跳转的lineMarkerProvider-->
-        <!--<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
         <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
         <applicationService serviceInterface="com.github.mustfun.mybatis.plugin.setting.MybatisSetting" serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
--->
+
         <!--代码补全贡献方-->
         <completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.TestParamContributor"/>
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
