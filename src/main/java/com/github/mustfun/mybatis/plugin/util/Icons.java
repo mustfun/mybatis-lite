@@ -20,7 +20,8 @@ public interface Icons {
 
   Icon STATEMENT_LINE_MARKER_ICON = IconLoader.getIcon("/images/up.png");
 
-  Icon SPRING_INJECTION_ICON = IconLoader.getIcon("/images/springBean.png");
+  Icon SPRING_BEAN_ICON = IconLoader.getIcon("/images/springBean.png");
+  Icon SPRING_INJECTION_ICON = IconLoader.getIcon("/images/showAutowiredDependencies.png");
 
   Icon MYBATIS_LOGO_TRUE = IconLoader.getIcon("/images/logo.png");
 
