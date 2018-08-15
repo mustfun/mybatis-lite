@@ -34,10 +34,12 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends 
     @Nullable
     @Override
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
+        //检测是不是需要标记的元素
         if (!isTheElement(element)) {
             return null;
         }
 
+        //Psi对象转化为T对象
         Optional<T> processResult = apply((F) element);
         return processResult.isPresent() ? new LineMarkerInfo<F>(
                 (F) element,

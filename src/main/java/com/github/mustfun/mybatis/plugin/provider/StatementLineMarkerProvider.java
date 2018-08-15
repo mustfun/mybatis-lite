@@ -6,14 +6,13 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-
 import com.intellij.pom.Navigatable;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
-
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -23,7 +22,7 @@ import javax.swing.*;
  * @update itar
  * @function
  */
-public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag, PsiMethod> {
+public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag, PsiNameIdentifierOwner> {
 
     private static final ImmutableList<Class<? extends GroupTwo>> TARGET_TYPES = ImmutableList.of(
             Select.class,
@@ -42,9 +41,18 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
     @SuppressWarnings("unchecked")
     @NotNull
     @Override
-    public Optional<PsiMethod> apply(@NotNull XmlTag from) {
+    public Optional<PsiNameIdentifierOwner> apply(@NotNull XmlTag from) {
+        Optional<PsiNameIdentifierOwner> optional;
         DomElement domElement = DomUtil.getDomElement(from);
-        return null == domElement ? Optional.<PsiMethod>absent() : JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement);
+        //如果是Mapper
+        if (domElement instanceof Mapper){
+            String namespace = ((Mapper) domElement).getNamespace().toString();
+            Optional<PsiClass> clazz = JavaUtils.findClazz(from.getProject(), namespace);
+            return Optional.of(clazz.get());
+        }else{
+            optional = null == domElement ? Optional.absent() : Optional.of(JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement).get());
+        }
+        return optional;
     }
 
     private boolean isTargetType(PsiElement element) {
@@ -54,20 +62,23 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
                 return true;
             }
         }
+        if (domElement instanceof Mapper){
+            return true;
+        }
         return false;
     }
 
     @SuppressWarnings("unchecked")
     @NotNull
     @Override
-    public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiMethod target) {
+    public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiNameIdentifierOwner target) {
         return (Navigatable) target.getNavigationElement();
     }
 
     @NotNull
     @Override
-    public String getTooltip(@NotNull XmlTag from, @NotNull PsiMethod target) {
-        return "Data access object found - " + target.getContainingClass().getQualifiedName();
+    public String getTooltip(@NotNull XmlTag from, @NotNull PsiNameIdentifierOwner target) {
+        return "Data access object found - ";
     }
 
     @NotNull

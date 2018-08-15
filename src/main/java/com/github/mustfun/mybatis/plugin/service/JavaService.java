@@ -89,7 +89,8 @@ public class JavaService {
     @SuppressWarnings("unchecked")
     public void process(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
         String ns = clazz.getQualifiedName();
-        for (Mapper mapper : MapperUtils.findMappers(clazz.getProject())) {
+        Collection<Mapper> mappers = MapperUtils.findMappers(clazz.getProject());
+        for (Mapper mapper : mappers) {
             if (MapperUtils.getNamespace(mapper).equals(ns)) {
                 processor.process(mapper);
             }

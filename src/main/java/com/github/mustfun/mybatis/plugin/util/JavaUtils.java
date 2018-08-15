@@ -171,26 +171,27 @@ public final class JavaUtils {
 
     /**
      * 找出Mapper等文件可能所在的路径所在路径
+     *
      * @param base
      * @param patten 多个进行匹配,或者关系, 如DemoDao.java或者DemoMapper.java都可以
      * @return
      */
-    public static VirtualFile getFilePattenPath(VirtualFile base, String... patten){
-        if (base.getPath().contains("/.git/")||base.getPath().contains("/.idea/")){
+    public static VirtualFile getFilePattenPath(VirtualFile base, String... patten) {
+        if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")) {
             return null;
         }
         for (String s : patten) {
-            if (base.getPath().toUpperCase().contains(s.toUpperCase())){
+            if (base.getPath().toUpperCase().contains(s.toUpperCase())) {
                 return base.getParent();
             }
         }
-        if (base.getChildren().length!=0){
+        if (base.getChildren().length != 0) {
             for (VirtualFile virtualFile : base.getChildren()) {
                 //这个地方不应该直接return，存在多个文件夹的情况
                 VirtualFile filePattenPath = getFilePattenPath(virtualFile, patten);
-                if (filePattenPath!=null){
+                if (filePattenPath != null) {
                     return filePattenPath;
-                }else{
+                } else {
                     continue;
                 }
             }
@@ -201,34 +202,34 @@ public final class JavaUtils {
 
     /**
      * getFileByPattenName
+     *
      * @param base
      * @param patten
      * @return
      */
-    public static VirtualFile getFileByPattenName(VirtualFile base, String... patten){
-        if (base.getPath().contains("/.git/")||base.getPath().contains("/.idea/")
-                ||base.getPath().contains("/.target/")){
+    public static VirtualFile getFileByPattenName(VirtualFile base, String... patten) {
+        if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
+                || base.getPath().contains("/.target/")) {
             return null;
         }
         for (String s : patten) {
-            if (base.getPath().toUpperCase().contains(s.toUpperCase())){
+            if (base.getPath().toUpperCase().contains(s.toUpperCase())) {
                 return base;
             }
         }
-        if (base.getChildren().length!=0){
+        if (base.getChildren().length != 0) {
             for (VirtualFile virtualFile : base.getChildren()) {
                 //这个地方不应该直接return，存在多个文件夹的情况
                 VirtualFile filePattenPath = getFileByPattenName(virtualFile, patten);
-                if (filePattenPath!=null){
+                if (filePattenPath != null) {
                     return filePattenPath;
-                }else{
+                } else {
                     continue;
                 }
             }
         }
         return null;
     }
-
 
 
     public static List collectSelectedCheckBox(CheckBoxList checkBoxList) {
@@ -242,10 +243,10 @@ public final class JavaUtils {
         return list;
     }
 
-    public static String getPackageName(PsiDirectory psiDirectory,Integer vmType){
+    public static String getPackageName(PsiDirectory psiDirectory, Integer vmType) {
         PsiFile[] files = psiDirectory.getFiles();
-        if (files.length!=0){
-            if (!(files[0] instanceof PsiJavaFile)){
+        if (files.length != 0) {
+            if (!(files[0] instanceof PsiJavaFile)) {
                 return "com.github.mustfun";
             }
             PsiJavaFile file = (PsiJavaFile) files[0];
@@ -254,68 +255,70 @@ public final class JavaUtils {
         //如果下面没有文件,就上一层找，暂时不考虑新建很多层那种复杂情况
         PsiDirectory parent = psiDirectory.getParent();
         PsiFile[] pare = parent.getFiles();
-        if (pare.length!=0){
-            if (!(pare[0] instanceof PsiJavaFile)){
+        if (pare.length != 0) {
+            if (!(pare[0] instanceof PsiJavaFile)) {
                 return "com.github.mustfun";
             }
             PsiJavaFile file = (PsiJavaFile) pare[0];
-            return file.getPackageName()+getClassType(vmType);
+            return file.getPackageName() + getClassType(vmType);
         }
         return "com.github.mustfun";
     }
 
-    public static String getClassType(Integer template){
+    public static String getClassType(Integer template) {
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            return  "/po";
+            return "/po";
         }
 
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            return  "/bo";
+            return "/bo";
         }
 
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
-            return  "/req";
+            return "/req";
         }
 
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            return  "/resp";
+            return "/resp";
         }
 
         if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
-            return  "/impl";
+            return "/impl";
         }
         return null;
     }
 
     /**
      * 通过类名找一个类
+     *
      * @return
      */
     // FIXME: 2018/6/22
-    public PsiClass[] findClassByName(){
-        return PsiShortNamesCache.getInstance(null).getClassesByName(null,null);
+    public PsiClass[] findClassByName() {
+        return PsiShortNamesCache.getInstance(null).getClassesByName(null, null);
     }
 
     /**
      * 在yaml中遍历一个节点
+     *
      * @param hashMap
      */
-    public static String findYamlValueByTag(LinkedHashMap hashMap,String... keywords) {
+    public static String findYamlValueByTag(LinkedHashMap hashMap, String... keywords) {
         for (Object o : hashMap.entrySet()) {
-            Map.Entry entry = (Map.Entry)o;
+            Map.Entry entry = (Map.Entry) o;
             String key = (String) entry.getKey();
             Object val = entry.getValue();
-            if (val instanceof LinkedHashMap){
-                String yamlValueByTag = findYamlValueByTag((LinkedHashMap) val,keywords);
-                if (yamlValueByTag==null){
+            if (val instanceof LinkedHashMap) {
+                String yamlValueByTag = findYamlValueByTag((LinkedHashMap) val, keywords);
+                if (yamlValueByTag == null) {
                     continue;
-                }else{
+                } else {
                     return yamlValueByTag;
                 }
-            }else{
+            } else {
                 for (String keyword : keywords) {
-                    if(key.equals(keyword)){
-                        return (String)val;
+                    if (key.equals(keyword)) {
+                        return (String) val;
                     }
                 }
             }
