@@ -62,12 +62,12 @@
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.LombokIntentionAction</className>
         </intentionAction>
-        <!--<intentionAction>
+        <intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateStatementIntention</className>
         </intentionAction>
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateMapperIntention</className>
-        </intentionAction>-->
+        </intentionAction>
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"

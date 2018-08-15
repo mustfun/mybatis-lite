@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @update itar
+ * @function 通用alt+enter检测器
  */
 public abstract class GenericIntention implements IntentionAction{
 
