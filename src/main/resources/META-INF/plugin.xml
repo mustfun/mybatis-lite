@@ -12,6 +12,16 @@
     <change-notes><![CDATA[
       <h4>1.0.3</h4>
       <ul>
+          <li>Navigation (Jump to symbol like dao or xml)</li>
+          <li>Generate XML File</li>
+          <li>Add Navigation Switch</li>
+      </ul>
+      <h4>1.0.2</h4>
+      <ul>
+          <li>Support IDEA 2018.2</li>
+      </ul>
+      <h4>1.0.1</h4>
+      <ul>
           <li>Support generate controller,service,dao,mapper and model</li>
           <li>Support generate @Getter and @Setter</li>
           <li>Support spring boot,spring cloud and normal spring applications</li>
