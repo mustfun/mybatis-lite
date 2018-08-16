@@ -10,6 +10,7 @@ import com.google.common.collect.Collections2;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
@@ -38,6 +39,12 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element,@NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
+
+        boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
+        if (!naviOpenStatus){
+            return;
+        }
+
         //如果element是PsiNameIdentifierOwner对象，且是接口
         if (element instanceof PsiNameIdentifierOwner && JavaUtils.isElementWithinInterface(element)) {
             //表示ID元素的一个集合列表

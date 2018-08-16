@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
@@ -34,6 +35,10 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends 
     @Nullable
     @Override
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
+        boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
+        if (!naviOpenStatus){
+            return null;
+        }
         //检测是不是需要标记的元素
         if (!isTheElement(element)) {
             return null;

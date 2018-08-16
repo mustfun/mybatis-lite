@@ -11,12 +11,7 @@ import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
+import com.google.common.collect.*;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -25,8 +20,6 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.CommonProcessors;
-
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,7 +46,9 @@ public abstract class StatementGenerator {
         @Override
         public String apply(Mapper mapper) {
             VirtualFile vf = mapper.getXmlTag().getContainingFile().getVirtualFile();
-            if (null == vf) return "";
+            if (null == vf) {
+                return "";
+            }
             return vf.getCanonicalPath();
         }
     };
@@ -120,7 +115,9 @@ public abstract class StatementGenerator {
 
     public void execute(@NotNull final PsiMethod method) {
         PsiClass psiClass = method.getContainingClass();
-        if (null == psiClass) return;
+        if (null == psiClass) {
+            return;
+        }
         CommonProcessors.CollectProcessor<Mapper> processor = new CommonProcessors.CollectProcessor<Mapper>();
         JavaService.getInstance(method.getProject()).process(psiClass, processor);
         final List<Mapper> mappers = Lists.newArrayList(processor.getResults());
