@@ -6,6 +6,7 @@
 ![生成controller等案例](doc/sample1.gif)
 ### II. 跳转配置
 ![跳转](doc/navi.gif)
+> 此功能默认关闭，需要在Setting->Mybatis->导航开关 打开
 ### III. 生成xml
 ![跳转](doc/generate.gif)
 
