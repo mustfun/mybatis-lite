@@ -2,8 +2,12 @@
 
 ## 案例演示
 
+### I. 生成代码
 ![生成controller等案例](doc/sample1.gif)
-
+### II. 跳转配置
+![跳转](doc/navi.gif)
+### III. 生成xml
+![跳转](doc/generate.gif)
 
 ## 下载安装  
 - IDEA-> File -> Settings -> Plugins -> Browse Repositories,输入mybatis plugin free，点install安装即可
