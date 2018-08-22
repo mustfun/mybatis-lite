@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Plugin Free</name>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.0.4</h4>
+      <ul>
+          <li>fix some bug</li>
+      </ul>
       <h4>1.0.3</h4>
       <ul>
           <li>Navigation (Jump to symbol like dao or xml)</li>

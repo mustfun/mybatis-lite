@@ -40,7 +40,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
 
     @Override
     public String getId() {
-        return "Mybatis";
+        return "Mybatis Plugin Free";
     }
 
     @Override
