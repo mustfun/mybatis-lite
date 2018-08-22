@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
@@ -50,7 +51,15 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
             Optional<PsiClass> clazz = JavaUtils.findClazz(from.getProject(), namespace);
             return Optional.of(clazz.get());
         }else{
-            optional = null == domElement ? Optional.absent() : Optional.of(JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement).get());
+            if (null == domElement) {
+                optional = Optional.absent();
+            } else {
+                Optional<PsiMethod> method = JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement);
+                if (!method.isPresent()){
+                    return Optional.absent();
+                }
+                optional = Optional.of(method.get());
+            }
         }
         return optional;
     }
