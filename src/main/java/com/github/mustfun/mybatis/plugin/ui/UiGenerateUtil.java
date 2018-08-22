@@ -83,11 +83,11 @@ public final class UiGenerateUtil {
             //连接数据库
             DbService dbService = DbService.getInstance(project);
             Connection connection = dbService.getConnection(dbSourcePo);
-            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION,connection);
             if (connection == null) {
                 Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
                 return;
             }
+            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION,connection);
             List<LocalTable> tables = dbService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {

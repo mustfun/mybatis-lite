@@ -23,7 +23,7 @@ import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.*;
  * @function Mybatis配置项
  */
 @State(
-        name = "MybatisSettings",
+        name = "MybatisPluginFreeSettings",
         storages = @Storage(value = "$APP_CONFIG$/mybatis.xml"))
 public class MybatisSetting implements PersistentStateComponent<Element> {
 
@@ -45,7 +45,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     @Nullable
     @Override
     public Element getState() {
-        Element element = new Element("MybatisSettings");
+        Element element = new Element("MybatisPluginFreeSettings");
         element.setAttribute(INSERT_GENERATOR.getId(), gson.toJson(INSERT_GENERATOR.getPatterns()));
         element.setAttribute(DELETE_GENERATOR.getId(), gson.toJson(DELETE_GENERATOR.getPatterns()));
         element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));
