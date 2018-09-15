@@ -39,7 +39,7 @@ public class MybatisSettingForm {
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(closeNaviRadioButton);
         buttonGroup.add(openNaviButton);
-        closeNaviRadioButton.setSelected(true);
+        openNaviButton.setSelected(true);
     }
 
 }
