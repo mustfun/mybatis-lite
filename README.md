@@ -6,7 +6,7 @@
 ![生成controller等案例](doc/sample1.gif)
 ### II. 跳转配置
 ![跳转](doc/navi.gif)
-> 此功能默认关闭，需要在IDEA->File菜单->Setting菜单->Other Setting菜单->Mybatis菜单->导航开关 打开
+> 此功能默认打开(可能会与Mybatis Plugin / free mybatis plugin等插件冲突)，需要关闭的同学，请在IDEA->File菜单->Setting菜单->Other Setting菜单->Mybatis菜单->导航开关 关闭
 ### III. 生成xml
 ![跳转](doc/generate.gif)
 
