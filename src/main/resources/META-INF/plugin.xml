@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Plugin Free</name>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,9 +10,13 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.0.5</h4>
+      <h4>1.0.6</h4>
       <ul>
           <li>The navigation switch is opened by default</li>
+      </ul>
+      <h4>1.0.5</h4>
+      <ul>
+          <li>bugfix</li>
       </ul>
       <h4>1.0.4</h4>
       <ul>

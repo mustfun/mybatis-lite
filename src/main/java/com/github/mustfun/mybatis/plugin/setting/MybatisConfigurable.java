@@ -69,6 +69,13 @@ public class MybatisConfigurable implements SearchableConfigurable {
             this.mybatisSettingForm = new MybatisSettingForm();
         }
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
+        boolean notFirstIn = PropertiesComponent.getInstance().getBoolean("notFirstIn");
+        if(!notFirstIn){
+            if (!naviOpenStatus){
+                naviOpenStatus=true;
+                PropertiesComponent.getInstance().setValue("naviOpenStatus", true);
+            }
+        }
         if (naviOpenStatus){
             mybatisSettingForm.openNaviButton.setSelected(true);
             mybatisSettingForm.closeNaviRadioButton.setSelected(false);
@@ -98,6 +105,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
         UPDATE_GENERATOR.setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.updatePatternTextField.getText())));
         SELECT_GENERATOR.setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.selectPatternTextField.getText())));
         PropertiesComponent.getInstance().setValue("naviOpenStatus", mybatisSettingForm.getOpenNaviButton().isSelected());
+        PropertiesComponent.getInstance().setValue("notFirstIn", true);
     }
 
     @Override

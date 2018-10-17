@@ -14,7 +14,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.0.5'
+version '1.0.6'
 
 sourceCompatibility = 1.8
 
@@ -48,9 +48,13 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      <h4>1.0.5</h4>
+      <h4>1.0.6</h4>
       <ul>
           <li>The navigation switch is opened by default</li>
+      </ul>
+      <h4>1.0.5</h4>
+      <ul>
+          <li>bugfix</li>
       </ul>
       <h4>1.0.4</h4>
       <ul>
