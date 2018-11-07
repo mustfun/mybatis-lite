@@ -8,6 +8,7 @@ import com.github.mustfun.mybatis.plugin.provider.FileProviderFactory;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -234,7 +235,7 @@ public class DbService {
 
                 String realPackageName="com.github.mustfun";
                 if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())){
-                    VirtualFile vFile = VfsUtil.createDirectoryIfMissing(outPath);
+                    VirtualFile vFile = WriteAction.computeAndWait(() -> VfsUtil.createDirectoryIfMissing(outPath));
                     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
                     realPackageName = JavaUtils.getPackageName(directory, templateId);
                 }
