@@ -135,6 +135,9 @@ public class TemplateEditMenuAction extends AnAction {
                                     return ;
                                 }
                                 Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+                                if (connection==null){
+                                    return ;
+                                }
                                 SqlLiteService instance = SqlLiteService.getInstance(connection);
                                 Template updatePo = new Template();
                                 updatePo.setId(template.getId());
