@@ -267,6 +267,9 @@ public class DbService {
         if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("INT SIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("INT")){
             column.setDataType("INTEGER");
         }
+        if (column.getDataType().toUpperCase().equalsIgnoreCase("DATETIME")||column.getDataType().toUpperCase().equalsIgnoreCase("DATE")){
+            column.setDataType("TIMESTAMP");
+        }
     }
 
     private static void transAttrTypePath(String attrType, LocalColumn column) {

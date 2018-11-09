@@ -43,13 +43,16 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
     @NotNull
     @Override
     public Optional<PsiNameIdentifierOwner> apply(@NotNull XmlTag from) {
-        Optional<PsiNameIdentifierOwner> optional;
+        Optional<PsiNameIdentifierOwner> optional = Optional.absent();
         DomElement domElement = DomUtil.getDomElement(from);
         //如果是Mapper
         if (domElement instanceof Mapper){
             String namespace = ((Mapper) domElement).getNamespace().toString();
             Optional<PsiClass> clazz = JavaUtils.findClazz(from.getProject(), namespace);
-            return Optional.of(clazz.get());
+            //有可能找不到
+            if (clazz.isPresent()){
+                return Optional.of(clazz.get());
+            }
         }else{
             if (null == domElement) {
                 optional = Optional.absent();
