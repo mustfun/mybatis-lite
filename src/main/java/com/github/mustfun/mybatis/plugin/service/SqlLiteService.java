@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.service;
 
+import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.PluginConfig;
 import com.github.mustfun.mybatis.plugin.model.Template;
 
@@ -142,4 +143,53 @@ public class SqlLiteService {
         return null;
     }
 
+    public DbSourcePo queryLatestConnectLog() {
+        try {
+            String sql = "select\n" +
+                    "        id,db_name,db_address,user_name,password\n" +
+                    "        from db_source order by create_time desc limit 1";
+
+            ResultSet rs = statement.executeQuery(sql);
+            DbSourcePo dbSource = new DbSourcePo();
+            while (rs.next()) {
+                dbSource.setId(rs.getInt("id"));
+                dbSource.setDbName(rs.getString("db_name"));
+                dbSource.setDbAddress(rs.getString("db_address"));
+                dbSource.setUserName(rs.getString("user_name"));
+                dbSource.setPassword(rs.getString("password"));
+            }
+            return dbSource;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 新增数据库连接历史 , 还可以做个模糊匹配
+     * @param dbSourcePo
+     * @return
+     */
+    public boolean insertDbConnectionInfo(DbSourcePo dbSourcePo) {
+        try {
+            String sql = "select max(id) from db_source";
+            ResultSet rs = statement.executeQuery(sql);
+            int id = 1;
+            if (rs.getRow()!=0){
+                id = rs.getInt("id");
+                //只存储最近30条历史记录
+                if (id/30==0){
+                    System.out.println("id小于"+id+"删除了历史记录了");
+                    String deleteSql = "delete from db_source where id<"+id;
+                    statement.executeUpdate(deleteSql);
+                }
+            }
+            id++;
+            statement.executeUpdate("insert into db_source(id,db_name,db_address,user_name,password) values("+id+",'"+dbSourcePo.getDbName()+"','"+dbSourcePo.getDbAddress()+"','"+dbSourcePo.getUserName()+"','"+dbSourcePo.getPassword()+"')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

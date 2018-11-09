@@ -96,6 +96,9 @@ public final class UiGenerateUtil {
             Connection sqlLiteConnection = dbService.getSqlLiteConnection();
             ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION,sqlLiteConnection);
             SqlLiteService sqlLiteService =  SqlLiteService.getInstance(sqlLiteConnection);
+            //插入连接数据库的信息
+            sqlLiteService.insertDbConnectionInfo(dbSourcePo);
+
             List<Template> templates = sqlLiteService.queryTemplateList();
             CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
@@ -192,6 +195,10 @@ public final class UiGenerateUtil {
 
 
     private void fillPanelText(ConnectDbSetting connectDbSetting) {
+        //优先从历史记录里面读取
+        if(readFromConnectLog(connectDbSetting)){
+            return ;
+        }
         VirtualFile baseDir = project.getBaseDir();
         VirtualFile file = JavaUtils.getFileByPattenName(baseDir, "application.properties","application-dev.properties","application.yml","application-dev.yml");
         if(file==null){
@@ -203,6 +210,26 @@ public final class UiGenerateUtil {
             insertPanelUseYaml(connectDbSetting, ymlFile);
         }else if(file.getPath().contains(".properties")){
             insertPanelUseProperties(connectDbSetting, ymlFile);
+        }
+    }
+
+    /**
+     * 从数据库中读取最近一条历史记录
+     * @param connectDbSetting
+     * @return
+     */
+    private boolean readFromConnectLog(ConnectDbSetting connectDbSetting) {
+        Connection sqlLiteConnection = DbService.getInstance(project).getSqlLiteConnection();
+        SqlLiteService sqlLiteService =  SqlLiteService.getInstance(sqlLiteConnection);
+        DbSourcePo dbSourcePo = sqlLiteService.queryLatestConnectLog();
+        if (dbSourcePo!=null){
+            connectDbSetting.getDbName().setText(dbSourcePo.getDbName());
+            connectDbSetting.getAddress().setText(dbSourcePo.getDbAddress());
+            connectDbSetting.getUserName().setText(dbSourcePo.getUserName());
+            connectDbSetting.getPassword().setText(dbSourcePo.getPassword());
+            return true;
+        }else{
+            return false;
         }
     }
 
