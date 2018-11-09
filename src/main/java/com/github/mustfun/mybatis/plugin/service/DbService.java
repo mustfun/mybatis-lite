@@ -171,13 +171,7 @@ public class DbService {
             if (!hasBigDecimal && attrType.equals("BigDecimal")) {
                 hasBigDecimal = true;
             }
-            //BIGINT处理一下
-            if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED")){
-                column.setDataType("BIGINT");
-            }
-            if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED")){
-                column.setDataType("INTEGER");
-            }
+            transSpecialDataType(column);
             columnsList.add(column);
         }
         table.setColumnList(columnsList);
@@ -262,6 +256,16 @@ public class DbService {
                 System.out.println("渲染模板发生异常{}e = " + e);
                 throw new RuntimeException("渲染模板失败，表名：" + table.getTableName(), e);
             }
+        }
+    }
+
+    private static void transSpecialDataType(LocalColumn column) {
+        //BIGINT处理一下
+        if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("BITINT SIGNED")){
+            column.setDataType("BIGINT");
+        }
+        if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("INT SIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("INT")){
+            column.setDataType("INTEGER");
         }
     }
 
