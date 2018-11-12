@@ -10,7 +10,7 @@ import com.intellij.psi.util.ReferenceSetBase;
  */
 public final class MybatisConstants {
 
-    public static final String PLUGIN_NAME = "MyBatis Plugin Free";
+    public static final String PLUGIN_NAME = "MyBatis-Plugin-Free";
 
     public static final String TEMP_DIR_PATH = PathManager.getPluginsPath()+"/"+ PLUGIN_NAME + "/temp";
 
