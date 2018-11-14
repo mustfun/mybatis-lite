@@ -35,6 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -92,6 +93,13 @@ public final class UiGenerateUtil {
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
                 tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
+                Pattern compile = Pattern.compile("^(\\w_)");
+                Matcher matcher = compile.matcher(table.getTableName());
+                if (matcher.find()){
+                    String group = matcher.group(1);
+                    connectDbSetting.getTablePrefixInput().setText(group);
+                }
+
             }
             Connection sqlLiteConnection = dbService.getSqlLiteConnection();
             ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION,sqlLiteConnection);
