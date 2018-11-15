@@ -8,7 +8,7 @@ import com.github.mustfun.mybatis.plugin.provider.FileProviderFactory;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
-import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -35,6 +35,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 /**
@@ -229,8 +231,19 @@ public class DbService {
 
                 String realPackageName="com.github.mustfun";
                 if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())){
-                    VirtualFile vFile = WriteAction.computeAndWait(() -> VfsUtil.createDirectoryIfMissing(outPath));
-                    PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
+                    final VirtualFile[] vFile = {null};
+                    try {
+                        new WriteCommandAction.Simple<VirtualFile>(project) {
+                            @Override
+                            protected void run() throws Throwable {
+                                vFile[0] = VfsUtil.createDirectoryIfMissing(outPath);
+                            }
+                        }.execute();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile[0]);
                     realPackageName = JavaUtils.getPackageName(directory, templateId);
                 }
 
