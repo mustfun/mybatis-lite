@@ -15,7 +15,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManagerAdapter;
+import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/6/12
  * @since 1.0
@@ -80,6 +80,8 @@ public class TemplateEditMenuAction extends AnAction {
         templateListPanel.show();
     }
 
+    private static  Template editingTemplate = new Template();
+
     private void addHandler(JBTable table, List<Template> templates, Project project, TemplateListPanel templateListPanel){
         //添加事件
         table.addMouseListener(new MouseAdapter(){
@@ -90,7 +92,7 @@ public class TemplateEditMenuAction extends AnAction {
                 if(column==3){
                     //处理button事件写在这里...
                     String tepName = (String) table.getValueAt(row, 0);
-                    Template template = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().get();
+                    editingTemplate = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().get();
                     ApplicationManager.getApplication().runWriteAction(() -> {
                         //先保存，再打开，再删除
                         VirtualFile vFile = null;
@@ -99,14 +101,14 @@ public class TemplateEditMenuAction extends AnAction {
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
-                        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(template.getTepName() + ".vm", JavaFileType.INSTANCE, template.getTepContent().replaceAll("\r\n", "\n"));
+                        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(editingTemplate.getTepName() + ".vm", JavaFileType.INSTANCE, editingTemplate.getTepContent().replaceAll("\r\n", "\n"));
                         PsiDirectory psiDirectory = PsiDirectoryFactory.getInstance(project).createDirectory(vFile);
-                        PsiFile file = psiDirectory.findFile(template.getTepName() + ".vm");
+                        PsiFile file = psiDirectory.findFile(editingTemplate.getTepName() + ".vm");
                         if (file==null){
                             psiDirectory.add(psiFile);
                         }
                         //再打开
-                        PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(template.getTepName() + ".vm")).findAny().get();
+                        PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(editingTemplate.getTepName() + ".vm")).findAny().get();
                         new OpenFileDescriptor(project, realPsiFile.getVirtualFile()).navigateInEditor(project, true);
 
                         templateListPanel.doCancelAction();
@@ -115,7 +117,7 @@ public class TemplateEditMenuAction extends AnAction {
                     /**
                      * 添加监听事件
                      */
-                    ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerAdapter() {
+                    ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerListener() {
 
                         @Override
                         public void beforeDocumentSaving(@NotNull final Document document) {
@@ -123,6 +125,9 @@ public class TemplateEditMenuAction extends AnAction {
 
                             if (openProjects.length > 0) {
                                 final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
+                                if (psiFile==null){
+                                    return ;
+                                }
                                 String text = psiFile.getText();
                                 if (StringUtils.isEmpty(document.getText())){
                                     Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
@@ -131,7 +136,7 @@ public class TemplateEditMenuAction extends AnAction {
                                 if (StringUtils.isEmpty(text)){
                                     return ;
                                 }
-                                if (DigestUtils.md5Hex(text).equals(DigestUtils.md5Hex(template.getTepContent()))){
+                                if (DigestUtils.md5Hex(text).equals(DigestUtils.md5Hex(editingTemplate.getTepContent()))){
                                     return ;
                                 }
                                 Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
@@ -140,7 +145,7 @@ public class TemplateEditMenuAction extends AnAction {
                                 }
                                 SqlLiteService instance = SqlLiteService.getInstance(connection);
                                 Template updatePo = new Template();
-                                updatePo.setId(template.getId());
+                                updatePo.setId(editingTemplate.getId());
                                 updatePo.setTepContent(text);
                                 instance.updateTemplate(updatePo);
 
