@@ -18,7 +18,14 @@ public class GenerateCodeMainActionGroup extends DefaultActionGroup {
     public void update(AnActionEvent event) {
         Editor editor = event.getData(CommonDataKeys.EDITOR);
         event.getPresentation().setVisible(true);
-        event.getPresentation().setEnabled(editor != null);
+        //大家要求，编辑器关闭的时候也允许打开
+        //event.getPresentation().setEnabled(editor != null);
         event.getPresentation().setIcon(Icons.MYBATIS_LOGO_MINI);
     }
+
+    @Override
+    public boolean hideIfNoVisibleChildren() {
+        return false;
+    }
+
 }

@@ -127,6 +127,9 @@ public final class UiGenerateUtil {
         VirtualFile finalDaoPath = daoPath;
         daoPanel.addActionListener(e -> {
             VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", finalDaoPath, baseDir);
+            if (vf==null){
+                return;
+            }
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
@@ -143,6 +146,9 @@ public final class UiGenerateUtil {
         VirtualFile finalMapperPath = mapperPath;
         mapperButton.addActionListener(e->{
             VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", finalMapperPath, baseDir);
+            if (vf==null){
+                return;
+            }
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
@@ -158,6 +164,9 @@ public final class UiGenerateUtil {
         connectDbSetting.getPoInput().setText(modelPath.getPath());
         connectDbSetting.getPoButton().addActionListener(e->{
             VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择实体层存放目录", finalModelPath, baseDir);
+            if (vf==null){
+                return;
+            }
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
@@ -173,6 +182,9 @@ public final class UiGenerateUtil {
         connectDbSetting.getServiceInput().setText(servicePath.getPath());
         connectDbSetting.getServiceButton().addActionListener(e->{
             VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Service层存放目录", finalServicePath, baseDir);
+            if (vf==null){
+                return;
+            }
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
