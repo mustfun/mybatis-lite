@@ -10,9 +10,13 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.0.7</h4>
+      <h4>1.0.8</h4>
       <ul>
           <li>Rename plugin</li>
+      </ul>
+      <h4>1.0.7</h4>
+      <ul>
+          <li>Rename plugin,Support 2017 version</li>
       </ul>
       <h4>1.0.6</h4>
       <ul>

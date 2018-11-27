@@ -42,15 +42,19 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2018.3'
+    version = 'IU-2018.2'
     plugins = ['coverage','Spring','DatabaseTools']
     pluginName = 'Mybatis-Plus'
 }
 patchPluginXml {
     changeNotes """
-      <h4>1.0.7</h4>
+      <h4>1.0.8</h4>
       <ul>
           <li>Rename plugin</li>
+      </ul>
+      <h4>1.0.7</h4>
+      <ul>
+          <li>Rename plugin,Support 2017 version</li>
       </ul>
       <h4>1.0.6</h4>
       <ul>
