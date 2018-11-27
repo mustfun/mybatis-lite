@@ -46,7 +46,7 @@
       ]]>
     </change-notes>
 
-    <idea-version since-build="171.1834" until-build="182.*"/>
+    <idea-version since-build="171.1834" until-build="183.*"/>
     <depends optional="true">com.intellij.database</depends>
     <depends optional="true">com.intellij.spring</depends>
 
@@ -97,7 +97,7 @@
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
-               text="Mybatis Plugin Free" description="mybatis plugin free menu" icon="/images/logo_16.png">
+               text="Mybatis Plus" description="mybatis plugin free menu" icon="/images/logo_16.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
 
