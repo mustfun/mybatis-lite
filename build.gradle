@@ -14,7 +14,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.0.6'
+version '1.0.7'
 
 sourceCompatibility = 1.8
 
@@ -42,12 +42,16 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2018.2'
+    version = 'IU-2018.3'
     plugins = ['coverage','Spring','DatabaseTools']
-    pluginName = 'Mybatis-Plugin-Free'
+    pluginName = 'Mybatis-Plus'
 }
 patchPluginXml {
     changeNotes """
+      <h4>1.0.7</h4>
+      <ul>
+          <li>Rename plugin</li>
+      </ul>
       <h4>1.0.6</h4>
       <ul>
           <li>The navigation switch is opened by default</li>
