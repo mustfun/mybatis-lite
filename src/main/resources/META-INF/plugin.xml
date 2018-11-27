@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Plus</name>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
