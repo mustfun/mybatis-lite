@@ -10,6 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.0.7</h4>
+      <ul>
+          <li>Rename plugin</li>
+      </ul>
       <h4>1.0.6</h4>
       <ul>
           <li>The navigation switch is opened by default</li>
