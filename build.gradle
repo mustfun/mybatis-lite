@@ -1,6 +1,17 @@
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
+        google()
+        jcenter()
+        gradlePluginPortal()
+        maven { url 'https://cache-redirector.jetbrains.com/jetbrains.bintray.com/intellij-plugin-service' }
+        maven { url 'https://cache-redirector.jetbrains.com/repo1.maven.org/maven2' }
+        maven { url 'https://cache-redirector.jetbrains.com/jcenter.bintray.com' }
+        maven { url "http://dl.bintray.com/jetbrains/intellij-plugin-service" }
+        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'http://maven.oschina.net/content/groups/public/'}
     }
 }
 
@@ -30,7 +41,7 @@ dependencies {
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.23.1'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
 
-
+    
     testCompile gradleTestKit()
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
         exclude module: 'groovy-all'
@@ -42,8 +53,8 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2018.3'
-    plugins = ['coverage','Spring','DatabaseTools']
+    version = 'IU-2018.2'
+    plugins = ['coverage','Spring','DatabaseTools']//'coverage'
     pluginName = 'Mybatis-Plus'
 }
 patchPluginXml {
