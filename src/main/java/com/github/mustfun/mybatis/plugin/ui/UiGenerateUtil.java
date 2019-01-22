@@ -76,12 +76,19 @@ public final class UiGenerateUtil {
             String dbName = connectDbSetting.getDbName().getText();
             String userName = connectDbSetting.getUserName().getText();
             String password = connectDbSetting.getPassword().getText();
+            Integer p = null;
+            if (StringUtils.isNotBlank(port)) {
+                try {
+                    p = Integer.parseInt(port);
+                } catch (NumberFormatException e1) {
+                    Messages.showMessageDialog("端口配置不正确", "连接数据库提示", Messages.getInformationIcon());
+                    return;
+                }
+            }
             DbSourcePo dbSourcePo = new DbSourcePo();
+            dbSourcePo.setPort(p);
             dbSourcePo.setDbAddress(address);
             dbSourcePo.setDbName(dbName);
-            if (StringUtils.isNotBlank(port)) {
-                dbSourcePo.setPort(Integer.parseInt(port));
-            }
             dbSourcePo.setUserName(userName);
             dbSourcePo.setPassword(password);
             //连接数据库
