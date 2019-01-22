@@ -61,7 +61,14 @@ public class DbService {
     }
 
     public  Connection getConnection(DbSourcePo configPo) {
-        DbUtil dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+
+        DbUtil dbUtil;
+        if(configPo.getPort() == null){
+            dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
+        }else{
+            //if configured
+            dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword(), configPo.getPort());
+        }
         return dbUtil.getConnection();
     }
 

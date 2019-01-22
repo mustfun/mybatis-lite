@@ -25,8 +25,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.util.ui.JBInsets;
 import com.intellij.util.ui.JBUI;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
+
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +36,6 @@ import java.sql.Connection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,7 +79,9 @@ public final class UiGenerateUtil {
             DbSourcePo dbSourcePo = new DbSourcePo();
             dbSourcePo.setDbAddress(address);
             dbSourcePo.setDbName(dbName);
-            dbSourcePo.setPort(Integer.parseInt(port));
+            if (StringUtils.isNotBlank(port)) {
+                dbSourcePo.setPort(Integer.parseInt(port));
+            }
             dbSourcePo.setUserName(userName);
             dbSourcePo.setPassword(password);
             //连接数据库
