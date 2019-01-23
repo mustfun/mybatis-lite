@@ -25,7 +25,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.0.8'
+version '1.0.9'
 
 sourceCompatibility = 1.8
 
@@ -59,6 +59,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+      <h4>1.0.9</h4>
+      <ul>
+          <li>support mysql8,fix the problem of not being able to connect to the database in some scenarios</li>
+      </ul>
       <h4>1.0.8</h4>
       <ul>
           <li>Rename plugin</li>
