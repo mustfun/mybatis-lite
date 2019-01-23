@@ -74,6 +74,10 @@ public final class UiGenerateUtil {
             String address = connectDbSetting.getAddress().getText();
             String port = connectDbSetting.getPort().getText();
             String dbName = connectDbSetting.getDbName().getText();
+            if (StringUtils.isEmpty(dbName)){
+                Messages.showMessageDialog("DB名称配置不正确", "连接数据库提示", Messages.getInformationIcon());
+                return;
+            }
             String userName = connectDbSetting.getUserName().getText();
             String password = connectDbSetting.getPassword().getText();
             Integer p = null;

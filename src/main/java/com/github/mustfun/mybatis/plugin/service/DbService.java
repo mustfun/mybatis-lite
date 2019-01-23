@@ -15,6 +15,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
+import com.mysql.cj.jdbc.ConnectionImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.http.client.utils.DateUtils;
@@ -83,7 +84,7 @@ public class DbService {
         try {
             dbMetData = connection.getMetaData();
             String[] types = {"TABLE"};
-            ResultSet rs = dbMetData.getTables(null, null, "%", types);
+            ResultSet rs = dbMetData.getTables(connection.getCatalog(), null, "%", types);
             while (rs.next()) {
                 LocalTable localTable = initLocalTable(connection, rs);
                 localTables.add(localTable);
@@ -103,19 +104,20 @@ public class DbService {
         localTable.setComment(remarks);
         localTable.setTableType(tableType);
         localTable.setTableName(tableName);
-        getColumns(connection.getMetaData(),tableName,localTable);
+        getColumns(connection,tableName,localTable);
         return localTable;
     }
 
-    private LocalTable getColumns(DatabaseMetaData meta, String tableName,LocalTable localTable) throws SQLException {
+    private LocalTable getColumns(Connection connection, String tableName,LocalTable localTable) throws SQLException {
+        DatabaseMetaData meta = connection.getMetaData();
         List<LocalColumn> localColumns = new ArrayList<>();
-        ResultSet primaryKeys = meta.getPrimaryKeys(null, null, tableName);
+        ResultSet primaryKeys = meta.getPrimaryKeys(connection.getCatalog(), null, tableName);
         String pkColumnName = null;
         while (primaryKeys.next()) {
             pkColumnName = primaryKeys.getString("COLUMN_NAME");
         }
         LocalColumn pkColumn = new LocalColumn();
-        ResultSet survey = meta.getColumns(null, null, tableName, null);
+        ResultSet survey = meta.getColumns(connection.getCatalog(), null, tableName, null);
         while (survey.next()) {
             LocalColumn localColumn = new LocalColumn();
             String columnName = survey.getString("COLUMN_NAME");
