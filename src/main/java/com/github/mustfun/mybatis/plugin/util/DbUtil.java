@@ -1,8 +1,5 @@
 package com.github.mustfun.mybatis.plugin.util;
 
-import com.intellij.openapi.application.PathManager;
-import com.intellij.util.PathUtil;
-
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +19,16 @@ public class DbUtil {
 
     public DbUtil(String url, String dbName, String userName, String password){
         this.url = "jdbc:mysql://"+url+":3306/"+dbName+"?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false";
+        this.username = userName;
+        this.password = password;
+    }
+
+    /**
+     * 增加端口配置
+     * @date 2019/1/22
+     */
+    public DbUtil(String url, String dbName, String userName, String password, int port){
+        this.url = "jdbc:mysql://"+url+":"+port+"/"+dbName+"?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false";
         this.username = userName;
         this.password = password;
     }
