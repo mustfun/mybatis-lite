@@ -121,6 +121,9 @@ public class TemplateEditMenuAction extends AnAction {
 
                         @Override
                         public void beforeDocumentSaving(@NotNull final Document document) {
+                            if(editingTemplate==null){
+                                return ;
+                            }
                             final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
 
                             if (openProjects.length > 0) {
@@ -129,6 +132,9 @@ public class TemplateEditMenuAction extends AnAction {
                                     return ;
                                 }
                                 String text = psiFile.getText();
+                                if (!psiFile.getVirtualFile().getName().startsWith(editingTemplate.getTepName())){
+                                    return ;
+                                }
                                 if (StringUtils.isEmpty(document.getText())){
                                     Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
                                     return ;
