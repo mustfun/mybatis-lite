@@ -1,4 +1,4 @@
-<idea-plugin url="https://github.com/mustfun/mybatis-plugin-free">
+<idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
     <version>1.0.11</version>
@@ -113,7 +113,7 @@
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
-               text="Mybatis Plus" description="mybatis plus menu" icon="/images/logo_16.png">
+               text="Mybatis Lite" description="mybatis plus menu" icon="/images/logo_16.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
 
