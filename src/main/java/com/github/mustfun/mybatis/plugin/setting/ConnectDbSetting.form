@@ -174,9 +174,15 @@
               <component id="ce424" class="com.intellij.ui.components.JBTextField" binding="tablePrefixInput">
                 <constraints/>
                 <properties>
-                  <margin top="0" left="0" bottom="0" right="0"/>
+                  <margin top="2" left="6" bottom="2" right="6"/>
                   <preferredSize width="250" height="30"/>
                   <text value=""/>
+                </properties>
+              </component>
+              <component id="9a41f" class="javax.swing.JCheckBox" binding="poStyle">
+                <constraints/>
+                <properties>
+                  <text value="PO/BO是否大写"/>
                 </properties>
               </component>
             </children>
@@ -203,7 +209,7 @@
               <component id="9cb33" class="com.intellij.ui.components.JBTextField" binding="daoInput">
                 <constraints/>
                 <properties>
-                  <margin top="0" left="10" bottom="0" right="0"/>
+                  <margin top="2" left="6" bottom="2" right="6"/>
                   <preferredSize width="250" height="30"/>
                   <text value=""/>
                 </properties>

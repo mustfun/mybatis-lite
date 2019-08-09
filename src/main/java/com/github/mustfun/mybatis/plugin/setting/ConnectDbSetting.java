@@ -63,6 +63,7 @@ public class ConnectDbSetting {
     private JBTextField serviceInput;
     private JButton serviceButton;
     private JBLabel serviceLabel;
+    private JCheckBox poStyle;
 
     public ConnectDbSetting(){
         port.addKeyListener(new KeyAdapter(){

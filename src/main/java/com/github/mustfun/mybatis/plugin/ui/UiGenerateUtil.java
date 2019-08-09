@@ -47,6 +47,7 @@ import java.util.regex.Pattern;
  */
 public final class UiGenerateUtil {
 
+    public static final String NUMBER_PATTEN = "^(\\w_)";
     private Project project;
 
     private FileEditorManager fileEditorManager;
@@ -107,7 +108,7 @@ public final class UiGenerateUtil {
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
                 tableCheckBox.addItem(table.getTableName(),table.getTableName(),false);
-                Pattern compile = Pattern.compile("^(\\w_)");
+                Pattern compile = Pattern.compile(NUMBER_PATTEN);
                 Matcher matcher = compile.matcher(table.getTableName());
                 if (matcher.find()){
                     String group = matcher.group(1);
