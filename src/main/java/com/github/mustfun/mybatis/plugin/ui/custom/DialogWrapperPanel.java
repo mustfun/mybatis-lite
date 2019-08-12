@@ -3,6 +3,7 @@ package com.github.mustfun.mybatis.plugin.ui.custom;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
@@ -83,6 +84,10 @@ public class DialogWrapperPanel extends DialogWrapper {
 
 
         ConnectionHolder.remove();
+
+        UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
+        uiComponentFacade.buildNotify(project,"Mybatis Lite","生成代码成功");
+
     }
 
     @NotNull

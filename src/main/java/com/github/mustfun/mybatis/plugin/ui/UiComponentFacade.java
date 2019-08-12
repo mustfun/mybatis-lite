@@ -1,5 +1,8 @@
 package com.github.mustfun.mybatis.plugin.ui;
 
+import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.intellij.icons.AllIcons;
+import com.intellij.notification.*;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -8,17 +11,23 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
+import com.intellij.openapi.startup.StartupManager;
+import com.intellij.openapi.ui.popup.*;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBList;
 
+import com.intellij.util.ui.JBInsets;
+import com.intellij.util.ui.JBUI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static com.intellij.notification.NotificationDisplayType.STICKY_BALLOON;
 
 /**
  * @author yanglin
@@ -161,4 +170,76 @@ public final class UiComponentFacade {
         return builder;
     }
 
+
+    /**
+     * 普通的popup组件
+     * @param component
+     * @return
+     */
+    public JBPopup getCommonPopUp(JComponent component,String title,String text){
+
+        return JBPopupFactory.getInstance().createComponentPopupBuilder(component, null)
+                /*
+                .setResizable(false)
+                .setShowShadow(true)
+                .setCancelKeyEnabled(true)
+                .setShowBorder(true)*/
+                .setTitle(title)
+                .setAdText(text)
+                .setShowBorder(true)
+                .setCancelButton(new IconButton("关闭", AllIcons.Actions.Close))
+                .setRequestFocus(true)
+                .setFocusable(true)
+                .setMovable(false)
+                .setCancelOnOtherWindowOpen(true)
+                .setCancelOnClickOutside(false)
+                .setProject(this.project)
+                .createPopup();
+    }
+
+
+    /**
+     * 将组件变成对话气泡
+     *
+     * <code>
+     *     Rectangle rect = connectDbSetting.getMainPanel().getVisibleRect();
+     *                 Point p = new Point(rect.x + 30, rect.y + rect.height - 10);
+     *                 RelativePoint point = new RelativePoint(connectDbSetting.getMainPanel(), p);
+     *                 balloonBuilder.createBalloon().show(point, Balloon.Position.above);
+     * </code>
+     * @param component
+     * @return
+     */
+    @NotNull
+    public BalloonBuilder buildBalloon(JComponent component) {
+        JBInsets borderInsets = JBUI.insets(20, 20, 20, 20);
+        return JBPopupFactory.getInstance()
+                .createDialogBalloonBuilder(component, null)
+                .setHideOnClickOutside(true)
+                .setShadow(true)
+                .setBlockClicksThroughBalloon(true)
+                .setRequestFocus(true)
+                .setBorderInsets(borderInsets);
+    }
+
+
+    /**
+     * 弹出notify
+     * @param project
+     * @param title
+     * @param content
+     */
+
+    public void buildNotify(Project project,String title,String content) {
+
+        NotificationGroup notificationGroup = new NotificationGroup("Code Generate Success", STICKY_BALLOON, true);
+        notificationGroup.createNotification(title, content, NotificationType.INFORMATION, new NotificationListener() {
+            @Override
+            public void hyperlinkUpdate(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+                return ;
+            }
+        }).notify(project);
+        notificationGroup.notify();
+
+    }
 }
