@@ -1,23 +1,6 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        google()
-        jcenter()
-        gradlePluginPortal()
-        maven { url 'https://cache-redirector.jetbrains.com/jetbrains.bintray.com/intellij-plugin-service' }
-        maven { url 'https://cache-redirector.jetbrains.com/repo1.maven.org/maven2' }
-        maven { url 'https://cache-redirector.jetbrains.com/jcenter.bintray.com' }
-        maven { url "http://dl.bintray.com/jetbrains/intellij-plugin-service" }
-        maven { url "https://jetbrains.bintray.com/intellij-third-party-dependencies" }
-        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/'}
-        maven { url 'http://maven.oschina.net/content/groups/public/'}
-    }
-}
-
 plugins {
-    id 'java'
-    id 'org.jetbrains.intellij' version "0.4.1"
+    id "java"
+    id "org.jetbrains.intellij" version "0.4.10"
 }
 
 apply plugin: 'idea'
@@ -25,8 +8,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.0.11'
-
+version '1.0.12'
 sourceCompatibility = 1.8
 
 
@@ -53,12 +35,16 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2018.2'
-    plugins = ['coverage','Spring','DatabaseTools']//'coverage'
+    version = 'IU-2019.2'
+    plugins = ['coverage','Spring','DatabaseTools','java']//'coverage'
     pluginName = 'Mybatis-Lite'
 }
 patchPluginXml {
     changeNotes """
+      <h4>1.0.12</h4>
+      <ul>
+          <li>support IDEA 2019.2</li>
+      </ul>
       <h4>1.0.11</h4>
       <ul>
           <li>Rename plugin</li>

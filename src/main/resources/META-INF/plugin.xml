@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.0.12</h4>
+      <ul>
+          <li>support IDEA 2019.2</li>
+      </ul>
       <h4>1.0.11</h4>
       <ul>
           <li>Rename plugin</li>
@@ -65,6 +69,7 @@
     <idea-version since-build="171.1834" until-build="183.*"/>
     <depends optional="true">com.intellij.database</depends>
     <depends optional="true">com.intellij.spring</depends>
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.MapperDescription"/>
