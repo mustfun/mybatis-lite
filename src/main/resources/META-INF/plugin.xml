@@ -66,10 +66,11 @@
       ]]>
     </change-notes>
 
-    <idea-version since-build="171.1834" until-build="183.*"/>
-    <depends optional="true">com.intellij.database</depends>
-    <depends optional="true">com.intellij.spring</depends>
-    <depends>com.intellij.modules.java</depends>
+    <idea-version since-build="171.1834"/>
+    <depends optional="true" config-file="">com.intellij.database</depends>
+    <depends optional="true" config-file="">com.intellij.spring</depends>
+    <depends config-file="">com.intellij.modules.java</depends>
+    <depends config-file="">com.intellij.modules.ultimate</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.MapperDescription"/>

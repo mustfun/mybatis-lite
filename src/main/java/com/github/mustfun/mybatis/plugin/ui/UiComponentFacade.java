@@ -239,7 +239,6 @@ public final class UiComponentFacade {
                 return ;
             }
         }).notify(project);
-        notificationGroup.notify();
 
     }
 }
