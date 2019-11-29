@@ -7,10 +7,8 @@ import com.intellij.util.xml.NameValue;
 import com.intellij.util.xml.Required;
 import com.intellij.util.xml.SubTagList;
 import com.intellij.util.xml.SubTagsList;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin

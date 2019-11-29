@@ -9,7 +9,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,7 +31,7 @@ public class GenerateStatementIntention extends GenericIntention {
     @Override
     public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        if (!naviOpenStatus){
+        if (!naviOpenStatus) {
             return;
         }
 

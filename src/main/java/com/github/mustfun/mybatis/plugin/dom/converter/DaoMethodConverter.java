@@ -5,14 +5,12 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.xml.ConvertContext;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
- * @update itar
- * dao层method 转变对象
+ * @update itar dao层method 转变对象
  */
 public class DaoMethodConverter extends AbstractConverterAdaptor<PsiMethod> {
 

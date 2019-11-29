@@ -11,7 +11,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
@@ -26,9 +25,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
@@ -60,7 +57,8 @@ public class GenerateMapperIntention extends GenericIntention {
     }
 
     @Override
-    public void invoke(@NotNull final Project project, final Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(@NotNull final Project project, final Editor editor, PsiFile file)
+        throws IncorrectOperationException {
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
         PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
         Collection<PsiDirectory> directories = MapperUtils.findMapperDirectories(project);
@@ -72,9 +70,9 @@ public class GenerateMapperIntention extends GenericIntention {
     }
 
     private void handleMutilDirectories(Project project,
-                                        final Editor editor,
-                                        final PsiClass clazz,
-                                        Collection<PsiDirectory> directories) {
+        final Editor editor,
+        final PsiClass clazz,
+        Collection<PsiDirectory> directories) {
         final Map<String, PsiDirectory> pathMap = getPathMap(directories);
         final ArrayList<String> keys = Lists.newArrayList(pathMap.keySet());
         ListSelectionListener popupListener = new ListSelectionListener() {
@@ -90,10 +88,10 @@ public class GenerateMapperIntention extends GenericIntention {
         };
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
         uiComponentFacade.showListPopupWithSingleClickable("Choose folder",
-                popupListener,
-                "Choose another",
-                getChooseFolderListener(editor, clazz),
-                getPathTextForShown(project, keys, pathMap));
+            popupListener,
+            "Choose another",
+            getChooseFolderListener(editor, clazz),
+            getPathTextForShown(project, keys, pathMap));
     }
 
     private ClickableListener getChooseFolderListener(final Editor editor, final PsiClass clazz) {
@@ -156,7 +154,8 @@ public class GenerateMapperIntention extends GenericIntention {
         try {
             Properties properties = new Properties();
             properties.setProperty("NAMESPACE", clazz.getQualifiedName());
-            PsiElement psiFile = MapperUtils.createMapperFromFileTemplate(MybatisFileTemplateDescriptorFactory.MYBATIS_MAPPER_XML_TEMPLATE,
+            PsiElement psiFile = MapperUtils
+                .createMapperFromFileTemplate(MybatisFileTemplateDescriptorFactory.MYBATIS_MAPPER_XML_TEMPLATE,
                     clazz.getName(), directory, properties);
             EditorService.getInstance(clazz.getProject()).scrollTo(psiFile, 0);
         } catch (Exception e) {

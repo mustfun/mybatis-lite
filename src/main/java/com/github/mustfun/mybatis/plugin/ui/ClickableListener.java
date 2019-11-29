@@ -5,6 +5,6 @@ package com.github.mustfun.mybatis.plugin.ui;
  */
 public interface ClickableListener extends ExecutableListener {
 
-  public void clicked();
+    public void clicked();
 
 }

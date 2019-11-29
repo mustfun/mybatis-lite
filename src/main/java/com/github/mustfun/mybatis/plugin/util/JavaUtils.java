@@ -5,22 +5,37 @@ import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaPsiFacade;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnnotationMemberValue;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiImportList;
+import com.intellij.psi.PsiImportStatement;
+import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-
 import com.intellij.ui.CheckBoxList;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author yanglin
@@ -38,7 +53,8 @@ public final class JavaUtils {
     @NotNull
     public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
         PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
-        return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
+        return null == propertySetter ? Optional.<PsiField>absent()
+            : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
     }
 
     @NotNull
@@ -66,11 +82,13 @@ public final class JavaUtils {
 
     @NotNull
     public static Optional<PsiClass> findClazz(@NotNull Project project, @NotNull String clazzName) {
-        return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
+        return Optional
+            .fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
     }
 
     @NotNull
-    public static Optional<PsiMethod> findMethod(@NotNull Project project, @Nullable String clazzName, @Nullable String methodName) {
+    public static Optional<PsiMethod> findMethod(@NotNull Project project, @Nullable String clazzName,
+        @Nullable String methodName) {
         if (StringUtils.isBlank(clazzName) && StringUtils.isBlank(methodName)) {
             return Optional.absent();
         }
@@ -93,33 +111,40 @@ public final class JavaUtils {
     }
 
     @NotNull
-    public static Optional<PsiAnnotation> getPsiAnnotation(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+    public static Optional<PsiAnnotation> getPsiAnnotation(@NotNull PsiModifierListOwner target,
+        @NotNull Annotation annotation) {
         PsiModifierList modifierList = target.getModifierList();
-        return null == modifierList ? Optional.<PsiAnnotation>absent() : Optional.fromNullable(modifierList.findAnnotation(annotation.getQualifiedName()));
+        return null == modifierList ? Optional.<PsiAnnotation>absent()
+            : Optional.fromNullable(modifierList.findAnnotation(annotation.getQualifiedName()));
     }
 
     @NotNull
     public static Optional<PsiAnnotationMemberValue> getAnnotationAttributeValue(@NotNull PsiModifierListOwner target,
-                                                                                 @NotNull Annotation annotation,
-                                                                                 @NotNull String attrName) {
+        @NotNull Annotation annotation,
+        @NotNull String attrName) {
         if (!isAnnotationPresent(target, annotation)) {
             return Optional.absent();
         }
         Optional<PsiAnnotation> psiAnnotation = getPsiAnnotation(target, annotation);
-        return psiAnnotation.isPresent() ? Optional.fromNullable(psiAnnotation.get().findAttributeValue(attrName)) : Optional.<PsiAnnotationMemberValue>absent();
+        return psiAnnotation.isPresent() ? Optional.fromNullable(psiAnnotation.get().findAttributeValue(attrName))
+            : Optional.<PsiAnnotationMemberValue>absent();
     }
 
     @NotNull
-    public static Optional<PsiAnnotationMemberValue> getAnnotationValue(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+    public static Optional<PsiAnnotationMemberValue> getAnnotationValue(@NotNull PsiModifierListOwner target,
+        @NotNull Annotation annotation) {
         return getAnnotationAttributeValue(target, annotation, "value");
     }
 
-    public static Optional<String> getAnnotationValueText(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+    public static Optional<String> getAnnotationValueText(@NotNull PsiModifierListOwner target,
+        @NotNull Annotation annotation) {
         Optional<PsiAnnotationMemberValue> annotationValue = getAnnotationValue(target, annotation);
-        return annotationValue.isPresent() ? Optional.of(annotationValue.get().getText().replaceAll("\"", "")) : Optional.<String>absent();
+        return annotationValue.isPresent() ? Optional.of(annotationValue.get().getText().replaceAll("\"", ""))
+            : Optional.<String>absent();
     }
 
-    public static boolean isAnyAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Set<Annotation> annotations) {
+    public static boolean isAnyAnnotationPresent(@NotNull PsiModifierListOwner target,
+        @NotNull Set<Annotation> annotations) {
         for (Annotation annotation : annotations) {
             if (isAnnotationPresent(target, annotation)) {
                 return true;
@@ -154,9 +179,6 @@ public final class JavaUtils {
 
     /**
      * 寻找离 public class最近的元素
-     *
-     * @param psiElement
-     * @return
      */
     public static PsiElement findNealModifierElement(PsiElement psiElement) {
         if (psiElement == null) {
@@ -172,9 +194,7 @@ public final class JavaUtils {
     /**
      * 找出Mapper等文件可能所在的路径所在路径
      *
-     * @param base
      * @param patten 多个进行匹配,或者关系, 如DemoDao.java或者DemoMapper.java都可以
-     * @return
      */
     public static VirtualFile getFilePattenPath(VirtualFile base, String... patten) {
         if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")) {
@@ -202,14 +222,10 @@ public final class JavaUtils {
 
     /**
      * getFileByPattenName
-     *
-     * @param base
-     * @param patten
-     * @return
      */
     public static VirtualFile getFileByPattenName(VirtualFile base, String... patten) {
         if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
-                || base.getPath().contains("/.target/")) {
+            || base.getPath().contains("/.target/")) {
             return null;
         }
         for (String s : patten) {
@@ -290,8 +306,6 @@ public final class JavaUtils {
 
     /**
      * 通过类名找一个类
-     *
-     * @return
      */
     // FIXME: 2018/6/22
     public PsiClass[] findClassByName() {
@@ -300,8 +314,6 @@ public final class JavaUtils {
 
     /**
      * 在yaml中遍历一个节点
-     *
-     * @param hashMap
      */
     public static String findYamlValueByTag(LinkedHashMap hashMap, String... keywords) {
         for (Object o : hashMap.entrySet()) {

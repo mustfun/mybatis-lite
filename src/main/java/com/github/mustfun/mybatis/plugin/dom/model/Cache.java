@@ -2,7 +2,6 @@ package com.github.mustfun.mybatis.plugin.dom.model;
 
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.SubTagList;
-
 import java.util.List;
 
 /**
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public interface Cache extends DomElement {
 
-  @SubTagList("property")
-  public List<Property> getProperties();
+    @SubTagList("property")
+    public List<Property> getProperties();
 
 }

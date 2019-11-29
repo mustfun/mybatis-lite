@@ -1,5 +1,10 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.DELETE_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.INSERT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.SELECT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.UPDATE_GENERATOR;
+
 import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
 import com.github.mustfun.mybatis.plugin.generate.StatementGenerator;
 import com.google.gson.Gson;
@@ -8,13 +13,10 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import org.jdom.Element;
-import org.jetbrains.annotations.Nullable;
-
 import java.lang.reflect.Type;
 import java.util.Set;
-
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.*;
+import org.jdom.Element;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -23,8 +25,8 @@ import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.*;
  * @function Mybatis配置项
  */
 @State(
-        name = "MybatisPluginFreeSettings",
-        storages = @Storage(value = "$APP_CONFIG$/mybatis.xml"))
+    name = "MybatisPluginFreeSettings",
+    storages = @Storage(value = "$APP_CONFIG$/mybatis.xml"))
 public class MybatisSetting implements PersistentStateComponent<Element> {
 
     private GenerateModel statementGenerateModel;

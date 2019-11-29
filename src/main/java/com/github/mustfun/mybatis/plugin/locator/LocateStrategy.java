@@ -1,7 +1,6 @@
 package com.github.mustfun.mybatis.plugin.locator;
 
 import com.intellij.psi.PsiClass;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

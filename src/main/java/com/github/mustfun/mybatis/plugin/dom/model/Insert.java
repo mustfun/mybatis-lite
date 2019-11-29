@@ -1,9 +1,9 @@
 package com.github.mustfun.mybatis.plugin.dom.model;
 
 /**
+ *  insert语句
  * @author yanglin
- * insert语句
  */
-public interface Insert extends GroupThree{
+public interface Insert extends GroupThree {
 
 }

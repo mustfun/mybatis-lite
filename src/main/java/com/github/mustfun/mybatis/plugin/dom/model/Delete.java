@@ -1,9 +1,9 @@
 package com.github.mustfun.mybatis.plugin.dom.model;
 
 /**
- * @author yanglin
  * delete语句
+ * @author yanglin
  */
-public interface Delete extends GroupTwo{
+public interface Delete extends GroupTwo {
 
 }

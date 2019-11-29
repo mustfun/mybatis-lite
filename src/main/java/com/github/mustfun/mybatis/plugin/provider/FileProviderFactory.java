@@ -8,6 +8,7 @@ import com.intellij.sql.SqlFileType;
 
 /**
  * 文件提供者工厂
+ *
  * @author hehaiyangwork@gmail.com
  * @date 2017/3/17
  * @update itar
@@ -24,11 +25,11 @@ public class FileProviderFactory {
     }
 
     public AbstractFileProvider getInstance(String type) {
-        if("java".equals(type)) {
+        if ("java".equals(type)) {
             return new DefaultProviderImpl(project, outputPath, JavaFileType.INSTANCE);
-        } else if("sql".equals(type)) {
+        } else if ("sql".equals(type)) {
             return new DefaultProviderImpl(project, outputPath, SqlFileType.INSTANCE);
-        } else if("xml".equals(type)) {
+        } else if ("xml".equals(type)) {
             return new DefaultProviderImpl(project, outputPath, XmlFileType.INSTANCE);
         } else {
             return new DefaultProviderImpl(project, outputPath, JavaFileType.INSTANCE);

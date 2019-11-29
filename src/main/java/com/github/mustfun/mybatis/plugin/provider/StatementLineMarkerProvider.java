@@ -1,6 +1,12 @@
 package com.github.mustfun.mybatis.plugin.provider;
 
-import com.github.mustfun.mybatis.plugin.dom.model.*;
+import com.github.mustfun.mybatis.plugin.dom.model.Delete;
+import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
+import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
+import com.github.mustfun.mybatis.plugin.dom.model.Insert;
+import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
+import com.github.mustfun.mybatis.plugin.dom.model.Select;
+import com.github.mustfun.mybatis.plugin.dom.model.Update;
 import com.github.mustfun.mybatis.plugin.util.Icons;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
@@ -14,9 +20,8 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
+import javax.swing.Icon;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 /**
  * @author yanglin
@@ -26,17 +31,17 @@ import javax.swing.*;
 public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag, PsiNameIdentifierOwner> {
 
     private static final ImmutableList<Class<? extends GroupTwo>> TARGET_TYPES = ImmutableList.of(
-            Select.class,
-            Update.class,
-            Insert.class,
-            Delete.class
+        Select.class,
+        Update.class,
+        Insert.class,
+        Delete.class
     );
 
     @Override
     public boolean isTheElement(@NotNull PsiElement element) {
         return element instanceof XmlTag
-                && MapperUtils.isElementWithinMybatisFile(element)
-                && isTargetType(element);
+            && MapperUtils.isElementWithinMybatisFile(element)
+            && isTargetType(element);
     }
 
     @SuppressWarnings("unchecked")
@@ -46,19 +51,19 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
         Optional<PsiNameIdentifierOwner> optional = Optional.absent();
         DomElement domElement = DomUtil.getDomElement(from);
         //如果是Mapper
-        if (domElement instanceof Mapper){
+        if (domElement instanceof Mapper) {
             String namespace = ((Mapper) domElement).getNamespace().toString();
             Optional<PsiClass> clazz = JavaUtils.findClazz(from.getProject(), namespace);
             //有可能找不到
-            if (clazz.isPresent()){
+            if (clazz.isPresent()) {
                 return Optional.of(clazz.get());
             }
-        }else{
+        } else {
             if (null == domElement) {
                 optional = Optional.absent();
             } else {
                 Optional<PsiMethod> method = JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement);
-                if (!method.isPresent()){
+                if (!method.isPresent()) {
                     return Optional.absent();
                 }
                 optional = Optional.of(method.get());
@@ -74,7 +79,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
                 return true;
             }
         }
-        if (domElement instanceof Mapper){
+        if (domElement instanceof Mapper) {
             return true;
         }
         return false;

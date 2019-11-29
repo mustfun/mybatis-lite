@@ -12,8 +12,8 @@ import com.intellij.util.xml.GenericAttributeValue;
  */
 public interface Include extends DomElement {
 
-  @Attribute("refid")
-  @Convert(SqlConverter.class)
-  public GenericAttributeValue<XmlTag> getRefId();
+    @Attribute("refid")
+    @Convert(SqlConverter.class)
+    public GenericAttributeValue<XmlTag> getRefId();
 
 }

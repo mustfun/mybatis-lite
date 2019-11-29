@@ -12,7 +12,7 @@ import com.intellij.util.xml.GenericAttributeValue;
  */
 public interface PropertyGroup extends DomElement {
 
-  @Attribute("property")
-  @Convert(PropertyConverter.class)
-  GenericAttributeValue<XmlAttributeValue> getProperty();
+    @Attribute("property")
+    @Convert(PropertyConverter.class)
+    GenericAttributeValue<XmlAttributeValue> getProperty();
 }
