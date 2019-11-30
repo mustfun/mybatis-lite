@@ -13,7 +13,8 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author yanglin xml中的一些节点，parameterMap , parameterType
+ * xml中的一些节点，parameterMap , parameterType
+ * @author yanglin
  */
 public interface GroupTwo extends GroupOne, IdDomElement {
 
