@@ -18,11 +18,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.yaml.snakeyaml.Yaml;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -31,6 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JButton;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * @author itar
@@ -123,7 +122,6 @@ public final class UiGenerateUtil {
             templateCheckbox.addMouseListener(new CheckMouseListener(project, 1, templates.get(2)));
         });
 
-
         //找出dao层所在目录
         JButton daoPanel = connectDbSetting.getDaoButton();
         VirtualFile baseDir = project.getBaseDir();
@@ -153,7 +151,8 @@ public final class UiGenerateUtil {
         connectDbSetting.getMapperInput().setText(mapperPath.getPath());
         VirtualFile finalMapperPath = mapperPath;
         mapperButton.addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Mapper层存放目录", finalMapperPath, baseDir);
+            VirtualFile vf = uiComponentFacade
+                .showSingleFolderSelectionDialog("请选择Mapper层存放目录", finalMapperPath, baseDir);
             if (vf == null) {
                 return;
             }
@@ -189,7 +188,8 @@ public final class UiGenerateUtil {
         VirtualFile finalServicePath = servicePath;
         connectDbSetting.getServiceInput().setText(servicePath.getPath());
         connectDbSetting.getServiceButton().addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Service层存放目录", finalServicePath, baseDir);
+            VirtualFile vf = uiComponentFacade
+                .showSingleFolderSelectionDialog("请选择Service层存放目录", finalServicePath, baseDir);
             if (vf == null) {
                 return;
             }
@@ -200,14 +200,16 @@ public final class UiGenerateUtil {
         });
 
         // 找出controller所在的目录
-        VirtualFile controllerPath = JavaUtils.getFilePattenPath(baseDir, "/facade/", "/controller/", "controller.java");
+        VirtualFile controllerPath = JavaUtils
+            .getFilePattenPath(baseDir, "/facade/", "/controller/", "controller.java");
         if (controllerPath == null) {
             controllerPath = baseDir;
         }
         VirtualFile finalControllerPath = controllerPath;
         connectDbSetting.getControllerInput().setText(controllerPath.getPath());
         connectDbSetting.getControllerButton().addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择Controller层存放目录", finalControllerPath, baseDir);
+            VirtualFile vf = uiComponentFacade
+                .showSingleFolderSelectionDialog("请选择Controller层存放目录", finalControllerPath, baseDir);
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
@@ -216,7 +218,6 @@ public final class UiGenerateUtil {
 
         //读取ymal或者property进行填充
         fillPanelText(connectDbSetting);
-
 
         return new DialogWrapperPanel(project, true, connectDbSetting);
     }
@@ -228,7 +229,9 @@ public final class UiGenerateUtil {
             return;
         }
         VirtualFile baseDir = project.getBaseDir();
-        VirtualFile file = JavaUtils.getFileByPattenName(baseDir, "application.properties", "application-dev.properties", "application.yml", "application-dev.yml");
+        VirtualFile file = JavaUtils
+            .getFileByPattenName(baseDir, "application.properties", "application-dev.properties", "application.yml",
+                "application-dev.yml");
         if (file == null) {
             return;
         }
@@ -243,9 +246,6 @@ public final class UiGenerateUtil {
 
     /**
      * 从数据库中读取最近一条历史记录
-     *
-     * @param connectDbSetting
-     * @return
      */
     private boolean readFromConnectLog(ConnectDbSetting connectDbSetting) {
         Connection sqlLiteConnection = DbService.getInstance(project).getSqlLiteConnection();

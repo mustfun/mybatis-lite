@@ -17,7 +17,6 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 
-
 /**
  * @author yanglin
  * @update itar
@@ -25,7 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public class SqlParamCompletionContributor extends CompletionContributor {
 
     @Override
-    public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull final CompletionResultSet result) {
+    public void fillCompletionVariants(@NotNull CompletionParameters parameters,
+        @NotNull final CompletionResultSet result) {
         if (parameters.getCompletionType() != CompletionType.BASIC) {
             return;
         }
@@ -42,7 +42,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
     private void process(PsiFile xmlFile, CompletionResultSet result, PsiElement position) {
         //总而言之是为了拿到documentWindows
         VirtualFile virtualFile = position.getContainingFile().getVirtualFile();
-        DocumentWindow documentWindow = ((VirtualFileWindow)virtualFile).getDocumentWindow();
+        DocumentWindow documentWindow = ((VirtualFileWindow) virtualFile).getDocumentWindow();
         int offset = documentWindow.injectedToHost(position.getTextOffset());
         Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(xmlFile.findElementAt(offset));
         if (idDomElement.isPresent()) {

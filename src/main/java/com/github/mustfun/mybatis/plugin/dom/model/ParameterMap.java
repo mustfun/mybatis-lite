@@ -6,22 +6,20 @@ import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.SubTagList;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
  */
-public interface ParameterMap extends IdDomElement{
+public interface ParameterMap extends IdDomElement {
 
-  @NotNull
-  @Attribute("type")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getType();
+    @NotNull
+    @Attribute("type")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getType();
 
-  @SubTagList("parameter")
-  public List<Parameter> getParameters();
+    @SubTagList("parameter")
+    public List<Parameter> getParameters();
 
 }

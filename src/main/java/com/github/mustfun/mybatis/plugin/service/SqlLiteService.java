@@ -3,7 +3,6 @@ package com.github.mustfun.mybatis.plugin.service;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.PluginConfig;
 import com.github.mustfun.mybatis.plugin.model.Template;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +17,7 @@ import java.util.List;
  * @since 1.0
  */
 public class SqlLiteService {
+
     private Connection connection;
     private Statement statement;
 
@@ -25,8 +25,8 @@ public class SqlLiteService {
         return new SqlLiteService(connection);
     }
 
-    public SqlLiteService(Connection connection){
-        this.connection=connection;
+    public SqlLiteService(Connection connection) {
+        this.connection = connection;
         try {
             this.statement = connection.createStatement();
         } catch (SQLException e) {
@@ -35,12 +35,12 @@ public class SqlLiteService {
     }
 
 
-    public Template queryTemplateById(Integer id){
+    public Template queryTemplateById(Integer id) {
         try {
             String sql = "select\n" +
-                    "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
-                    "        from template\n" +
-                    "        where id = "+id;
+                "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
+                "        from template\n" +
+                "        where id = " + id;
             ResultSet rs = statement.executeQuery(sql);
             Template template = new Template();
             while (rs.next()) {
@@ -58,17 +58,18 @@ public class SqlLiteService {
         return null;
     }
 
-    public void deleteTemplate(Integer id){
+    public void deleteTemplate(Integer id) {
         try {
-            statement.executeUpdate("delete from template where id="+id);
+            statement.executeUpdate("delete from template where id=" + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void updateTemplate(Template template){
+    public void updateTemplate(Template template) {
         try {
-            statement.executeUpdate("update template set tep_content='"+template.getTepContent()+"' where id="+template.getId());
+            statement.executeUpdate(
+                "update template set tep_content='" + template.getTepContent() + "' where id=" + template.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -78,8 +79,8 @@ public class SqlLiteService {
     public List<Template> queryTemplateList() {
         try {
             String sql = "select\n" +
-                    "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
-                    "        from template";
+                "        id, tep_name, tep_desc,create_by,tep_content,vm_type,db_type,create_time\n" +
+                "        from template";
             ResultSet rs = statement.executeQuery(sql);
             List<Template> list = new ArrayList<>();
             while (rs.next()) {
@@ -101,11 +102,11 @@ public class SqlLiteService {
     }
 
 
-    public List<PluginConfig> queryPluginConfigList(){
+    public List<PluginConfig> queryPluginConfigList() {
         try {
             String sql = "select\n" +
-                    "        id,key,value\n" +
-                    "        from plugin_config";
+                "        id,key,value\n" +
+                "        from plugin_config";
             List<PluginConfig> list = new ArrayList<>();
 
             ResultSet rs = statement.executeQuery(sql);
@@ -123,11 +124,11 @@ public class SqlLiteService {
         return null;
     }
 
-    public PluginConfig queryPluginConfigByKey(String key){
+    public PluginConfig queryPluginConfigByKey(String key) {
         try {
             String sql = "select\n" +
-                    "        id,key,value\n" +
-                    "        from plugin_config where key='"+key+"'limit 1";
+                "        id,key,value\n" +
+                "        from plugin_config where key='" + key + "'limit 1";
 
             ResultSet rs = statement.executeQuery(sql);
             PluginConfig template = new PluginConfig();
@@ -146,8 +147,8 @@ public class SqlLiteService {
     public DbSourcePo queryLatestConnectLog() {
         try {
             String sql = "select\n" +
-                    "        id,db_name,db_address,user_name,password\n" +
-                    "        from db_source order by create_time desc limit 1";
+                "        id,db_name,db_address,user_name,password\n" +
+                "        from db_source order by create_time desc limit 1";
 
             ResultSet rs = statement.executeQuery(sql);
             DbSourcePo dbSource = new DbSourcePo();
@@ -167,25 +168,26 @@ public class SqlLiteService {
 
     /**
      * 新增数据库连接历史 , 还可以做个模糊匹配
-     * @param dbSourcePo
-     * @return
      */
     public boolean insertDbConnectionInfo(DbSourcePo dbSourcePo) {
         try {
             String sql = "select max(id) from db_source";
             ResultSet rs = statement.executeQuery(sql);
             int id = 1;
-            if (rs.getRow()!=0){
+            if (rs.getRow() != 0) {
                 id = rs.getInt("id");
                 //只存储最近30条历史记录
-                if (id/30==0){
-                    System.out.println("id小于"+id+"删除了历史记录了");
-                    String deleteSql = "delete from db_source where id<"+id;
+                if (id / 30 == 0) {
+                    System.out.println("id小于" + id + "删除了历史记录了");
+                    String deleteSql = "delete from db_source where id<" + id;
                     statement.executeUpdate(deleteSql);
                 }
             }
             id++;
-            statement.executeUpdate("insert into db_source(id,db_name,db_address,user_name,password) values("+id+",'"+dbSourcePo.getDbName()+"','"+dbSourcePo.getDbAddress()+"','"+dbSourcePo.getUserName()+"','"+dbSourcePo.getPassword()+"')");
+            statement.executeUpdate(
+                "insert into db_source(id,db_name,db_address,user_name,password) values(" + id + ",'" + dbSourcePo
+                    .getDbName() + "','" + dbSourcePo.getDbAddress() + "','" + dbSourcePo.getUserName() + "','"
+                    + dbSourcePo.getPassword() + "')");
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

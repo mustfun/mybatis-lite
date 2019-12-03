@@ -22,5 +22,4 @@ public class GenerateCodeUIAction extends AnAction {
     }
 
 
-
 }

@@ -1,7 +1,6 @@
 package com.github.mustfun.mybatis.plugin.inspection;
 
 import com.intellij.codeInspection.LocalQuickFix;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,9 +8,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class GenericQuickFix implements LocalQuickFix {
 
-  @NotNull @Override
-  public String getFamilyName() {
-    return getName();
-  }
+    @NotNull
+    @Override
+    public String getFamilyName() {
+        return getName();
+    }
 
 }

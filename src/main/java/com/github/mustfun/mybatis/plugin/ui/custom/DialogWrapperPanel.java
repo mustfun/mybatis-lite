@@ -11,13 +11,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.CheckBoxList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author dengzhiyuan
@@ -52,9 +52,9 @@ public class DialogWrapperPanel extends DialogWrapper {
         CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
         List collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
         List collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
-        if (collectTableBoxList.size()==0||collectTemplateList.size()==0){
-            Messages.showErrorDialog("请至少勾选一个表和一个模板","错误提示");
-            return ;
+        if (collectTableBoxList.size() == 0 || collectTemplateList.size() == 0) {
+            Messages.showErrorDialog("请至少勾选一个表和一个模板", "错误提示");
+            return;
         }
         super.doOKAction();
         //tempLateList需要根据vmType排个顺序
@@ -67,12 +67,14 @@ public class DialogWrapperPanel extends DialogWrapper {
             for (Object s : collectTableBoxList) {
                 System.out.println("需要生成代码的表{} = " + s);
                 LocalTable table = new LocalTable();
-                ResultSet rs = connection.getMetaData().getTables(null,null,(String) s, new String[]{"TABLE","VIEW"});
+                ResultSet rs = connection.getMetaData()
+                    .getTables(null, null, (String) s, new String[]{"TABLE", "VIEW"});
                 while (rs.next()) {
                     table = dbService.initLocalTable(connection, rs);
                 }
                 //生成代码啦，替换模板
-                dbService.generateCodeUseTemplate(connectDbSetting,sqlLiteConnection,table,tablePrefix,collectTemplateList);
+                dbService.generateCodeUseTemplate(connectDbSetting, sqlLiteConnection, table, tablePrefix,
+                    collectTemplateList);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,11 +84,10 @@ public class DialogWrapperPanel extends DialogWrapper {
             System.out.println("o = " + o);
         }
 
-
         ConnectionHolder.remove();
 
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
-        uiComponentFacade.buildNotify(project,"Mybatis Lite","生成代码成功");
+        uiComponentFacade.buildNotify(project, "Mybatis Lite", "生成代码成功");
 
     }
 

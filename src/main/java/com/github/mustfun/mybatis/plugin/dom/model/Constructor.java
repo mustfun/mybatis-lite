@@ -2,7 +2,6 @@ package com.github.mustfun.mybatis.plugin.dom.model;
 
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.SubTagList;
-
 import java.util.List;
 
 /**
@@ -10,9 +9,9 @@ import java.util.List;
  */
 public interface Constructor extends DomElement {
 
-  @SubTagList("arg")
-  public List<Arg> getArgs();
+    @SubTagList("arg")
+    public List<Arg> getArgs();
 
-  @SubTagList("idArg")
-  public List<IdArg> getIdArgs();
+    @SubTagList("idArg")
+    public List<IdArg> getIdArgs();
 }

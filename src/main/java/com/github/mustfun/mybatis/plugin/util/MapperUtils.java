@@ -1,12 +1,15 @@
 package com.github.mustfun.mybatis.plugin.util;
 
-import com.github.mustfun.mybatis.plugin.dom.model.*;
+import com.github.mustfun.mybatis.plugin.dom.model.Configuration;
+import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
+import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.dom.model.Package;
+import com.github.mustfun.mybatis.plugin.dom.model.TypeAlias;
+import com.github.mustfun.mybatis.plugin.dom.model.TypeAliases;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
@@ -20,16 +23,13 @@ import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
-
-
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -54,9 +54,9 @@ public final class MapperUtils {
     }
 
     public static PsiElement createMapperFromFileTemplate(@NotNull String fileTemplateName,
-                                                          @NotNull String fileName,
-                                                          @NotNull PsiDirectory directory,
-                                                          @Nullable Properties pops) throws Exception {
+        @NotNull String fileName,
+        @NotNull PsiDirectory directory,
+        @Nullable Properties pops) throws Exception {
         FileTemplate fileTemplate = FileTemplateManager.getInstance().getJ2eeTemplate(fileTemplateName);
         return FileTemplateUtil.createFromTemplate(fileTemplate, fileName, pops, directory);
     }
@@ -96,7 +96,8 @@ public final class MapperUtils {
 
     @NotNull
     public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull PsiClass clazz) {
-        return JavaUtils.isElementWithinInterface(clazz) ? findMappers(project, clazz.getQualifiedName()) : Collections.<Mapper>emptyList();
+        return JavaUtils.isElementWithinInterface(clazz) ? findMappers(project, clazz.getQualifiedName())
+            : Collections.<Mapper>emptyList();
     }
 
     @NotNull
@@ -199,7 +200,7 @@ public final class MapperUtils {
     }
 
     public static void processConfiguredPackage(@NotNull Project project,
-                                                @NotNull Processor<Package> processor) {
+        @NotNull Processor<Package> processor) {
         for (Configuration conf : getMybatisConfigurations(project)) {
             for (TypeAliases tas : conf.getTypeAliases()) {
                 for (Package pkg : tas.getPackages()) {

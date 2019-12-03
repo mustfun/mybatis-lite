@@ -1,8 +1,6 @@
 package com.github.mustfun.mybatis.plugin.util;
 
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.psi.util.ReferenceSetBase;
 
 /**
@@ -12,7 +10,7 @@ public final class MybatisConstants {
 
     public static final String PLUGIN_NAME = "Mybatis-Lite";
 
-    public static final String TEMP_DIR_PATH = PathManager.getPluginsPath()+"/"+ PLUGIN_NAME + "/temp";
+    public static final String TEMP_DIR_PATH = PathManager.getPluginsPath() + "/" + PLUGIN_NAME + "/temp";
 
     public static final String SQL_LITE_CONNECTION = "sqlLiteConnection";
     public static final String MYSQL_DB_CONNECTION = "mysqlDbConnection";

@@ -5,7 +5,6 @@ import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.google.common.base.Optional;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -22,12 +21,9 @@ import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
-
-
+import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * @author yanglin
@@ -57,7 +53,8 @@ public class JavaService {
             return Optional.absent();
         }
         PsiType type = ((PsiField) field).getType();
-        return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve()) : Optional.<PsiClass>absent();
+        return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve())
+            : Optional.<PsiClass>absent();
     }
 
     public Optional<DomElement> findStatement(@Nullable PsiMethod method) {

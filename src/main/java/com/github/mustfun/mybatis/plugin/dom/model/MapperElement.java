@@ -1,6 +1,10 @@
 package com.github.mustfun.mybatis.plugin.dom.model;
 
-import com.intellij.util.xml.*;
+import com.intellij.util.xml.Attribute;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.GenericAttributeValue;
+import com.intellij.util.xml.NameValue;
+import com.intellij.util.xml.Required;
 
 /**
  * <code>MapperElement</code>
@@ -11,9 +15,9 @@ import com.intellij.util.xml.*;
  * @since 2018/8/15 v1.0
  */
 public interface MapperElement extends DomElement {
+
     /**
      * namespace属性
-     * @return
      */
     @Required
     @NameValue
@@ -22,7 +26,6 @@ public interface MapperElement extends DomElement {
 
     /**
      * 设置值
-     * @param content
      */
     void setValue(String content);
 }

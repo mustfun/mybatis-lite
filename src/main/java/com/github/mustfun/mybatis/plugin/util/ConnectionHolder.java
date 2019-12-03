@@ -1,11 +1,9 @@
 package com.github.mustfun.mybatis.plugin.util;
 
 
-
-import org.apache.commons.codec.digest.DigestUtils;
-
 import java.sql.Connection;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * @author dengzhiyuan
@@ -15,19 +13,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConnectionHolder {
 
-    private static ConcurrentHashMap<String,Connection> connectionMap=new ConcurrentHashMap<>(4);
+    private static ConcurrentHashMap<String, Connection> connectionMap = new ConcurrentHashMap<>(4);
 
 
-    public static void addConnection(String key,Connection connection){
+    public static void addConnection(String key, Connection connection) {
         String digest = DigestUtils.md5Hex(key.getBytes());
         connectionMap.put(digest, connection);
     }
 
-    public  static Connection getConnection(String key){
+    public static Connection getConnection(String key) {
         return connectionMap.get(DigestUtils.md5Hex(key.getBytes()));
     }
 
-    public static void remove(){
+    public static void remove() {
         connectionMap.clear();
     }
 

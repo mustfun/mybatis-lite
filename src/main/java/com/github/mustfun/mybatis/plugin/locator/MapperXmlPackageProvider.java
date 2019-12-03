@@ -3,7 +3,6 @@ package com.github.mustfun.mybatis.plugin.locator;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.google.common.collect.Sets;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
@@ -11,12 +10,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.search.GlobalSearchScope;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin

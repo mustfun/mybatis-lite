@@ -6,11 +6,9 @@ import com.github.mustfun.mybatis.plugin.util.Icons;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.google.common.base.Optional;
-
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
-import com.intellij.icons.AllIcons;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiAnnotation;
@@ -20,11 +18,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
-
+import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 /**
  * @author yanglin
@@ -34,9 +30,10 @@ import java.util.Collection;
 public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
     @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(@NotNull PsiElement element,
+        Collection<? super RelatedItemLineMarkerInfo> result) {
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        if (!naviOpenStatus){
+        if (!naviOpenStatus) {
             return;
         }
 
@@ -65,10 +62,10 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
 
         NavigationGutterIconBuilder<PsiElement> builder =
-                NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON)
-                        .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                        .setTarget(psiClass)
-                        .setTooltipTitle("Data access object found - " + psiClass.getQualifiedName());
+            NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON)
+                .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                .setTarget(psiClass)
+                .setTooltipTitle("Data access object found - " + psiClass.getQualifiedName());
         result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
     }
 

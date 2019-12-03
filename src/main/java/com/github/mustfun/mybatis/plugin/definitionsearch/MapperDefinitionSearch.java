@@ -7,7 +7,6 @@ import com.intellij.psi.PsiTypeParameterListOwner;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
-
 import org.jetbrains.annotations.NotNull;
 
 
