@@ -123,7 +123,7 @@
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
-               text="Mybatis Lite" description="mybatis plus menu" icon="/images/logo_16.png">
+               text="Mybatis Lite" description="mybatis lite menu" icon="/images/logo_16.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
 

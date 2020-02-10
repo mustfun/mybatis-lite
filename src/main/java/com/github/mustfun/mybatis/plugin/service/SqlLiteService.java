@@ -144,11 +144,15 @@ public class SqlLiteService {
         return null;
     }
 
+    /**
+     * 找到最近的连接记录
+     * @return
+     */
     public DbSourcePo queryLatestConnectLog() {
         try {
             String sql = "select\n" +
                 "        id,db_name,db_address,user_name,password\n" +
-                "        from db_source order by create_time desc limit 1";
+                "        from db_source order by id desc limit 1";
 
             ResultSet rs = statement.executeQuery(sql);
             DbSourcePo dbSource = new DbSourcePo();
@@ -171,10 +175,10 @@ public class SqlLiteService {
      */
     public boolean insertDbConnectionInfo(DbSourcePo dbSourcePo) {
         try {
-            String sql = "select max(id) from db_source";
+            String sql = "select max(id) as id from db_source";
             ResultSet rs = statement.executeQuery(sql);
             int id = 1;
-            if (rs.getRow() != 0) {
+            while(rs.next()){
                 id = rs.getInt("id");
                 //只存储最近30条历史记录
                 if (id / 30 == 0) {

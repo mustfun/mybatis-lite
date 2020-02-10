@@ -18,6 +18,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
+
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -60,67 +62,8 @@ public final class UiGenerateUtil {
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
         }
-        connectDbSetting.getConnectButton().addActionListener(e -> {
-            connectDbSetting.getTemplateCheckbox().clear();
-            connectDbSetting.getTableCheckBox().clear();
-            //监听点击
-            String address = connectDbSetting.getAddress().getText();
-            String port = connectDbSetting.getPort().getText();
-            String dbName = connectDbSetting.getDbName().getText();
-            if (StringUtils.isEmpty(dbName)) {
-                Messages.showMessageDialog("DB名称配置不正确", "连接数据库提示", Messages.getInformationIcon());
-                return;
-            }
-            String userName = connectDbSetting.getUserName().getText();
-            String password = connectDbSetting.getPassword().getText();
-            Integer p = null;
-            if (StringUtils.isNotBlank(port)) {
-                try {
-                    p = Integer.parseInt(port);
-                } catch (NumberFormatException e1) {
-                    Messages.showMessageDialog("端口配置不正确", "连接数据库提示", Messages.getInformationIcon());
-                    return;
-                }
-            }
-            DbSourcePo dbSourcePo = new DbSourcePo();
-            dbSourcePo.setPort(p);
-            dbSourcePo.setDbAddress(address);
-            dbSourcePo.setDbName(dbName);
-            dbSourcePo.setUserName(userName);
-            dbSourcePo.setPassword(password);
-            //连接数据库
-            DbService dbService = DbService.getInstance(project);
-            Connection connection = dbService.getConnection(dbSourcePo);
-            if (connection == null) {
-                Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
-                return;
-            }
-            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION, connection);
-            List<LocalTable> tables = dbService.getTables(connection);
-            CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
-            for (LocalTable table : tables) {
-                tableCheckBox.addItem(table.getTableName(), table.getTableName(), false);
-                Pattern compile = Pattern.compile(NUMBER_PATTEN);
-                Matcher matcher = compile.matcher(table.getTableName());
-                if (matcher.find()) {
-                    String group = matcher.group(1);
-                    connectDbSetting.getTablePrefixInput().setText(group);
-                }
-
-            }
-            Connection sqlLiteConnection = dbService.getSqlLiteConnection();
-            ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, sqlLiteConnection);
-            SqlLiteService sqlLiteService = SqlLiteService.getInstance(sqlLiteConnection);
-            //插入连接数据库的信息
-            sqlLiteService.insertDbConnectionInfo(dbSourcePo);
-
-            List<Template> templates = sqlLiteService.queryTemplateList();
-            CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
-            for (Template template : templates) {
-                templateCheckbox.addItem(template.getId(), template.getTepName(), false);
-            }
-            templateCheckbox.addMouseListener(new CheckMouseListener(project, 1, templates.get(2)));
-        });
+        //监听主面板点击事件
+        connectDbSetting.getConnectButton().addActionListener(getActionListener());
 
         //找出dao层所在目录
         JButton daoPanel = connectDbSetting.getDaoButton();
@@ -220,6 +163,71 @@ public final class UiGenerateUtil {
         fillPanelText(connectDbSetting);
 
         return new DialogWrapperPanel(project, true, connectDbSetting);
+    }
+
+    @NotNull
+    private ActionListener getActionListener() {
+        return e -> {
+            connectDbSetting.getTemplateCheckbox().clear();
+            connectDbSetting.getTableCheckBox().clear();
+            //监听点击
+            String address = connectDbSetting.getAddress().getText();
+            String port = connectDbSetting.getPort().getText();
+            String dbName = connectDbSetting.getDbName().getText();
+            if (StringUtils.isEmpty(dbName)) {
+                Messages.showMessageDialog("DB名称配置不正确", "连接数据库提示", Messages.getInformationIcon());
+                return;
+            }
+            String userName = connectDbSetting.getUserName().getText();
+            String password = connectDbSetting.getPassword().getText();
+            Integer p = null;
+            if (StringUtils.isNotBlank(port)) {
+                try {
+                    p = Integer.parseInt(port);
+                } catch (NumberFormatException e1) {
+                    Messages.showMessageDialog("端口配置不正确", "连接数据库提示", Messages.getInformationIcon());
+                    return;
+                }
+            }
+            DbSourcePo dbSourcePo = new DbSourcePo();
+            dbSourcePo.setPort(p);
+            dbSourcePo.setDbAddress(address);
+            dbSourcePo.setDbName(dbName);
+            dbSourcePo.setUserName(userName);
+            dbSourcePo.setPassword(password);
+            //连接数据库
+            DbService dbService = DbService.getInstance(project);
+            Connection connection = dbService.getConnection(dbSourcePo);
+            if (connection == null) {
+                Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
+                return;
+            }
+            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION, connection);
+            List<LocalTable> tables = dbService.getTables(connection);
+            CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
+            for (LocalTable table : tables) {
+                tableCheckBox.addItem(table.getTableName(), table.getTableName(), false);
+                Pattern compile = Pattern.compile(NUMBER_PATTEN);
+                Matcher matcher = compile.matcher(table.getTableName());
+                if (matcher.find()) {
+                    String group = matcher.group(1);
+                    connectDbSetting.getTablePrefixInput().setText(group);
+                }
+
+            }
+            Connection sqlLiteConnection = dbService.getSqlLiteConnection();
+            ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, sqlLiteConnection);
+            SqlLiteService sqlLiteService = SqlLiteService.getInstance(sqlLiteConnection);
+            //插入连接数据库的信息
+            sqlLiteService.insertDbConnectionInfo(dbSourcePo);
+
+            List<Template> templates = sqlLiteService.queryTemplateList();
+            CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
+            for (Template template : templates) {
+                templateCheckbox.addItem(template.getId(), template.getTepName(), false);
+            }
+            templateCheckbox.addMouseListener(new CheckMouseListener(project, 1, templates.get(2)));
+        };
     }
 
 
