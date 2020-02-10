@@ -44,6 +44,9 @@ public class DialogWrapperPanel extends DialogWrapper {
         return connectDbSetting.getMainPanel();
     }
 
+    /**
+     * 生成代码核心逻辑，点击确认后系统调用
+     */
     @Override
     protected void doOKAction() {
 

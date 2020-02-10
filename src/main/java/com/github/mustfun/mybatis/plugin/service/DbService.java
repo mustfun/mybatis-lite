@@ -163,6 +163,7 @@ public class DbService {
 
         SqlLiteService sqlLiteService = SqlLiteService.getInstance(connection);
 
+        boolean maxModelFlag = connectDbSetting.getPoStyle().isSelected();
         boolean hasBigDecimal = false;
         //表名转换成Java类名
         //PluginConfig tablePrefix = sqlLiteService.queryPluginConfigByKey("tablePrefix");
@@ -240,7 +241,7 @@ public class DbService {
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
 
-                String fileName = getFileName(template.getVmType(), table.getClassName());
+                String fileName = getFileName(template.getVmType(), table.getClassName(),maxModelFlag);
                 String outPath = getRealPath(template.getVmType(), connectDbSetting);
 
                 String realPackageName = "com.github.mustfun";
@@ -437,21 +438,21 @@ public class DbService {
     /**
      * 获取文件名
      */
-    public static String getFileName(Integer template, String className) {
+    public static String getFileName(Integer template, String className, boolean maxModelFlag) {
         if (template.equals(VmTypeEnums.RESULT.getCode())) {
             return "Result.java";
         }
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            return className + "Po.java";
+            return className + (maxModelFlag?"PO.java":"Po.java");
         }
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            return className + "Bo.java";
+            return className + (maxModelFlag?"BO.java":"Bo.java");
         }
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
-            return className + "Req.java";
+            return className + (maxModelFlag?"REQ.java":"Req.java");
         }
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            return className + "Resp.java";
+            return className + (maxModelFlag?"RESP.java":"Resp.java");
         }
         if (template.equals(VmTypeEnums.DAO.getCode())) {
             return className + "Dao.java";
