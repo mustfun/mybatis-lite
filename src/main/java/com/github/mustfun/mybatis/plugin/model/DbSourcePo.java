@@ -1,9 +1,8 @@
 package com.github.mustfun.mybatis.plugin.model;
 
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 /**
  * @author dengzhiyuan
@@ -14,6 +13,7 @@ import java.util.Date;
 @Setter
 @Getter
 public class DbSourcePo {
+
     private Integer id;
     private Integer port;
     private String userName;

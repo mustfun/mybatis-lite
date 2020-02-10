@@ -5,10 +5,8 @@ import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateCodeEditPanel;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.CheckBoxList;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.UnsupportedEncodingException;
 
 /**
  * @author : itar
@@ -23,7 +21,7 @@ public class CheckMouseListener implements MouseListener {
     private Project project;
     private Template template;
 
-    public CheckMouseListener(Project project,Integer checkBoxId,Template template){
+    public CheckMouseListener(Project project, Integer checkBoxId, Template template) {
         this.checkBoxId = checkBoxId;
         this.project = project;
         this.template = template;

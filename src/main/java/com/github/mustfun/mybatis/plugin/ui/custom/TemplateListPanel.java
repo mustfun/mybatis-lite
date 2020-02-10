@@ -3,9 +3,8 @@ package com.github.mustfun.mybatis.plugin.ui.custom;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import javax.swing.JComponent;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 /**
  * @author dengzhiyuan

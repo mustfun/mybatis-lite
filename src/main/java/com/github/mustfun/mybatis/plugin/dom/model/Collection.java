@@ -5,7 +5,6 @@ import com.intellij.psi.PsiClass;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Collection extends GroupFour, ResultMapGroup, PropertyGroup {
 
-  @NotNull
-  @Attribute("ofType")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getOfType();
+    @NotNull
+    @Attribute("ofType")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getOfType();
 
 }

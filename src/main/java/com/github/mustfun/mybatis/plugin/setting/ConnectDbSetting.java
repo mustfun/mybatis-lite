@@ -4,13 +4,15 @@ import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.beans.Visibility;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author dengzhiyuan
@@ -21,6 +23,7 @@ import java.beans.Visibility;
 @Setter
 @Getter
 public class ConnectDbSetting {
+
     private JTextField address;
     private JTextField userName;
     private JTextField password;
@@ -65,12 +68,12 @@ public class ConnectDbSetting {
     private JBLabel serviceLabel;
     private JCheckBox poStyle;
 
-    public ConnectDbSetting(){
-        port.addKeyListener(new KeyAdapter(){
+    public ConnectDbSetting() {
+        port.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
                 int keyChar = e.getKeyChar();
-                if(!(keyChar >= KeyEvent.VK_0 && keyChar <= KeyEvent.VK_9)){
+                if (!(keyChar >= KeyEvent.VK_0 && keyChar <= KeyEvent.VK_9)) {
                     e.consume(); //关键，屏蔽掉非法输入
                 }
             }

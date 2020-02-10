@@ -1,16 +1,18 @@
 package com.github.mustfun.mybatis.plugin.util.crypto;
 
 
-
-
-
-
-import org.apache.commons.net.util.Base64;
-
-import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.interfaces.RSAPrivateKey;
@@ -19,6 +21,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import javax.crypto.Cipher;
+import org.apache.commons.net.util.Base64;
 
 /**
  * @author dengzhiyuan
@@ -44,7 +48,7 @@ public class ConfigTools {
     }
 
     public static String decrypt(String publicKeyText, String cipherText)
-            throws Exception {
+        throws Exception {
         PublicKey publicKey = getPublicKey(publicKeyText);
 
         return decrypt(publicKey, cipherText);
@@ -60,7 +64,7 @@ public class ConfigTools {
             in = new FileInputStream(x509File);
 
             CertificateFactory factory = CertificateFactory
-                    .getInstance("X.509");
+                .getInstance("X.509");
             Certificate cer = factory.generateCertificate(in);
             return cer.getPublicKey();
         } catch (Exception e) {
@@ -77,7 +81,7 @@ public class ConfigTools {
         try {
             byte[] publicKeyBytes = Base64.decodeBase64(publicKeyText);
             X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(
-                    publicKeyBytes);
+                publicKeyBytes);
 
             KeyFactory keyFactory = KeyFactory.getInstance("RSA", "SunRsaSign");
             return keyFactory.generatePublic(x509KeySpec);
@@ -108,12 +112,12 @@ public class ConfigTools {
         } catch (Exception e) {
             throw new IllegalArgumentException("Failed to get public key", e);
         } finally {
-            
+
         }
     }
 
     public static String decrypt(PublicKey publicKey, String cipherText)
-            throws Exception {
+        throws Exception {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         try {
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
@@ -151,7 +155,7 @@ public class ConfigTools {
     }
 
     public static String encrypt(byte[] keyBytes, String plainText)
-            throws Exception {
+        throws Exception {
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory factory = KeyFactory.getInstance("RSA", "SunRsaSign");
         PrivateKey privateKey = factory.generatePrivate(spec);
@@ -161,7 +165,8 @@ public class ConfigTools {
         } catch (InvalidKeyException e) {
             //For IBM JDK, 原因请看解密方法中的说明
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) privateKey;
-            RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(rsaPrivateKey.getModulus(), rsaPrivateKey.getPrivateExponent());
+            RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(rsaPrivateKey.getModulus(),
+                rsaPrivateKey.getPrivateExponent());
             Key fakePublicKey = KeyFactory.getInstance("RSA").generatePublic(publicKeySpec);
             cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, fakePublicKey);
@@ -174,7 +179,7 @@ public class ConfigTools {
     }
 
     public static byte[][] genKeyPairBytes(int keySize)
-            throws NoSuchAlgorithmException, NoSuchProviderException {
+        throws NoSuchAlgorithmException, NoSuchProviderException {
         byte[][] keyPairBytes = new byte[2][];
 
         KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA", "SunRsaSign");
@@ -188,7 +193,7 @@ public class ConfigTools {
     }
 
     public static String[] genKeyPair(int keySize)
-            throws NoSuchAlgorithmException, NoSuchProviderException {
+        throws NoSuchAlgorithmException, NoSuchProviderException {
         byte[][] keyPairBytes = genKeyPairBytes(keySize);
         String[] keyPairs = new String[2];
 

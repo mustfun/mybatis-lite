@@ -11,16 +11,15 @@ import com.intellij.util.xml.Required;
  * @update itar
  * @function 通用的dom元素 -  id
  */
-public interface IdDomElement extends DomElement{
+public interface IdDomElement extends DomElement {
 
-  /**
-   * 通用的属性值
-   * @return
-   */
-  @Required
-  @NameValue
-  @Attribute("id")
-  GenericAttributeValue<String> getId();
+    /**
+     * 通用的属性值
+     */
+    @Required
+    @NameValue
+    @Attribute("id")
+    GenericAttributeValue<String> getId();
 
-  void setValue(String content);
+    void setValue(String content);
 }

@@ -28,17 +28,16 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.table.JBTable;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JButton;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author itar
@@ -47,6 +46,8 @@ import java.util.List;
  * @since 1.0
  */
 public class TemplateEditMenuAction extends AnAction {
+
+    private static Template editingTemplate = new Template();
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -57,39 +58,38 @@ public class TemplateEditMenuAction extends AnAction {
 
         DbService dbService = DbService.getInstance(project);
         Connection connection = dbService.getSqlLiteConnection();
-        SqlLiteService sqlLiteService =  SqlLiteService.getInstance(connection);
-        ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION,connection);
+        SqlLiteService sqlLiteService = SqlLiteService.getInstance(connection);
+        ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, connection);
 
         List<Template> templates = sqlLiteService.queryTemplateList();
         Object[][] obj = new Object[templates.size()][];
         for (int i = 0; i < templates.size(); i++) {
             Template template = templates.get(i);
             JButton button = new JButton("编辑");
-            Object[] objects= new Object[4];
+            Object[] objects = new Object[4];
             objects[0] = template.getTepName();
-            objects[1] = template.getCreateBy()==null?"":template.getCreateBy();
+            objects[1] = template.getCreateBy() == null ? "" : template.getCreateBy();
             objects[2] = VmTypeEnums.findVmNameByVmType(template.getVmType()).getMgs();
             objects[3] = button;
             obj[i] = objects;
         }
-        templateList.setModel(new MyTableModel(headName,obj));
+        templateList.setModel(new MyTableModel(headName, obj));
         templateListForm.getMainPanel().validate();
         TemplateListPanel templateListPanel = new TemplateListPanel(project, true, templateListForm);
         templateListPanel.setTitle("编辑模板");
-        addHandler(templateList,templates,project,templateListPanel);
+        addHandler(templateList, templates, project, templateListPanel);
         templateListPanel.show();
     }
 
-    private static  Template editingTemplate = new Template();
-
-    private void addHandler(JBTable table, List<Template> templates, Project project, TemplateListPanel templateListPanel){
+    private void addHandler(JBTable table, List<Template> templates, Project project,
+        TemplateListPanel templateListPanel) {
         //添加事件
-        table.addMouseListener(new MouseAdapter(){
+        table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int row = table.getSelectedRow();
                 int column = table.getSelectedColumn();
-                if(column==3){
+                if (column == 3) {
                     //处理button事件写在这里...
                     String tepName = (String) table.getValueAt(row, 0);
                     editingTemplate = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().get();
@@ -101,14 +101,17 @@ public class TemplateEditMenuAction extends AnAction {
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
-                        PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(editingTemplate.getTepName() + ".vm", JavaFileType.INSTANCE, editingTemplate.getTepContent().replaceAll("\r\n", "\n"));
+                        PsiFile psiFile = PsiFileFactory.getInstance(project)
+                            .createFileFromText(editingTemplate.getTepName() + ".vm", JavaFileType.INSTANCE,
+                                editingTemplate.getTepContent().replaceAll("\r\n", "\n"));
                         PsiDirectory psiDirectory = PsiDirectoryFactory.getInstance(project).createDirectory(vFile);
                         PsiFile file = psiDirectory.findFile(editingTemplate.getTepName() + ".vm");
-                        if (file==null){
+                        if (file == null) {
                             psiDirectory.add(psiFile);
                         }
                         //再打开
-                        PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles()).filter(x -> x.getName().equals(editingTemplate.getTepName() + ".vm")).findAny().get();
+                        PsiFile realPsiFile = Arrays.stream(psiDirectory.getFiles())
+                            .filter(x -> x.getName().equals(editingTemplate.getTepName() + ".vm")).findAny().get();
                         new OpenFileDescriptor(project, realPsiFile.getVirtualFile()).navigateInEditor(project, true);
 
                         templateListPanel.doCancelAction();
@@ -117,47 +120,51 @@ public class TemplateEditMenuAction extends AnAction {
                     /**
                      * 添加监听事件
                      */
-                    ApplicationManager.getApplication().getMessageBus().connect().subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerListener() {
+                    ApplicationManager.getApplication().getMessageBus().connect()
+                        .subscribe(AppTopics.FILE_DOCUMENT_SYNC, new FileDocumentManagerListener() {
 
-                        @Override
-                        public void beforeDocumentSaving(@NotNull final Document document) {
-                            if(editingTemplate==null){
-                                return ;
+                            @Override
+                            public void beforeDocumentSaving(@NotNull final Document document) {
+                                if (editingTemplate == null) {
+                                    return;
+                                }
+                                final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
+
+                                if (openProjects.length > 0) {
+                                    final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0])
+                                        .getPsiFile(document);
+                                    if (psiFile == null) {
+                                        return;
+                                    }
+                                    String text = psiFile.getText();
+                                    if (!psiFile.getVirtualFile().getName().startsWith(editingTemplate.getTepName())) {
+                                        return;
+                                    }
+                                    if (StringUtils.isEmpty(document.getText())) {
+                                        Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
+                                        return;
+                                    }
+                                    if (StringUtils.isEmpty(text)) {
+                                        return;
+                                    }
+                                    if (DigestUtils.md5Hex(text)
+                                        .equals(DigestUtils.md5Hex(editingTemplate.getTepContent()))) {
+                                        return;
+                                    }
+                                    Connection connection = ConnectionHolder
+                                        .getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+                                    if (connection == null) {
+                                        return;
+                                    }
+                                    SqlLiteService instance = SqlLiteService.getInstance(connection);
+                                    Template updatePo = new Template();
+                                    updatePo.setId(editingTemplate.getId());
+                                    updatePo.setTepContent(text);
+                                    instance.updateTemplate(updatePo);
+
+                                }
                             }
-                            final Project[] openProjects = ProjectManager.getInstance().getOpenProjects();
-
-                            if (openProjects.length > 0) {
-                                final PsiFile psiFile = PsiDocumentManager.getInstance(openProjects[0]).getPsiFile(document);
-                                if (psiFile==null){
-                                    return ;
-                                }
-                                String text = psiFile.getText();
-                                if (!psiFile.getVirtualFile().getName().startsWith(editingTemplate.getTepName())){
-                                    return ;
-                                }
-                                if (StringUtils.isEmpty(document.getText())){
-                                    Messages.showErrorDialog("模板数据不可为空", "编辑模板提示");
-                                    return ;
-                                }
-                                if (StringUtils.isEmpty(text)){
-                                    return ;
-                                }
-                                if (DigestUtils.md5Hex(text).equals(DigestUtils.md5Hex(editingTemplate.getTepContent()))){
-                                    return ;
-                                }
-                                Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
-                                if (connection==null){
-                                    return ;
-                                }
-                                SqlLiteService instance = SqlLiteService.getInstance(connection);
-                                Template updatePo = new Template();
-                                updatePo.setId(editingTemplate.getId());
-                                updatePo.setTepContent(text);
-                                instance.updateTemplate(updatePo);
-
-                            }
-                        }
-                    });
+                        });
                 }
             }
         });

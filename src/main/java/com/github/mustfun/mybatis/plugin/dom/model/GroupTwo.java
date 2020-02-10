@@ -8,16 +8,13 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.Required;
 import com.intellij.util.xml.SubTagList;
-
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
- * @author yanglin
  * xml中的一些节点，parameterMap , parameterType
+ * @author yanglin
  */
 public interface GroupTwo extends GroupOne, IdDomElement {
 

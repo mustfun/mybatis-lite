@@ -1,7 +1,6 @@
 package com.github.mustfun.mybatis.plugin.provider;
 
 import com.google.common.base.Optional;
-
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -10,15 +9,12 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.Function;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
-
-import javax.swing.*;
+import javax.swing.Icon;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
@@ -36,7 +32,7 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends 
     @Override
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        if (!naviOpenStatus){
+        if (!naviOpenStatus) {
             return null;
         }
         //检测是不是需要标记的元素
@@ -47,13 +43,13 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends 
         //Psi对象转化为T对象
         Optional<T> processResult = apply((F) element);
         return processResult.isPresent() ? new LineMarkerInfo<F>(
-                (F) element,
-                element.getTextRange(),
-                getIcon(),
-                Pass.UPDATE_ALL,
-                getTooltipProvider(processResult.get()),
-                getNavigationHandler(processResult.get()),
-                GutterIconRenderer.Alignment.CENTER
+            (F) element,
+            element.getTextRange(),
+            getIcon(),
+            Pass.UPDATE_ALL,
+            getTooltipProvider(processResult.get()),
+            getNavigationHandler(processResult.get()),
+            GutterIconRenderer.Alignment.CENTER
         ) : null;
     }
 

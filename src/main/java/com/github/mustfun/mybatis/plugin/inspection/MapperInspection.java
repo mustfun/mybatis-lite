@@ -8,6 +8,6 @@ import com.intellij.codeInspection.ProblemDescriptor;
  */
 public abstract class MapperInspection extends BaseJavaLocalInspectionTool {
 
-  public static final ProblemDescriptor[] EMPTY_ARRAY = new ProblemDescriptor[0];
+    public static final ProblemDescriptor[] EMPTY_ARRAY = new ProblemDescriptor[0];
 
 }

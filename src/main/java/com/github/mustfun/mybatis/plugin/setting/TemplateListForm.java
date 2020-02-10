@@ -3,15 +3,14 @@ package com.github.mustfun.mybatis.plugin.setting;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import java.awt.Component;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author dengzhiyuan
@@ -22,15 +21,16 @@ import java.awt.*;
 @Setter
 @Getter
 public class TemplateListForm {
+
     private Project project;
     private JPanel mainPanel;
     private JBScrollPane mainScrollPane;
     private JPanel firstPanel;
     private JBTable templateList;
 
-    public TemplateListForm(Project project){
+    public TemplateListForm(Project project) {
         this.project = project;
-        templateList.setModel(new MyTableModel(new String[]{},new Object[][]{}));
+        templateList.setModel(new MyTableModel(new String[]{}, new Object[][]{}));
         templateList.setDefaultRenderer(JButton.class, new ComboBoxCellRenderer());
         templateList.setRowSelectionAllowed(false);
         templateList.setColumnSelectionAllowed(false);
@@ -42,6 +42,7 @@ public class TemplateListForm {
 
 
     public static class MyTableModel extends AbstractTableModel {
+
         private String[] headName;
         private Object[][] obj;
 
@@ -91,10 +92,10 @@ public class TemplateListForm {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+            boolean isSelected, boolean hasFocus, int row, int column) {
             JButton cmb = (JButton) value;
             cmb.setFont(table.getFont());
-            if (isSelected){
+            if (isSelected) {
 
             }
             return cmb;

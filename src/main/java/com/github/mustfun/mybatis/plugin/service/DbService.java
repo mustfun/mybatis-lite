@@ -15,7 +15,19 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
-import com.mysql.cj.jdbc.ConnectionImpl;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.http.client.utils.DateUtils;
@@ -27,15 +39,6 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -61,19 +64,21 @@ public class DbService {
         return ServiceManager.getService(project, DbService.class);
     }
 
-    public  Connection getConnection(DbSourcePo configPo) {
+    public Connection getConnection(DbSourcePo configPo) {
 
         DbUtil dbUtil;
-        if(configPo.getPort() == null){
-            dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword());
-        }else{
+        if (configPo.getPort() == null) {
+            dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(),
+                configPo.getPassword());
+        } else {
             //if configured
-            dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(), configPo.getPassword(), configPo.getPort());
+            dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(),
+                configPo.getPassword(), configPo.getPort());
         }
         return dbUtil.getConnection();
     }
 
-    public  Connection getSqlLiteConnection() {
+    public Connection getSqlLiteConnection() {
         DbUtil dbUtil = new DbUtil();
         return dbUtil.getSqlliteConnection();
     }
@@ -104,11 +109,11 @@ public class DbService {
         localTable.setComment(remarks);
         localTable.setTableType(tableType);
         localTable.setTableName(tableName);
-        getColumns(connection,tableName,localTable);
+        getColumns(connection, tableName, localTable);
         return localTable;
     }
 
-    private LocalTable getColumns(Connection connection, String tableName,LocalTable localTable) throws SQLException {
+    private LocalTable getColumns(Connection connection, String tableName, LocalTable localTable) throws SQLException {
         DatabaseMetaData meta = connection.getMetaData();
         List<LocalColumn> localColumns = new ArrayList<>();
         ResultSet primaryKeys = meta.getPrimaryKeys(connection.getCatalog(), null, tableName);
@@ -135,8 +140,8 @@ public class DbService {
             int position = survey.getInt("ORDINAL_POSITION");
             localColumn.setPosition(position);
             localColumn.setColumnComment(survey.getString("REMARKS"));
-            if (columnName.equalsIgnoreCase(pkColumnName)){
-                pkColumn=localColumn;
+            if (columnName.equalsIgnoreCase(pkColumnName)) {
+                pkColumn = localColumn;
             }
             localColumns.add(localColumn);
         }
@@ -147,15 +152,16 @@ public class DbService {
     }
 
 
-    public void generateCodeUseTemplate(ConnectDbSetting connectDbSetting, Connection connection, LocalTable columns, String tablePrefix, List<Integer> vmList) {
-        generatorCode(connectDbSetting,connection,columns,columns.getColumnList(),tablePrefix,vmList);
+    public void generateCodeUseTemplate(ConnectDbSetting connectDbSetting, Connection connection, LocalTable columns,
+        String tablePrefix, List<Integer> vmList) {
+        generatorCode(connectDbSetting, connection, columns, columns.getColumnList(), tablePrefix, vmList);
     }
 
 
     public static void generatorCode(ConnectDbSetting connectDbSetting, Connection connection, LocalTable table,
-                                     List<LocalColumn> columns, String tablePrefix, List<Integer> vmList) {
+        List<LocalColumn> columns, String tablePrefix, List<Integer> vmList) {
 
-        SqlLiteService sqlLiteService =  SqlLiteService.getInstance(connection);
+        SqlLiteService sqlLiteService = SqlLiteService.getInstance(connection);
 
         boolean hasBigDecimal = false;
         //表名转换成Java类名
@@ -166,7 +172,7 @@ public class DbService {
 
         //列信息
         List<LocalColumn> columnsList = new ArrayList<>();
-        for(LocalColumn column : columns){
+        for (LocalColumn column : columns) {
 
             //列名转换成Java属性名
             String attrName = columnToJava(column.getColumnName());
@@ -176,7 +182,7 @@ public class DbService {
             //列的数据类型，转换成Java类型
             String attrType = sqlLiteService.queryPluginConfigByKey(column.getDataType().toUpperCase()).getValue();
             column.setAttrType(attrType);
-            transAttrTypePath(attrType,column);
+            transAttrTypePath(attrType, column);
             if (!hasBigDecimal && attrType.equals("BigDecimal")) {
                 hasBigDecimal = true;
             }
@@ -192,13 +198,15 @@ public class DbService {
 
         //设置velocity资源加载器
         VelocityEngine engine = new VelocityEngine();
-        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
+        engine
+            .setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
         engine.setProperty(Velocity.RESOURCE_LOADER, "string");
         engine.addProperty("string.resource.loader.class", StringResourceLoader.class.getName());
         engine.addProperty("string.resource.loader.repository.static", "false");
 
         engine.init();
-        StringResourceRepository repo = (StringResourceRepository) engine.getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT);
+        StringResourceRepository repo = (StringResourceRepository) engine
+            .getApplicationAttribute(StringResourceLoader.REPOSITORY_NAME_DEFAULT);
 
         String mainPath = sqlLiteService.queryPluginConfigByKey("mainPath").getValue();
         mainPath = StringUtils.isBlank(mainPath) ? "com.generator" : mainPath;
@@ -223,9 +231,9 @@ public class DbService {
 
         //获取模板列表
         for (Integer templateId : vmList) {
-                  //取出模板
+            //取出模板
             com.github.mustfun.mybatis.plugin.model.Template template = sqlLiteService.queryTemplateById(templateId);
-            if(!checkNeedGenerate(template.getVmType())){
+            if (!checkNeedGenerate(template.getVmType())) {
                 continue;
             }
 
@@ -233,31 +241,28 @@ public class DbService {
             try (StringWriter sw = new StringWriter()) {
 
                 String fileName = getFileName(template.getVmType(), table.getClassName());
-                String outPath = getRealPath(template.getVmType(),connectDbSetting);
+                String outPath = getRealPath(template.getVmType(), connectDbSetting);
 
-
-                String realPackageName="com.github.mustfun";
-                if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())){
+                String realPackageName = "com.github.mustfun";
+                if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
                     VirtualFile vFile = WriteAction.computeAndWait(() -> VfsUtil.createDirectoryIfMissing(outPath));
                     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
                     realPackageName = JavaUtils.getPackageName(directory, templateId);
                 }
 
-                fileHashMap.put(template.getVmType(), realPackageName+"."+fileName.split("\\.")[0]);
+                fileHashMap.put(template.getVmType(), realPackageName + "." + fileName.split("\\.")[0]);
                 //给VM填充
-                importNeedClass(context,template.getVmType(),table.getClassName());
-
+                importNeedClass(context, template.getVmType(), table.getClassName());
 
                 //merge 操作
-                repo.putStringResource(template.getTepName()+"_"+template.getId(), template.getTepContent());
-                Template tpl = engine.getTemplate(template.getTepName()+"_"+template.getId(),"UTF-8");
+                repo.putStringResource(template.getTepName() + "_" + template.getId(), template.getTepContent());
+                Template tpl = engine.getTemplate(template.getTepName() + "_" + template.getId(), "UTF-8");
                 tpl.merge(context, sw);
 
-
-                FileProviderFactory fileFactory = new FileProviderFactory(project,outPath);
+                FileProviderFactory fileFactory = new FileProviderFactory(project, outPath);
                 if (template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
                     fileFactory.getInstance("xml").create(sw.toString(), fileName);
-                }else {
+                } else {
                     fileFactory.getInstance("java").create(sw.toString(), fileName);
                 }
 
@@ -270,22 +275,25 @@ public class DbService {
 
     private static void transSpecialDataType(LocalColumn column) {
         //BIGINT处理一下
-        if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("BITINT SIGNED")){
+        if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED") || column.getDataType().toUpperCase()
+            .equalsIgnoreCase("BITINT SIGNED")) {
             column.setDataType("BIGINT");
         }
-        if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("INT SIGNED")||column.getDataType().toUpperCase().equalsIgnoreCase("INT")){
+        if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED") || column.getDataType().toUpperCase()
+            .equalsIgnoreCase("INT SIGNED") || column.getDataType().toUpperCase().equalsIgnoreCase("INT")) {
             column.setDataType("INTEGER");
         }
-        if (column.getDataType().toUpperCase().equalsIgnoreCase("DATETIME")||column.getDataType().toUpperCase().equalsIgnoreCase("DATE")){
+        if (column.getDataType().toUpperCase().equalsIgnoreCase("DATETIME") || column.getDataType().toUpperCase()
+            .equalsIgnoreCase("DATE")) {
             column.setDataType("TIMESTAMP");
         }
     }
 
     private static void transAttrTypePath(String attrType, LocalColumn column) {
-        if("Integer".equals(attrType)){
+        if ("Integer".equals(attrType)) {
             column.setAttrTypePath("java.lang.Integer");
         }
-        if ("Long".equals(attrType)){
+        if ("Long".equals(attrType)) {
             column.setAttrTypePath("java.lang.Long");
         }
     }
@@ -293,32 +301,32 @@ public class DbService {
 
     /**
      * 导入包
-     * @param context
-     * @param vmType
-     * @param className
      */
-    private static void importNeedClass(VelocityContext context, Integer vmType, String className){
+    private static void importNeedClass(VelocityContext context, Integer vmType, String className) {
         ArrayList<String> arrayList = new ArrayList<>();
         String poImport = fileHashMap.get(VmTypeEnums.MODEL_PO.getCode());
         String daoImport = fileHashMap.get(VmTypeEnums.DAO.getCode());
         String serverImport = fileHashMap.get(VmTypeEnums.SERVICE.getCode());
         String resultImport = fileHashMap.get(VmTypeEnums.RESULT.getCode());
         // FIXME: 2018/6/27
-        if (StringUtils.isEmpty(poImport)){
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "po.java",className+".java");
-            poImport = filePattenPath==null?null:filePattenPath.getPath();
+        if (StringUtils.isEmpty(poImport)) {
+            VirtualFile filePattenPath = JavaUtils
+                .getFilePattenPath(project.getBaseDir(), className + "po.java", className + ".java");
+            poImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
-        if (StringUtils.isEmpty(daoImport)){
+        if (StringUtils.isEmpty(daoImport)) {
             VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "Dao.java");
-            daoImport = filePattenPath==null?null:filePattenPath.getPath();
+            daoImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
-        if (StringUtils.isEmpty(serverImport)){
+        if (StringUtils.isEmpty(serverImport)) {
             VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "Service.java");
-            serverImport = filePattenPath==null?null:filePattenPath.getPath();
+            serverImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
-        if (StringUtils.isEmpty(resultImport)){
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), "Result.java", "BaseResult.java", "BaseResponse.java", "Response.java");
-            resultImport = filePattenPath==null?null:filePattenPath.getPath();
+        if (StringUtils.isEmpty(resultImport)) {
+            VirtualFile filePattenPath = JavaUtils
+                .getFilePattenPath(project.getBaseDir(), "Result.java", "BaseResult.java", "BaseResponse.java",
+                    "Response.java");
+            resultImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
             arrayList.add(poImport);
@@ -350,45 +358,45 @@ public class DbService {
 
     private static String getRealPath(Integer template, ConnectDbSetting connectDbSetting) {
         if (template.equals(VmTypeEnums.RESULT.getCode())) {
-            return  connectDbSetting.getPoInput().getText();
+            return connectDbSetting.getPoInput().getText();
         }
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/po";
+            return connectDbSetting.getPoInput().getText() + "/po";
         }
 
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/bo";
+            return connectDbSetting.getPoInput().getText() + "/bo";
         }
 
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/req";
+            return connectDbSetting.getPoInput().getText() + "/req";
         }
 
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            return  connectDbSetting.getPoInput().getText()+"/resp";
+            return connectDbSetting.getPoInput().getText() + "/resp";
         }
         if (template.equals(VmTypeEnums.DAO.getCode())) {
-            return  connectDbSetting.getDaoInput().getText();
+            return connectDbSetting.getDaoInput().getText();
         }
 
         if (template.equals(VmTypeEnums.SERVICE.getCode())) {
-            return  connectDbSetting.getServiceInput().getText();
+            return connectDbSetting.getServiceInput().getText();
         }
 
         if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
-            return  connectDbSetting.getServiceInput().getText()+"/impl";
+            return connectDbSetting.getServiceInput().getText() + "/impl";
         }
 
         if (template.equals(VmTypeEnums.CONTROLLER.getCode())) {
-            return  connectDbSetting.getControllerInput().getText();
+            return connectDbSetting.getControllerInput().getText();
         }
 
         if (template.equals(VmTypeEnums.CONTROLLER_IMPL.getCode())) {
-            return  connectDbSetting.getControllerInput().getText()+"/impl";
+            return connectDbSetting.getControllerInput().getText() + "/impl";
         }
 
         if (template.equals(VmTypeEnums.MAPPER.getCode())) {
-            return  connectDbSetting.getMapperInput().getText();
+            return connectDbSetting.getMapperInput().getText();
         }
         return null;
     }
@@ -398,10 +406,10 @@ public class DbService {
      */
     public static String tableToJava(String tableName, String tablePrefix) {
         if (StringUtils.isNotBlank(tablePrefix)) {
-            if (!tablePrefix.contains("_")){
+            if (!tablePrefix.contains("_")) {
                 tablePrefix += "_";
             }
-            tableName = tableName.replaceFirst(tablePrefix, "" );
+            tableName = tableName.replaceFirst(tablePrefix, "");
         }
         return columnToJava(tableName);
     }
@@ -410,15 +418,15 @@ public class DbService {
      * 列名转换成Java属性名
      */
     public static String columnToJava(String columnName) {
-        return WordUtils.capitalizeFully(columnName, new char[]{'_'}).replace("_", "" );
+        return WordUtils.capitalizeFully(columnName, new char[]{'_'}).replace("_", "");
     }
 
-    private  static boolean checkNeedGenerate(Integer template) {
-        if (template.equals(VmTypeEnums.RESULT.getCode())){
+    private static boolean checkNeedGenerate(Integer template) {
+        if (template.equals(VmTypeEnums.RESULT.getCode())) {
             Integer integer = templateGenerateTimeMap.get(template);
-            if (integer==null){
-                templateGenerateTimeMap.put(template,1);
-            }else if(integer>0){
+            if (integer == null) {
+                templateGenerateTimeMap.put(template, 1);
+            } else if (integer > 0) {
                 return false;
             }
         }

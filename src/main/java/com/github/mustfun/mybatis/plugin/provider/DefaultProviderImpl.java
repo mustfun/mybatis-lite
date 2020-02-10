@@ -30,7 +30,7 @@ public class DefaultProviderImpl extends AbstractFileProvider {
     }
 
     @Override
-    public PsiFile create(String fullFile,String fileName){
+    public PsiFile create(String fullFile, String fileName) {
 
         final PsiFile[] psiFile = {null};
 
@@ -42,7 +42,7 @@ public class DefaultProviderImpl extends AbstractFileProvider {
 
                 //PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
 
-                psiFile[0] = createFile(project, psiDirectory, fileName , fullFile, this.languageFileType);
+                psiFile[0] = createFile(project, psiDirectory, fileName, fullFile, this.languageFileType);
             } catch (Exception e) {
                 LOGGER.error(e);
             }

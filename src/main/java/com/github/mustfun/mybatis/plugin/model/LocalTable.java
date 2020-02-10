@@ -1,9 +1,8 @@
 package com.github.mustfun.mybatis.plugin.model;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 /**
  * @author dengzhiyuan
@@ -14,6 +13,7 @@ import java.util.List;
 @Setter
 @Getter
 public class LocalTable {
+
     private Integer id;
     private String tableName;
     private String tableType;

@@ -5,6 +5,6 @@ package com.github.mustfun.mybatis.plugin.ui;
  */
 public interface ListSelectionListener extends ExecutableListener {
 
-  public void selected(int index);
+    public void selected(int index);
 
 }

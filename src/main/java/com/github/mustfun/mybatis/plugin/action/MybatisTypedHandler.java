@@ -4,7 +4,6 @@ import com.github.mustfun.mybatis.plugin.util.DomUtils;
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.editor.Editor;
@@ -12,26 +11,17 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
-
-
 import com.intellij.sql.psi.SqlFile;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
- * @update itar
- * 主要是自动补全用
+ * @update itar 主要是自动补全用
  */
 public class MybatisTypedHandler extends TypedHandlerDelegate {
 
     /**
      * 自动弹出候选项,写.的时候弹出
-     * @param charTyped
-     * @param project
-     * @param editor
-     * @param file
-     * @return
      */
     @Override
     public Result checkAutoPopup(char charTyped, final Project project, final Editor editor, PsiFile file) {
@@ -45,15 +35,9 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
 
 
     /**
-     * 当特殊符号被输入时候被唤醒
-     * 作用条件: #{}  唤醒自动补全
-     * 系统会自动去找 CompletionContributor
+     * 当特殊符号被输入时候被唤醒 作用条件: #{}  唤醒自动补全 系统会自动去找 CompletionContributor
+     *
      * @see com.intellij.codeInsight.completion.CompletionContributor
-     * @param c
-     * @param project
-     * @param editor
-     * @param file
-     * @return
      */
     @NotNull
     @Override
@@ -62,10 +46,10 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
         //比如sqlFile 顶层 file 就是xmlFile
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(project).getTopLevelFile(file);
         boolean parameterCase = c == '{' &&
-                index >= 0 &&
-                editor.getDocument().getText().charAt(index) == '#' &&
-                file instanceof SqlFile &&
-                DomUtils.isMybatisFile(topLevelFile);
+            index >= 0 &&
+            editor.getDocument().getText().charAt(index) == '#' &&
+            file instanceof SqlFile &&
+            DomUtils.isMybatisFile(topLevelFile);
         if (parameterCase) {
             autoPopupParameter(project, editor);
             return Result.STOP;
@@ -75,16 +59,11 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
 
     /**
      * 当特殊符号被输入qian被唤醒
-     * @param c
-     * @param project
-     * @param editor
-     * @param file
-     * @param fileType
-     * @return
      */
     @NotNull
     @Override
-    public Result beforeCharTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, @NotNull FileType fileType) {
+    public Result beforeCharTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file,
+        @NotNull FileType fileType) {
         return super.beforeCharTyped(c, project, editor, file, fileType);
     }
 

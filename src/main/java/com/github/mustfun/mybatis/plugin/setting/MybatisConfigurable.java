@@ -1,20 +1,20 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.DELETE_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.INSERT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.SELECT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.UPDATE_GENERATOR;
+
 import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
-
+import javax.swing.JComponent;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.*;
 
 
 /**
@@ -70,16 +70,16 @@ public class MybatisConfigurable implements SearchableConfigurable {
         }
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
         boolean notFirstIn = PropertiesComponent.getInstance().getBoolean("notFirstIn");
-        if(!notFirstIn){
-            if (!naviOpenStatus){
-                naviOpenStatus=true;
+        if (!notFirstIn) {
+            if (!naviOpenStatus) {
+                naviOpenStatus = true;
                 PropertiesComponent.getInstance().setValue("naviOpenStatus", true);
             }
         }
-        if (naviOpenStatus){
+        if (naviOpenStatus) {
             mybatisSettingForm.openNaviButton.setSelected(true);
             mybatisSettingForm.closeNaviRadioButton.setSelected(false);
-        }else{
+        } else {
             mybatisSettingForm.closeNaviRadioButton.setSelected(true);
             mybatisSettingForm.openNaviButton.setSelected(false);
         }
@@ -89,22 +89,29 @@ public class MybatisConfigurable implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        return mybatisSetting.getStatementGenerateModel().getIdentifier() != mybatisSettingForm.modelComboBox.getSelectedIndex()
-                || !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
-                || !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
-                || !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
-                || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText())
-                || naviOpenStatus!=mybatisSettingForm.openNaviButton.isSelected();
+        return mybatisSetting.getStatementGenerateModel().getIdentifier() != mybatisSettingForm.modelComboBox
+            .getSelectedIndex()
+            || !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
+            || !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
+            || !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
+            || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText())
+            || naviOpenStatus != mybatisSettingForm.openNaviButton.isSelected();
     }
 
     @Override
     public void apply() throws ConfigurationException {
-        mybatisSetting.setStatementGenerateModel(GenerateModel.getInstance(mybatisSettingForm.modelComboBox.getSelectedIndex()));
-        INSERT_GENERATOR.setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.insertPatternTextField.getText())));
-        DELETE_GENERATOR.setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.deletePatternTextField.getText())));
-        UPDATE_GENERATOR.setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.updatePatternTextField.getText())));
-        SELECT_GENERATOR.setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.selectPatternTextField.getText())));
-        PropertiesComponent.getInstance().setValue("naviOpenStatus", mybatisSettingForm.getOpenNaviButton().isSelected());
+        mybatisSetting
+            .setStatementGenerateModel(GenerateModel.getInstance(mybatisSettingForm.modelComboBox.getSelectedIndex()));
+        INSERT_GENERATOR
+            .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.insertPatternTextField.getText())));
+        DELETE_GENERATOR
+            .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.deletePatternTextField.getText())));
+        UPDATE_GENERATOR
+            .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.updatePatternTextField.getText())));
+        SELECT_GENERATOR
+            .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.selectPatternTextField.getText())));
+        PropertiesComponent.getInstance()
+            .setValue("naviOpenStatus", mybatisSettingForm.getOpenNaviButton().isSelected());
         PropertiesComponent.getInstance().setValue("notFirstIn", true);
     }
 

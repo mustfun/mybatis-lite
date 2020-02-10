@@ -29,14 +29,15 @@ public abstract class AbstractFileProvider {
         this.outputPath = outputPath;
     }
 
-    public abstract PsiFile create(String fullFile,String fileName);
+    public abstract PsiFile create(String fullFile, String fileName);
 
-    protected PsiFile createFile(Project project, @NotNull PsiDirectory psiDirectory, String fileName, String context, LanguageFileType fileType) {
+    protected PsiFile createFile(Project project, @NotNull PsiDirectory psiDirectory, String fileName, String context,
+        LanguageFileType fileType) {
 
         //+        final String simpleContent = XmlSorterUtil.replaceAllByRegex(content, ">" + lineSeparator + "*\\s+?<", "><");
         String replace = context.replaceAll("\r\n", "\n");
         PsiFile file = psiDirectory.findFile(fileName);
-        if (file!=null){
+        if (file != null) {
             file.delete();
         }
         PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(fileName, fileType, replace);

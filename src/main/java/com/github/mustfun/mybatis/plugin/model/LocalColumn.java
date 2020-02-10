@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class LocalColumn {
+
     /**
      * 列名
      */
