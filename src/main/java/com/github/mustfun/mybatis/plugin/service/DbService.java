@@ -241,7 +241,7 @@ public class DbService {
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
 
-                String fileName = getFileName(template.getVmType(), table.getClassName(),maxModelFlag);
+                String fileName = getFileName(template, table.getClassName(),maxModelFlag);
                 String outPath = getRealPath(template.getVmType(), connectDbSetting);
 
                 String realPackageName = "com.github.mustfun";
@@ -438,20 +438,33 @@ public class DbService {
     /**
      * 获取文件名
      */
-    public static String getFileName(Integer template, String className, boolean maxModelFlag) {
+    public static String getFileName(com.github.mustfun.mybatis.plugin.model.Template tmp, String className, boolean maxModelFlag) {
+        Integer template = tmp.getVmType();
         if (template.equals(VmTypeEnums.RESULT.getCode())) {
             return "Result.java";
         }
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Po", "${className}PO"));
+            }
             return className + (maxModelFlag?"PO.java":"Po.java");
         }
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Bo", "${className}BO"));
+            }
             return className + (maxModelFlag?"BO.java":"Bo.java");
         }
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Req", "${className}REQ"));
+            }
             return className + (maxModelFlag?"REQ.java":"Req.java");
         }
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Resp", "${className}RESP"));
+            }
             return className + (maxModelFlag?"RESP.java":"Resp.java");
         }
         if (template.equals(VmTypeEnums.DAO.getCode())) {
