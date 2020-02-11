@@ -22,10 +22,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @update itar
- * @function Mybatis配置项
+ * @function Mybatis配置项 - 持久化
  */
 @State(
-    name = "MybatisPluginFreeSettings",
+    name = "MybatisLiteSettings",
     storages = @Storage(value = "$APP_CONFIG$/mybatis.xml"))
 public class MybatisSetting implements PersistentStateComponent<Element> {
 
@@ -47,7 +47,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     @Nullable
     @Override
     public Element getState() {
-        Element element = new Element("MybatisPluginFreeSettings");
+        Element element = new Element("MybatisLiteSettings");
         element.setAttribute(INSERT_GENERATOR.getId(), gson.toJson(INSERT_GENERATOR.getPatterns()));
         element.setAttribute(DELETE_GENERATOR.getId(), gson.toJson(DELETE_GENERATOR.getPatterns()));
         element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));

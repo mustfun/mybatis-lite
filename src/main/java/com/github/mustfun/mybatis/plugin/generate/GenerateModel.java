@@ -4,14 +4,11 @@ import java.util.Collection;
 
 /**
  * @author yanglin
+ * @updater itar 生成模态对话框
  */
 public abstract class GenerateModel {
 
     public static final GenerateModel START_WITH_MODEL = new StartWithModel();
-
-    public static final GenerateModel END_WITH_MODEL = new EndWithModel();
-
-    public static final GenerateModel CONTAIN_MODEL = new ContainModel();
 
     public static GenerateModel getInstance(String identifier) {
         try {
@@ -25,10 +22,6 @@ public abstract class GenerateModel {
         switch (identifier) {
             case 0:
                 return START_WITH_MODEL;
-            case 1:
-                return END_WITH_MODEL;
-            case 2:
-                return CONTAIN_MODEL;
             default:
                 throw new AssertionError();
         }
@@ -51,6 +44,9 @@ public abstract class GenerateModel {
 
     public abstract int getIdentifier();
 
+    /**
+     * 开始模态对话框
+     */
     static class StartWithModel extends GenerateModel {
 
         @Override
@@ -61,32 +57,6 @@ public abstract class GenerateModel {
         @Override
         public int getIdentifier() {
             return 0;
-        }
-    }
-
-    static class EndWithModel extends GenerateModel {
-
-        @Override
-        protected boolean apply(String pattern, String target) {
-            return target.endsWith(pattern);
-        }
-
-        @Override
-        public int getIdentifier() {
-            return 1;
-        }
-    }
-
-    static class ContainModel extends GenerateModel {
-
-        @Override
-        protected boolean apply(String pattern, String target) {
-            return target.contains(pattern);
-        }
-
-        @Override
-        public int getIdentifier() {
-            return 2;
         }
     }
 }

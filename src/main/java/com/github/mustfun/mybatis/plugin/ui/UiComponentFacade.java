@@ -122,8 +122,10 @@ public final class UiComponentFacade {
     private void setActionForExecutableListener(Runnable runnable, ExecutableListener listener) {
         final Application application = ApplicationManager.getApplication();
         if (listener.isWriteAction()) {
+            //唤醒系统写入操作，如果有读操作，写操作会被暂停
             application.runWriteAction(runnable);
         } else {
+            //唤醒系统读取操作
             application.runReadAction(runnable);
         }
     }
@@ -148,6 +150,7 @@ public final class UiComponentFacade {
             builder.setItemChoosenCallback(new Runnable() {
                 @Override
                 public void run() {
+                    //一单点击了就会唤醒这里
                     setActionForExecutableListener(runnable, listener);
                 }
             });

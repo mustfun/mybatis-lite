@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 语句生成抽象类
  */
 public abstract class StatementGenerator {
 
@@ -43,8 +45,11 @@ public abstract class StatementGenerator {
 
     public static final StatementGenerator DELETE_GENERATOR = new DeleteGenerator("del", "cancel");
 
-    public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new");
+    public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new","batch");
 
+    /**
+     * 不可变set
+     */
     public static final Set<StatementGenerator> ALL = ImmutableSet
         .of(UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR);
 
@@ -88,12 +93,12 @@ public abstract class StatementGenerator {
             generators[0].execute(method);
         } else {
             UiComponentFacade.getInstance(method.getProject())
-                .showListPopup("[ Select target statement ]", new ListSelectionListener() {
+                .showListPopup("[ 选择要生成的语句]", new ListSelectionListener() {
                     @Override
                     public void selected(int index) {
                         generators[index].execute(method);
                     }
-
+                    //自定义listener
                     @Override
                     public boolean isWriteAction() {
                         return true;
@@ -103,12 +108,18 @@ public abstract class StatementGenerator {
         }
     }
 
+    /**
+     *
+     * @param method
+     * @return
+     */
     @NotNull
     public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
         GenerateModel model = MybatisSetting.getInstance().getStatementGenerateModel();
         String target = method.getName();
         List<StatementGenerator> result = Lists.newArrayList();
         for (StatementGenerator generator : ALL) {
+            //找出符合的generator
             if (model.matchesAny(generator.getPatterns(), target)) {
                 result.add(generator);
             }
@@ -123,6 +134,10 @@ public abstract class StatementGenerator {
         this.patterns = Sets.newHashSet(patterns);
     }
 
+    /**
+     * 开始构建生成的语句
+     * @param method
+     */
     public void execute(@NotNull final PsiMethod method) {
         PsiClass psiClass = method.getContainingClass();
         if (null == psiClass) {

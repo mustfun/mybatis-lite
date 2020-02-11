@@ -25,7 +25,7 @@ public class GenerateStatementIntention extends GenericIntention {
     @NotNull
     @Override
     public String getText() {
-        return "[Mybatis] Generate new statement";
+        return "[Mybatis Lite] 生成xml-sql语句";
     }
 
     @Override
@@ -36,7 +36,8 @@ public class GenerateStatementIntention extends GenericIntention {
         }
 
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-        StatementGenerator.applyGenerate(PsiTreeUtil.getParentOfType(element, PsiMethod.class));
+        PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        StatementGenerator.applyGenerate(method);
     }
 
 }
