@@ -87,7 +87,7 @@ public final class UiGenerateUtil {
 
         //找出Mapper层所在目录
         JButton mapperButton = connectDbSetting.getMapperButton();
-        VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir, "/mapper/", "Mapper.xml", "Dao.xml");
+        VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.xml", "Dao.xml");
         if (mapperPath == null) {
             mapperPath = baseDir;
         }

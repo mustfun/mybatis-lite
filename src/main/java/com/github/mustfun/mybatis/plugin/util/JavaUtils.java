@@ -7,21 +7,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PropertyUtil;
@@ -41,6 +27,8 @@ import org.jetbrains.annotations.Nullable;
  * @author yanglin
  */
 public final class JavaUtils {
+
+    public static final String DEFAULT_PACKAGE_NAME = "com.github.mustfun";
 
     private JavaUtils() {
         throw new UnsupportedOperationException();
@@ -221,7 +209,7 @@ public final class JavaUtils {
 
 
     /**
-     * getFileByPattenName
+     * 根据文件名找文件路径 - 模糊匹配
      */
     public static VirtualFile getFileByPattenName(VirtualFile base, String... patten) {
         if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
@@ -248,6 +236,36 @@ public final class JavaUtils {
     }
 
 
+    /**
+     * 通过文件名找到文件路径
+     * @param base
+     * @param fileName
+     * @return
+     */
+    public static VirtualFile getFilePathByName(VirtualFile base, String fileName) {
+        if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
+                || base.getPath().contains("/.target/")) {
+            return null;
+        }
+        //本层目录是否包含
+        if (base.getPath().toUpperCase().contains(fileName.toUpperCase())) {
+            return base;
+        }
+        if (base.getChildren().length != 0) {
+            for (VirtualFile virtualFile : base.getChildren()) {
+                //这个地方不应该直接return，存在多个文件夹的情况
+                VirtualFile filePattenPath = getFilePathByName(virtualFile, fileName);
+                if (filePattenPath != null) {
+                    return filePattenPath;
+                } else {
+                    continue;
+                }
+            }
+        }
+        return null;
+    }
+
+
     public static List collectSelectedCheckBox(CheckBoxList checkBoxList) {
         List list = new ArrayList<>();
         for (int i = 0; i < checkBoxList.getItemsCount(); i++) {
@@ -259,11 +277,53 @@ public final class JavaUtils {
         return list;
     }
 
+
+    /**
+     * 从虚拟文件获取全限定名
+     * @param project
+     * @param virtualFile
+     * @return
+     */
+    public static String getFullClassPath(Project project,VirtualFile virtualFile,String className){
+        return getPackageName(project, virtualFile)+ "." + className.split("\\.")[0];
+    }
+
+    /**
+     * 从虚拟文件获取包名
+     * @param project
+     * @param virtualFile
+     * @return
+     */
+    public static String getPackageName(Project project,VirtualFile virtualFile){
+        if (virtualFile==null){
+            return DEFAULT_PACKAGE_NAME;
+        }
+        PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
+        if (file==null){
+            return DEFAULT_PACKAGE_NAME;
+        }
+        return getPackageName(file);
+    }
+
+    /**
+     * 从psiFile获取包名
+     * @param file
+     * @return
+     */
+    public static String getPackageName(PsiFile file) {
+        if (!(file instanceof PsiJavaFile)) {
+            return DEFAULT_PACKAGE_NAME;
+        }
+        PsiJavaFile javaFile = (PsiJavaFile) file;
+        return javaFile.getPackageName();
+    }
+
+
     public static String getPackageName(PsiDirectory psiDirectory, Integer vmType) {
         PsiFile[] files = psiDirectory.getFiles();
         if (files.length != 0) {
             if (!(files[0] instanceof PsiJavaFile)) {
-                return "com.github.mustfun";
+                return DEFAULT_PACKAGE_NAME;
             }
             PsiJavaFile file = (PsiJavaFile) files[0];
             return file.getPackageName();
@@ -273,12 +333,12 @@ public final class JavaUtils {
         PsiFile[] pare = parent.getFiles();
         if (pare.length != 0) {
             if (!(pare[0] instanceof PsiJavaFile)) {
-                return "com.github.mustfun";
+                return DEFAULT_PACKAGE_NAME;
             }
             PsiJavaFile file = (PsiJavaFile) pare[0];
             return file.getPackageName() + getClassType(vmType);
         }
-        return "com.github.mustfun";
+        return DEFAULT_PACKAGE_NAME;
     }
 
     public static String getClassType(Integer template) {

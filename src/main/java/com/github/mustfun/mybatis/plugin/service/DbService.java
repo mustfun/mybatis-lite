@@ -11,10 +11,11 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -39,6 +40,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.SystemIndependent;
 
 
 /**
@@ -50,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 public class DbService {
 
     public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DEFAULT_PACKAGE_PATH = "com.github.mustfun";
 
     private static ConcurrentHashMap<Integer, Integer> templateGenerateTimeMap = new ConcurrentHashMap<>(10);
     /**
@@ -160,7 +163,7 @@ public class DbService {
 
     public static void generatorCode(ConnectDbSetting connectDbSetting, Connection connection, LocalTable table,
         List<LocalColumn> columns, String tablePrefix, List<Integer> vmList) {
-
+        fileHashMap.clear();
         SqlLiteService sqlLiteService = SqlLiteService.getInstance(connection);
 
         boolean maxModelFlag = connectDbSetting.getPoStyle().isSelected();
@@ -199,8 +202,7 @@ public class DbService {
 
         //设置velocity资源加载器
         VelocityEngine engine = new VelocityEngine();
-        engine
-            .setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute");
         engine.setProperty(Velocity.RESOURCE_LOADER, "string");
         engine.addProperty("string.resource.loader.class", StringResourceLoader.class.getName());
         engine.addProperty("string.resource.loader.repository.static", "false");
@@ -230,6 +232,18 @@ public class DbService {
         //vmList排序
         vmList.sort(Comparator.comparing(o -> sqlLiteService.queryTemplateById(o).getVmType()));
 
+        //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
+        VirtualFile projectDir = ProjectUtil.guessProjectDir(project);
+        String poFileName = getFileName(VmTypeEnums.MODEL_PO.getCode(), className, maxModelFlag);
+        VirtualFile poFile = JavaUtils.getFilePathByName(projectDir, poFileName);
+        String poPackageName = JavaUtils.getFullClassPath(project, poFile, poFileName);
+        fileHashMap.put(VmTypeEnums.MODEL_PO.getCode(),poPackageName);
+        String daoFileName = getFileName(VmTypeEnums.DAO.getCode(), className, maxModelFlag);
+        VirtualFile daoFile = JavaUtils.getFilePathByName(projectDir,daoFileName );
+        String daoPackageName = JavaUtils.getFullClassPath(project, daoFile, daoFileName);
+        fileHashMap.put(VmTypeEnums.DAO.getCode(),daoPackageName);
+        //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
+
         //获取模板列表
         for (Integer templateId : vmList) {
             //取出模板
@@ -241,13 +255,16 @@ public class DbService {
             //渲染模板
             try (StringWriter sw = new StringWriter()) {
 
-                String fileName = getFileName(template, table.getClassName(),maxModelFlag);
+                //系统自动替换模板的一些文件
+                replaceContent(template,table.getClassName(),maxModelFlag);
+                String fileName = getFileName(template.getVmType(), table.getClassName(),maxModelFlag);
                 String outPath = getRealPath(template.getVmType(), connectDbSetting);
 
-                String realPackageName = "com.github.mustfun";
+                String realPackageName = DEFAULT_PACKAGE_PATH;
                 if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
                     VirtualFile vFile = WriteAction.computeAndWait(() -> VfsUtil.createDirectoryIfMissing(outPath));
                     PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
+                    //找到这个文件的路径
                     realPackageName = JavaUtils.getPackageName(directory, templateId);
                 }
 
@@ -438,33 +455,20 @@ public class DbService {
     /**
      * 获取文件名
      */
-    public static String getFileName(com.github.mustfun.mybatis.plugin.model.Template tmp, String className, boolean maxModelFlag) {
-        Integer template = tmp.getVmType();
+    public static String getFileName(Integer template, String className, boolean maxModelFlag) {
         if (template.equals(VmTypeEnums.RESULT.getCode())) {
             return "Result.java";
         }
         if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            if (maxModelFlag) {
-                tmp.setTepContent(tmp.getTepContent().replace("${className}Po", "${className}PO"));
-            }
             return className + (maxModelFlag?"PO.java":"Po.java");
         }
         if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            if (maxModelFlag) {
-                tmp.setTepContent(tmp.getTepContent().replace("${className}Bo", "${className}BO"));
-            }
             return className + (maxModelFlag?"BO.java":"Bo.java");
         }
         if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
-            if (maxModelFlag) {
-                tmp.setTepContent(tmp.getTepContent().replace("${className}Req", "${className}REQ"));
-            }
             return className + (maxModelFlag?"REQ.java":"Req.java");
         }
         if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            if (maxModelFlag) {
-                tmp.setTepContent(tmp.getTepContent().replace("${className}Resp", "${className}RESP"));
-            }
             return className + (maxModelFlag?"RESP.java":"Resp.java");
         }
         if (template.equals(VmTypeEnums.DAO.getCode())) {
@@ -483,6 +487,38 @@ public class DbService {
             return className + "Dao.xml";
         }
         return null;
+    }
+
+
+
+    /**
+     * 对模板文件进行定制替换，系统发起，非用户发起
+     */
+    public static void replaceContent(com.github.mustfun.mybatis.plugin.model.Template tmp, String className, boolean maxModelFlag) {
+        Integer template = tmp.getVmType();
+        if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Po", "${className}PO"));
+            }
+            return ;
+        }
+        if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Bo", "${className}BO"));
+            }
+            return ;
+        }
+        if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Req", "${className}REQ"));
+            }
+            return ;
+        }
+        if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Resp", "${className}RESP"));
+            }
+        }
     }
 
 
