@@ -10,6 +10,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface IntentionChooser {
 
+    /**
+     *
+     * @param project
+     * @param editor
+     * @param file
+     * @return
+     */
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file);
 
 }

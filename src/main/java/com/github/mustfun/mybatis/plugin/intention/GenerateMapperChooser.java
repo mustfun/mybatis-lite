@@ -7,10 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * 自定义chooser , 主要是avaliable方法
  */
 public class GenerateMapperChooser extends JavaFileIntentionChooser {
 
-    public static final JavaFileIntentionChooser INSTANCE = new GenerateMapperChooser();
+    static final JavaFileIntentionChooser INSTANCE = new GenerateMapperChooser();
 
     @Override
     public boolean isAvailable(@NotNull PsiElement element) {
