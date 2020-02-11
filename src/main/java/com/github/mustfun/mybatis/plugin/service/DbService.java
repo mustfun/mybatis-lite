@@ -519,6 +519,11 @@ public class DbService {
                 tmp.setTepContent(tmp.getTepContent().replace("${className}Resp", "${className}RESP"));
             }
         }
+        if (template.equals(VmTypeEnums.DAO.getCode())) {
+            if (maxModelFlag) {
+                tmp.setTepContent(tmp.getTepContent().replace("${className}Po", "${className}PO"));
+            }
+        }
     }
 
 
