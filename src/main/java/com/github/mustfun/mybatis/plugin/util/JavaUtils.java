@@ -237,12 +237,12 @@ public final class JavaUtils {
 
 
     /**
-     * 通过文件名找到文件路径
+     * 通过文件名找到文件路径 - 文件存在的情况
      * @param base
      * @param fileName
      * @return
      */
-    public static VirtualFile getFilePathByName(VirtualFile base, String fileName) {
+    public static VirtualFile getExistFilePathByName(VirtualFile base, String fileName) {
         if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
                 || base.getPath().contains("/.target/")) {
             return null;
@@ -254,7 +254,7 @@ public final class JavaUtils {
         if (base.getChildren().length != 0) {
             for (VirtualFile virtualFile : base.getChildren()) {
                 //这个地方不应该直接return，存在多个文件夹的情况
-                VirtualFile filePattenPath = getFilePathByName(virtualFile, fileName);
+                VirtualFile filePattenPath = getExistFilePathByName(virtualFile, fileName);
                 if (filePattenPath != null) {
                     return filePattenPath;
                 } else {
@@ -319,50 +319,37 @@ public final class JavaUtils {
     }
 
 
-    public static String getPackageName(PsiDirectory psiDirectory, Integer vmType) {
+    /**
+     * 只有一个空文件夹向上递归确定包名 - 适用于文件一定存在的情况
+     * @param psiDirectory
+     * @return
+     */
+    public static String getPackageNameForExistFile(PsiDirectory psiDirectory,StringBuilder stringBuilder) {
+        if (psiDirectory==null){
+            return DEFAULT_PACKAGE_NAME;
+        }
         PsiFile[] files = psiDirectory.getFiles();
-        if (files.length != 0) {
-            if (!(files[0] instanceof PsiJavaFile)) {
-                return DEFAULT_PACKAGE_NAME;
+        for (PsiFile file : files) {
+            if (!(file instanceof PsiJavaFile)) {
+                continue;
             }
-            PsiJavaFile file = (PsiJavaFile) files[0];
-            return file.getPackageName();
+            PsiJavaFile javaFile = (PsiJavaFile) files[0];
+            return javaFile.getPackageName()+stringBuilder.toString();
         }
-        //如果下面没有文件,就上一层找，暂时不考虑新建很多层那种复杂情况
-        PsiDirectory parent = psiDirectory.getParent();
-        PsiFile[] pare = parent.getFiles();
-        if (pare.length != 0) {
-            if (!(pare[0] instanceof PsiJavaFile)) {
-                return DEFAULT_PACKAGE_NAME;
-            }
-            PsiJavaFile file = (PsiJavaFile) pare[0];
-            return file.getPackageName() + getClassType(vmType);
-        }
-        return DEFAULT_PACKAGE_NAME;
+        //如果下面没有文件,就上一层找
+        return getPackageNameForExistFile(psiDirectory.getParent(),stringBuilder.append("\\.").append(psiDirectory.getName()));
     }
 
-    public static String getClassType(Integer template) {
-        if (template.equals(VmTypeEnums.MODEL_PO.getCode())) {
-            return "/po";
-        }
-
-        if (template.equals(VmTypeEnums.MODEL_BO.getCode())) {
-            return "/bo";
-        }
-
-        if (template.equals(VmTypeEnums.MODEL_REQ.getCode())) {
-            return "/req";
-        }
-
-        if (template.equals(VmTypeEnums.MODEL_RESP.getCode())) {
-            return "/resp";
-        }
-
-        if (template.equals(VmTypeEnums.SERVICE_IMPL.getCode())) {
-            return "/impl";
-        }
-        return null;
+    /**
+     * 从当前文件夹获取包名
+     * @param directory
+     * @param className
+     * @return
+     */
+    public static String getNotExistPackageNameFromDirectory(VirtualFile virtualFile) {
+        return virtualFile.getPath().split("src/main/java/")[1].replace("/",".");
     }
+
 
     /**
      * 通过类名找一个类

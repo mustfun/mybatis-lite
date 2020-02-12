@@ -235,11 +235,11 @@ public class DbService {
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
         VirtualFile projectDir = ProjectUtil.guessProjectDir(project);
         String poFileName = getFileName(VmTypeEnums.MODEL_PO.getCode(), className, maxModelFlag);
-        VirtualFile poFile = JavaUtils.getFilePathByName(projectDir, poFileName);
+        VirtualFile poFile = JavaUtils.getExistFilePathByName(projectDir, poFileName);
         String poPackageName = JavaUtils.getFullClassPath(project, poFile, poFileName);
         fileHashMap.put(VmTypeEnums.MODEL_PO.getCode(),poPackageName);
         String daoFileName = getFileName(VmTypeEnums.DAO.getCode(), className, maxModelFlag);
-        VirtualFile daoFile = JavaUtils.getFilePathByName(projectDir,daoFileName );
+        VirtualFile daoFile = JavaUtils.getExistFilePathByName(projectDir,daoFileName );
         String daoPackageName = JavaUtils.getFullClassPath(project, daoFile, daoFileName);
         fileHashMap.put(VmTypeEnums.DAO.getCode(),daoPackageName);
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
@@ -263,9 +263,8 @@ public class DbService {
                 String realPackageName = DEFAULT_PACKAGE_PATH;
                 if (!template.getVmType().equals(VmTypeEnums.MAPPER.getCode())) {
                     VirtualFile vFile = WriteAction.computeAndWait(() -> VfsUtil.createDirectoryIfMissing(outPath));
-                    PsiDirectory directory = PsiManager.getInstance(project).findDirectory(vFile);
                     //找到这个文件的路径
-                    realPackageName = JavaUtils.getPackageName(directory, templateId);
+                    realPackageName = JavaUtils.getNotExistPackageNameFromDirectory(vFile);
                 }
 
                 fileHashMap.put(template.getVmType(), realPackageName + "." + fileName.split("\\.")[0]);
