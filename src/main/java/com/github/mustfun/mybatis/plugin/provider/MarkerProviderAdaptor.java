@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 行标记的一个适配器
  */
 public abstract class MarkerProviderAdaptor implements LineMarkerProvider {
 

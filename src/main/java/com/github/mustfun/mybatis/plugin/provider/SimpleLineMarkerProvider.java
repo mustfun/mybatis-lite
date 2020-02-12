@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @update itar
- * @function 自定义lineMarkerProvider
+ * @function 自定义lineMarkerProvider ， 从F跳转到T
  */
 public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends MarkerProviderAdaptor {
 
@@ -46,7 +46,6 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends 
             (F) element,
             element.getTextRange(),
             getIcon(),
-            Pass.UPDATE_ALL,
             getTooltipProvider(processResult.get()),
             getNavigationHandler(processResult.get()),
             GutterIconRenderer.Alignment.CENTER
