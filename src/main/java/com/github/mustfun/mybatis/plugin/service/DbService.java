@@ -328,20 +328,20 @@ public class DbService {
         // FIXME: 2018/6/27
         if (StringUtils.isEmpty(poImport)) {
             VirtualFile filePattenPath = JavaUtils
-                .getFilePattenPath(project.getBaseDir(), className + "po.java", className + ".java");
+                .getFilePattenPath(ProjectUtil.guessProjectDir(project), className + "po.java", className + ".java");
             poImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(daoImport)) {
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "Dao.java");
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(ProjectUtil.guessProjectDir(project), className + "Dao.java");
             daoImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(serverImport)) {
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(project.getBaseDir(), className + "Service.java");
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(ProjectUtil.guessProjectDir(project), className + "Service.java");
             serverImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(resultImport)) {
             VirtualFile filePattenPath = JavaUtils
-                .getFilePattenPath(project.getBaseDir(), "Result.java", "BaseResult.java", "BaseResponse.java",
+                .getFilePattenPath(ProjectUtil.guessProjectDir(project), "Result.java", "BaseResult.java", "BaseResponse.java",
                     "Response.java");
             resultImport = filePattenPath == null ? null : filePattenPath.getPath();
         }

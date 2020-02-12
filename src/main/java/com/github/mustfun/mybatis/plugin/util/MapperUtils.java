@@ -57,7 +57,7 @@ public final class MapperUtils {
         @NotNull String fileName,
         @NotNull PsiDirectory directory,
         @Nullable Properties pops) throws Exception {
-        FileTemplate fileTemplate = FileTemplateManager.getInstance().getJ2eeTemplate(fileTemplateName);
+        FileTemplate fileTemplate = FileTemplateManager.getInstance(directory.getProject()).getJ2eeTemplate(fileTemplateName);
         return FileTemplateUtil.createFromTemplate(fileTemplate, fileName, pops, directory);
     }
 

@@ -15,6 +15,7 @@ import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
@@ -67,7 +68,7 @@ public final class UiGenerateUtil {
 
         //找出dao层所在目录
         JButton daoPanel = connectDbSetting.getDaoButton();
-        VirtualFile baseDir = project.getBaseDir();
+        VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
         VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.java", "Dao.java","/dao/", "/dal/");
         if (daoPath == null) {
             daoPath = baseDir;
@@ -236,7 +237,7 @@ public final class UiGenerateUtil {
         if (readFromConnectLog(connectDbSetting)) {
             return;
         }
-        VirtualFile baseDir = project.getBaseDir();
+        VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
         VirtualFile file = JavaUtils
             .getFileByPattenName(baseDir, "application.properties", "application-dev.properties", "application.yml",
                 "application-dev.yml");
