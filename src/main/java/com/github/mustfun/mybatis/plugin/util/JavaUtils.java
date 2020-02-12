@@ -341,9 +341,8 @@ public final class JavaUtils {
     }
 
     /**
-     * 从当前文件夹获取包名
-     * @param directory
-     * @param className
+     * 从当前文件夹获取包名 - 不存在的文件夹
+     * @param virtualFile
      * @return
      */
     public static String getNotExistPackageNameFromDirectory(VirtualFile virtualFile) {
