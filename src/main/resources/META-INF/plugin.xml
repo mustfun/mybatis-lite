@@ -12,6 +12,8 @@
     <change-notes><![CDATA[
       <h4>1.0.14</h4>
       <ul>
+          <li>fix bugs</li>
+          <li>add new feature</li>
           <li>support IDEA 2019.3</li>
       </ul>
       <h4>1.0.13</h4>
@@ -70,9 +72,10 @@
       ]]>
     </change-notes>
 
-    <idea-version since-build="171.1834"/>
-    <depends optional="true" config-file="">com.intellij.database</depends>
-    <depends optional="true" config-file="">com.intellij.spring</depends>
+    <!--多个函数得用到新api-->
+    <idea-version since-build="191.4213"/>
+    <!--<depends optional="true" config-file="">com.intellij.database</depends>-->
+    <!--<depends optional="true" config-file="">com.intellij.spring</depends>-->
     <depends config-file="">com.intellij.modules.java</depends>
     <depends config-file="">com.intellij.modules.ultimate</depends>
 

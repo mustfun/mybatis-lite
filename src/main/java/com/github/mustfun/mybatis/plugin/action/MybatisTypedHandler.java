@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.lang.injection.InjectedLanguageManager;
+import com.intellij.openapi.application.AppUIExecutor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
@@ -25,7 +26,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
      */
     @Override
     public Result checkAutoPopup(char charTyped, final Project project, final Editor editor, PsiFile file) {
-        //在xml里面打个. 唤醒自动补全，有个蛋用啊...
+        //在xml里面打个. 唤醒自动补全
         if (charTyped == '.' && DomUtils.isMybatisFile(file)) {
             autoPopupParameter(project, editor);
             return Result.STOP;
@@ -58,7 +59,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     }
 
     /**
-     * 当特殊符号被输入qian被唤醒
+     * 当特殊符号被输入被唤醒
      */
     @NotNull
     @Override
