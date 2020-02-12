@@ -68,7 +68,7 @@ public final class UiGenerateUtil {
         //找出dao层所在目录
         JButton daoPanel = connectDbSetting.getDaoButton();
         VirtualFile baseDir = project.getBaseDir();
-        VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir, "/dao/", "/dal/", "Mapper.java", "Dao.java");
+        VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.java", "Dao.java","/dao/", "/dal/");
         if (daoPath == null) {
             daoPath = baseDir;
         }
@@ -87,7 +87,7 @@ public final class UiGenerateUtil {
 
         //找出Mapper层所在目录
         JButton mapperButton = connectDbSetting.getMapperButton();
-        VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.xml", "Dao.xml");
+        VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.xml", "Dao.xml","resources/mapper","resources/dao","resources/mybatis");
         if (mapperPath == null) {
             mapperPath = baseDir;
         }
