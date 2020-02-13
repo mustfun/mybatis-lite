@@ -2,7 +2,7 @@ package com.github.mustfun.mybatis.plugin.inspection;
 
 import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.dom.model.Select;
-import com.github.mustfun.mybatis.plugin.generate.StatementGenerator;
+import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
 import com.github.mustfun.mybatis.plugin.locator.MapperLocator;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
@@ -59,7 +59,7 @@ public class MapperMethodInspection extends MapperInspection {
             DomElement domElement = ele.get();
             if (domElement instanceof Select) {
                 Select select = (Select) domElement;
-                Optional<PsiClass> target = StatementGenerator.getSelectResultType(method);
+                Optional<PsiClass> target = AbstractStatementGenerator.getSelectResultType(method);
                 PsiClass clazz = select.getResultType().getValue();
                 PsiIdentifier ide = method.getNameIdentifier();
                 if (null != ide && null == select.getResultMap().getValue()) {

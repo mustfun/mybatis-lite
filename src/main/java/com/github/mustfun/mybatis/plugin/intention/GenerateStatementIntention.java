@@ -1,6 +1,6 @@
 package com.github.mustfun.mybatis.plugin.intention;
 
-import com.github.mustfun.mybatis.plugin.generate.StatementGenerator;
+import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -37,7 +37,7 @@ public class GenerateStatementIntention extends GenericIntention {
 
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
         PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-        StatementGenerator.applyGenerate(method);
+        AbstractStatementGenerator.applyGenerate(method);
     }
 
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class UpdateGenerator extends StatementGenerator {
+public class UpdateGenerator extends AbstractStatementGenerator {
 
     public UpdateGenerator(@NotNull String... patterns) {
         super(patterns);

@@ -1,9 +1,9 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.DELETE_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.INSERT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.SELECT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.UPDATE_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.DELETE_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.INSERT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.SELECT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.UPDATE_GENERATOR;
 
 import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
 import com.google.common.base.Joiner;

@@ -1,6 +1,6 @@
 package com.github.mustfun.mybatis.plugin.inspection;
 
-import com.github.mustfun.mybatis.plugin.generate.StatementGenerator;
+import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
@@ -25,7 +25,7 @@ public class StatementNotExistsQuickFix extends GenericQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        StatementGenerator.applyGenerate(method);
+        AbstractStatementGenerator.applyGenerate(method);
     }
 
     @NotNull

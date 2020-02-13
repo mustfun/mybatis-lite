@@ -36,21 +36,21 @@ import org.jetbrains.annotations.Nullable;
  * @updater itar
  * @function 语句生成抽象类
  */
-public abstract class StatementGenerator {
+public abstract class AbstractStatementGenerator {
 
-    public static final StatementGenerator UPDATE_GENERATOR = new UpdateGenerator("update", "modify", "set");
+    public static final AbstractStatementGenerator UPDATE_GENERATOR = new UpdateGenerator("update", "modify", "set");
 
-    public static final StatementGenerator SELECT_GENERATOR = new SelectGenerator("select", "get", "look", "find",
+    public static final AbstractStatementGenerator SELECT_GENERATOR = new SelectGenerator("select", "get", "look", "find",
         "list", "search", "count", "query");
 
-    public static final StatementGenerator DELETE_GENERATOR = new DeleteGenerator("del", "cancel");
+    public static final AbstractStatementGenerator DELETE_GENERATOR = new DeleteGenerator("del", "cancel");
 
-    public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new","batch");
+    public static final AbstractStatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new","batch");
 
     /**
      * 不可变set
      */
-    public static final Set<StatementGenerator> ALL = ImmutableSet
+    public static final Set<AbstractStatementGenerator> ALL = ImmutableSet
         .of(UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR);
 
     private static final Function<Mapper, String> FUN = new Function<Mapper, String>() {
@@ -88,12 +88,12 @@ public abstract class StatementGenerator {
         if (null == method) {
             return;
         }
-        final StatementGenerator[] generators = getGenerators(method);
+        final AbstractStatementGenerator[] generators = getGenerators(method);
         if (1 == generators.length) {
             generators[0].execute(method);
         } else {
             UiComponentFacade.getInstance(method.getProject())
-                .showListPopup("[ 选择要生成的语句]", new ListSelectionListener() {
+                .showListPopup("[选择要生成的语句] ", new ListSelectionListener() {
                     @Override
                     public void selected(int index) {
                         generators[index].execute(method);
@@ -114,23 +114,23 @@ public abstract class StatementGenerator {
      * @return
      */
     @NotNull
-    public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
+    public static AbstractStatementGenerator[] getGenerators(@NotNull PsiMethod method) {
         GenerateModel model = MybatisSetting.getInstance().getStatementGenerateModel();
         String target = method.getName();
-        List<StatementGenerator> result = Lists.newArrayList();
-        for (StatementGenerator generator : ALL) {
+        List<AbstractStatementGenerator> result = Lists.newArrayList();
+        for (AbstractStatementGenerator generator : ALL) {
             //找出符合的generator
             if (model.matchesAny(generator.getPatterns(), target)) {
                 result.add(generator);
             }
         }
-        return CollectionUtils.isNotEmpty(result) ? result.toArray(new StatementGenerator[result.size()])
-            : ALL.toArray(new StatementGenerator[ALL.size()]);
+        return CollectionUtils.isNotEmpty(result) ? result.toArray(new AbstractStatementGenerator[result.size()])
+            : ALL.toArray(new AbstractStatementGenerator[ALL.size()]);
     }
 
     private Set<String> patterns;
 
-    public StatementGenerator(@NotNull String... patterns) {
+    public AbstractStatementGenerator(@NotNull String... patterns) {
         this.patterns = Sets.newHashSet(patterns);
     }
 

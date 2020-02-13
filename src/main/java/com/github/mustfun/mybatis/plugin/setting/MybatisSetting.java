@@ -1,12 +1,12 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.DELETE_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.INSERT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.SELECT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.StatementGenerator.UPDATE_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.DELETE_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.INSERT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.SELECT_GENERATOR;
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.UPDATE_GENERATOR;
 
 import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
-import com.github.mustfun.mybatis.plugin.generate.StatementGenerator;
+import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -66,7 +66,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
         statementGenerateModel = GenerateModel.getInstance(state.getAttributeValue("statementGenerateModel"));
     }
 
-    private void loadState(Element state, StatementGenerator generator) {
+    private void loadState(Element state, AbstractStatementGenerator generator) {
         String attribute = state.getAttributeValue(generator.getId());
         if (null != attribute) {
             generator.setPatterns((Set<String>) gson.fromJson(attribute, gsonTypeToken));
