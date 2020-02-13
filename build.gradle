@@ -43,7 +43,13 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      <h4>1.0.12</h4>
+      <h4>1.0.14</h4>
+      <ul>
+          <li>fix bugs</li>
+          <li>add new feature</li>
+          <li>support IDEA 2019.3</li>
+      </ul>
+      <h4>1.0.13</h4>
       <ul>
           <li>support IDEA 2019.2</li>
       </ul>
