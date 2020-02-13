@@ -2,6 +2,7 @@ package com.github.mustfun.mybatis.plugin.action;
 
 import com.github.mustfun.mybatis.plugin.util.DomUtils;
 import com.intellij.codeInsight.AutoPopupController;
+import com.intellij.codeInsight.AutoPopupControllerImpl;
 import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
@@ -69,7 +70,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     }
 
     private static void autoPopupParameter(final Project project, final Editor editor) {
-        AutoPopupController.runTransactionWithEverythingCommitted(project, new Runnable() {
+        AppUIExecutor.onUiThread().later().withDocumentsCommitted(project).inTransaction(project).execute(new Runnable() {
             @Override
             public void run() {
                 //当前文件是否最新，没有未提交的

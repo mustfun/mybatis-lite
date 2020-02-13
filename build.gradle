@@ -37,7 +37,7 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2019.2'
+    version = 'IU-2019.3'
     plugins = ['coverage','Spring','DatabaseTools','java']//'coverage'
     pluginName = 'Mybatis-Lite'
 }
