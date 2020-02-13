@@ -1,10 +1,5 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.DELETE_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.INSERT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.SELECT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.UPDATE_GENERATOR;
-
 import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -12,9 +7,12 @@ import com.google.common.collect.Sets;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
-import javax.swing.JComponent;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+
+import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.*;
 
 
 /**
@@ -91,10 +89,10 @@ public class MybatisConfigurable implements SearchableConfigurable {
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
         return mybatisSetting.getStatementGenerateModel().getIdentifier() != mybatisSettingForm.modelComboBox
             .getSelectedIndex()
-            || !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
-            || !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
-            || !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
-            || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText())
+            //|| !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
+            //|| !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
+            //|| !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
+            //|| !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText())
             || naviOpenStatus != mybatisSettingForm.openNaviButton.isSelected();
     }
 
@@ -102,7 +100,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
     public void apply() throws ConfigurationException {
         mybatisSetting
             .setStatementGenerateModel(GenerateModel.getInstance(mybatisSettingForm.modelComboBox.getSelectedIndex()));
-        INSERT_GENERATOR
+        /*INSERT_GENERATOR
             .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.insertPatternTextField.getText())));
         DELETE_GENERATOR
             .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.deletePatternTextField.getText())));
@@ -110,7 +108,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
             .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.updatePatternTextField.getText())));
         SELECT_GENERATOR
             .setPatterns(Sets.newHashSet(splitter.split(mybatisSettingForm.selectPatternTextField.getText())));
-        PropertiesComponent.getInstance()
+        */PropertiesComponent.getInstance()
             .setValue("naviOpenStatus", mybatisSettingForm.getOpenNaviButton().isSelected());
         PropertiesComponent.getInstance().setValue("notFirstIn", true);
     }
@@ -118,11 +116,11 @@ public class MybatisConfigurable implements SearchableConfigurable {
     @Override
     public void reset() {
         mybatisSettingForm.modelComboBox.setSelectedIndex(mybatisSetting.getStatementGenerateModel().getIdentifier());
-        mybatisSettingForm.insertPatternTextField.setText(joiner.join(INSERT_GENERATOR.getPatterns()));
+        /*mybatisSettingForm.insertPatternTextField.setText(joiner.join(INSERT_GENERATOR.getPatterns()));
         mybatisSettingForm.deletePatternTextField.setText(joiner.join(DELETE_GENERATOR.getPatterns()));
         mybatisSettingForm.updatePatternTextField.setText(joiner.join(UPDATE_GENERATOR.getPatterns()));
         mybatisSettingForm.selectPatternTextField.setText(joiner.join(SELECT_GENERATOR.getPatterns()));
-    }
+    */}
 
     @Override
     public void disposeUIResources() {

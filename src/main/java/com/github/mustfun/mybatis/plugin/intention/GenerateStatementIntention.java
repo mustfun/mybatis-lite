@@ -37,6 +37,7 @@ public class GenerateStatementIntention extends GenericIntention {
 
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
         PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+        //generator开始生成语句
         AbstractStatementGenerator.applyGenerate(method);
     }
 

@@ -11,11 +11,7 @@ import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
@@ -25,11 +21,12 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.CommonProcessors;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
@@ -38,20 +35,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractStatementGenerator {
 
-    public static final AbstractStatementGenerator UPDATE_GENERATOR = new UpdateGenerator("update", "modify", "set");
-
-    public static final AbstractStatementGenerator SELECT_GENERATOR = new SelectGenerator("select", "get", "look", "find",
-        "list", "search", "count", "query");
-
-    public static final AbstractStatementGenerator DELETE_GENERATOR = new DeleteGenerator("del", "cancel");
-
-    public static final AbstractStatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new","batch");
 
     /**
-     * 不可变set
+     * 获取所有的生成器
+     * @return
      */
-    public static final Set<AbstractStatementGenerator> ALL = ImmutableSet
-        .of(UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR);
+    public static Set<AbstractStatementGenerator> getALLGenerator(){
+        final AbstractStatementGenerator updateGenerator = new UpdateGenerator("update", "modify", "set");
+
+        final AbstractStatementGenerator selectGenerator = new SelectGenerator("select", "get", "look", "find",
+                "list", "search", "count", "query");
+
+        final AbstractStatementGenerator deleteGenerator = new DeleteGenerator("del", "cancel");
+
+        final AbstractStatementGenerator insertGenerator = new InsertGenerator("insert", "add", "new","batch");
+
+        return ImmutableSet
+                .of(updateGenerator, selectGenerator, deleteGenerator, insertGenerator);
+    }
 
     private static final Function<Mapper, String> FUN = new Function<Mapper, String>() {
         @Override
@@ -90,6 +91,7 @@ public abstract class AbstractStatementGenerator {
         }
         final AbstractStatementGenerator[] generators = getGenerators(method);
         if (1 == generators.length) {
+            //如果命中，直接执行即可
             generators[0].execute(method);
         } else {
             UiComponentFacade.getInstance(method.getProject())
@@ -118,14 +120,16 @@ public abstract class AbstractStatementGenerator {
         GenerateModel model = MybatisSetting.getInstance().getStatementGenerateModel();
         String target = method.getName();
         List<AbstractStatementGenerator> result = Lists.newArrayList();
-        for (AbstractStatementGenerator generator : ALL) {
+        Set<AbstractStatementGenerator> allGenerator = getALLGenerator();
+        for (AbstractStatementGenerator generator : allGenerator) {
             //找出符合的generator
             if (model.matchesAny(generator.getPatterns(), target)) {
                 result.add(generator);
             }
         }
-        return CollectionUtils.isNotEmpty(result) ? result.toArray(new AbstractStatementGenerator[result.size()])
-            : ALL.toArray(new AbstractStatementGenerator[ALL.size()]);
+        //指定了array的类型，避免是object类型,自动扩容吧
+        return CollectionUtils.isNotEmpty(result) ? result.toArray(new AbstractStatementGenerator[0])
+            : allGenerator.toArray(new AbstractStatementGenerator[result.size()]);
     }
 
     private Set<String> patterns;
@@ -200,4 +204,13 @@ public abstract class AbstractStatementGenerator {
         this.patterns = patterns;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

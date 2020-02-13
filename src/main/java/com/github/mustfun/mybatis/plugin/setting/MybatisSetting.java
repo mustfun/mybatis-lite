@@ -1,22 +1,18 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.DELETE_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.INSERT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.SELECT_GENERATOR;
-import static com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator.UPDATE_GENERATOR;
-
-import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
 import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
+import com.github.mustfun.mybatis.plugin.generate.GenerateModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import java.lang.reflect.Type;
-import java.util.Set;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Type;
+import java.util.Set;
 
 
 /**
@@ -48,20 +44,21 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     @Override
     public Element getState() {
         Element element = new Element("MybatisLiteSettings");
-        element.setAttribute(INSERT_GENERATOR.getId(), gson.toJson(INSERT_GENERATOR.getPatterns()));
-        element.setAttribute(DELETE_GENERATOR.getId(), gson.toJson(DELETE_GENERATOR.getPatterns()));
-        element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));
-        element.setAttribute(SELECT_GENERATOR.getId(), gson.toJson(SELECT_GENERATOR.getPatterns()));
+        //element.setAttribute(INSERT_GENERATOR.getId(), gson.toJson(INSERT_GENERATOR.getPatterns()));
+        //element.setAttribute(DELETE_GENERATOR.getId(), gson.toJson(DELETE_GENERATOR.getPatterns()));
+        //element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));
+        //element.setAttribute(SELECT_GENERATOR.getId(), gson.toJson(SELECT_GENERATOR.getPatterns()));
         element.setAttribute("statementGenerateModel", String.valueOf(statementGenerateModel.getIdentifier()));
         return element;
     }
 
     @Override
     public void loadState(Element state) {
-        loadState(state, INSERT_GENERATOR);
-        loadState(state, DELETE_GENERATOR);
-        loadState(state, UPDATE_GENERATOR);
-        loadState(state, SELECT_GENERATOR);
+        //TODO 配置
+        //loadState(state, INSERT_GENERATOR);
+        //loadState(state, DELETE_GENERATOR);
+        //loadState(state, UPDATE_GENERATOR);
+        //loadState(state, SELECT_GENERATOR);
 
         statementGenerateModel = GenerateModel.getInstance(state.getAttributeValue("statementGenerateModel"));
     }
