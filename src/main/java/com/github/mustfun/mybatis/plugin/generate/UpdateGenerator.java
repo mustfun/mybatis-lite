@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 生成update语句
  */
 public class UpdateGenerator extends AbstractStatementGenerator {
 
@@ -29,7 +31,7 @@ public class UpdateGenerator extends AbstractStatementGenerator {
     @NotNull
     @Override
     public String getDisplayText() {
-        return "Update Statement";
+        return "Update 语句";
     }
 
 }

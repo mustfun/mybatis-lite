@@ -25,6 +25,8 @@ import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.JBInsets;
 import com.intellij.util.ui.JBUI;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;
@@ -106,6 +108,7 @@ public final class UiComponentFacade {
         @NotNull Object[] objs) {
         PopupChooserBuilder builder = createListPopupBuilder(title, listener, objs);
         JBPopup popup = builder.createPopup();
+        popup.setSize(new Dimension(200, 200));
         setPositionForShown(popup);
         return popup;
     }
@@ -137,7 +140,9 @@ public final class UiComponentFacade {
     public PopupChooserBuilder createListPopupBuilder(@NotNull String title,
         @Nullable final ListSelectionListener listener,
         @NotNull Object... objs) {
+        //toString方法展示
         final JBList list = new JBList(objs);
+        list.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
         PopupChooserBuilder builder = new PopupChooserBuilder(list);
         builder.setTitle(title);
         if (null != listener) {

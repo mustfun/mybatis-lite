@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 生成delete语句
  */
 public class DeleteGenerator extends AbstractStatementGenerator {
 
@@ -29,7 +31,7 @@ public class DeleteGenerator extends AbstractStatementGenerator {
     @NotNull
     @Override
     public String getDisplayText() {
-        return "Delete Statement";
+        return "Delete 语句";
     }
 
 }

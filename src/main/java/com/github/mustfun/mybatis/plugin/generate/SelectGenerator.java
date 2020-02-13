@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 生成select语句
  */
 public class SelectGenerator extends AbstractStatementGenerator {
 
@@ -41,6 +43,6 @@ public class SelectGenerator extends AbstractStatementGenerator {
     @NotNull
     @Override
     public String getDisplayText() {
-        return "Select Statement";
+        return "Select 语句";
     }
 }
