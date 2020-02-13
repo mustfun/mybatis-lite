@@ -39,6 +39,7 @@ public class BeanAliasResolver extends PackageAliasResolver {
     public Collection<String> getPackages(@Nullable PsiElement element) {
         Set<String> res = Sets.newHashSet();
         for (Module module : moduleManager.getModules()) {
+            //TODO remove 2020.1
             for (CommonSpringModel springModel : springManager.getCombinedModel(module).getModelsToProcess()) {
                 addPackages(res, springModel);
             }
@@ -49,6 +50,7 @@ public class BeanAliasResolver extends PackageAliasResolver {
     private void addPackages(Set<String> res, CommonSpringModel springModel) {
         Optional sqlSessionFactoryClazzOpt = JavaUtils.findClazz(project, MAPPER_ALIAS_PACKAGE_CLASS);
         if (sqlSessionFactoryClazzOpt.isPresent()) {
+            //TODO remove 2020.1
             Collection domBeans = springModel.getAllDomBeans();
             PsiClass sqlSessionFactoryClazz = (PsiClass) sqlSessionFactoryClazzOpt.get();
 
