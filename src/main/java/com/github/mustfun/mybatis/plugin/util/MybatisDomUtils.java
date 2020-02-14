@@ -16,9 +16,13 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class DomUtils {
+/**
+ * dom节点工具类
+ * 操作mapper文件用， 跟mavenDomUtil类似
+ */
+public final class MybatisDomUtils {
 
-    private DomUtils() {
+    private MybatisDomUtils() {
         throw new UnsupportedOperationException();
     }
 
@@ -27,6 +31,7 @@ public final class DomUtils {
     public static <T extends DomElement> Collection<T> findDomElements(@NotNull Project project, Class<T> clazz) {
         GlobalSearchScope scope = GlobalSearchScope.allScope(project);
         List<DomFileElement<T>> elements = DomService.getInstance().getFileElements(clazz, project, scope);
+        //讲domFileElement转化为domElement
         return Collections2.transform(elements, new Function<DomFileElement<T>, T>() {
             @Override
             public T apply(DomFileElement<T> input) {

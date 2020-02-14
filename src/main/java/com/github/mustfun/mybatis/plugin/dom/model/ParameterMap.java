@@ -11,14 +11,23 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @function parameterMap标签
  */
 public interface ParameterMap extends IdDomElement {
 
+    /**
+     *
+     * @return
+     */
     @NotNull
     @Attribute("type")
     @Convert(AliasConverter.class)
     public GenericAttributeValue<PsiClass> getType();
 
+    /**
+     *
+     * @return
+     */
     @SubTagList("parameter")
     public List<Parameter> getParameters();
 

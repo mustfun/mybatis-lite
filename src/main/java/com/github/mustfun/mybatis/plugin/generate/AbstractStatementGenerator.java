@@ -155,7 +155,7 @@ public abstract class AbstractStatementGenerator {
         } else if (mappers.size() > 1) {
             Collection<String> paths = Collections2.transform(mappers, FUN);
             UiComponentFacade.getInstance(method.getProject())
-                .showListPopup("Choose target mapper xml to generate", new ListSelectionListener() {
+                .showListPopup("【请选择目标mapper xml文件路径】", new ListSelectionListener() {
                     @Override
                     public void selected(int index) {
                         setupTag(method, mappers.get(index));
@@ -165,7 +165,7 @@ public abstract class AbstractStatementGenerator {
                     public boolean isWriteAction() {
                         return true;
                     }
-                }, paths.toArray(new String[paths.size()]));
+                }, paths.toArray(new String[0]));
         }
     }
 

@@ -1,8 +1,6 @@
 package com.github.mustfun.mybatis.plugin.action;
 
-import com.github.mustfun.mybatis.plugin.util.DomUtils;
-import com.intellij.codeInsight.AutoPopupController;
-import com.intellij.codeInsight.AutoPopupControllerImpl;
+import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
 import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
@@ -28,7 +26,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     @Override
     public Result checkAutoPopup(char charTyped, final Project project, final Editor editor, PsiFile file) {
         //在xml里面打个. 唤醒自动补全
-        if (charTyped == '.' && DomUtils.isMybatisFile(file)) {
+        if (charTyped == '.' && MybatisDomUtils.isMybatisFile(file)) {
             autoPopupParameter(project, editor);
             return Result.STOP;
         }
@@ -51,7 +49,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
             index >= 0 &&
             editor.getDocument().getText().charAt(index) == '#' &&
             file instanceof SqlFile &&
-            DomUtils.isMybatisFile(topLevelFile);
+            MybatisDomUtils.isMybatisFile(topLevelFile);
         if (parameterCase) {
             autoPopupParameter(project, editor);
             return Result.STOP;

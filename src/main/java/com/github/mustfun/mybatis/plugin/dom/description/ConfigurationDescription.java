@@ -1,7 +1,7 @@
 package com.github.mustfun.mybatis.plugin.dom.description;
 
 import com.github.mustfun.mybatis.plugin.dom.model.Configuration;
-import com.github.mustfun.mybatis.plugin.util.DomUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileDescription;
@@ -19,7 +19,7 @@ public class ConfigurationDescription extends DomFileDescription<Configuration> 
 
     @Override
     public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
-        return DomUtils.isMybatisConfigurationFile(file);
+        return MybatisDomUtils.isMybatisConfigurationFile(file);
     }
 
 }

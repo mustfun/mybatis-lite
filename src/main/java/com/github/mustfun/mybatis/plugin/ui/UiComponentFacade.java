@@ -108,7 +108,7 @@ public final class UiComponentFacade {
         @NotNull Object[] objs) {
         PopupChooserBuilder builder = createListPopupBuilder(title, listener, objs);
         JBPopup popup = builder.createPopup();
-        popup.setSize(new Dimension(200, 200));
+        popup.setSize(new Dimension(300, 200));
         setPositionForShown(popup);
         return popup;
     }
@@ -142,7 +142,7 @@ public final class UiComponentFacade {
         @NotNull Object... objs) {
         //toString方法展示
         final JBList list = new JBList(objs);
-        list.setFont(new Font("Microsoft YaHei", Font.PLAIN, 16));
+        list.setFont(new Font("Monospaced", Font.BOLD, 18));
         PopupChooserBuilder builder = new PopupChooserBuilder(list);
         builder.setTitle(title);
         if (null != listener) {

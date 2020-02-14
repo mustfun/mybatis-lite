@@ -10,15 +10,25 @@ import com.intellij.util.xml.GenericAttributeValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ *
  * @author yanglin
+ * @function resultMap的一些属性
  */
 public interface ResultMap extends GroupFour, IdDomElement {
 
+    /**
+     * extend属性
+     * @return
+     */
     @NotNull
     @Attribute("extends")
     @Convert(ResultMapConverter.class)
     public GenericAttributeValue<XmlAttributeValue> getExtends();
 
+    /**
+     * type属性
+     * @return
+     */
     @NotNull
     @Attribute("type")
     @Convert(AliasConverter.class)

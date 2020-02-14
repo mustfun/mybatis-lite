@@ -83,6 +83,11 @@ public class JavaService {
         }
     }
 
+    /**
+     *
+     * @param clazz  要执行的psi类
+     * @param processor  被执行的类，也可以换成list通用
+     */
     @SuppressWarnings("unchecked")
     public void process(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
         String ns = clazz.getQualifiedName();

@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * @author yanglin
+ * @function dom的一些共有属性，归类
  */
 public interface GroupFour extends DomElement {
 

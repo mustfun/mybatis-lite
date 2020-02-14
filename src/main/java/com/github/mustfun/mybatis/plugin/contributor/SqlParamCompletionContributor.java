@@ -1,7 +1,7 @@
 package com.github.mustfun.mybatis.plugin.contributor;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
-import com.github.mustfun.mybatis.plugin.util.DomUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.google.common.base.Optional;
 import com.intellij.codeInsight.completion.CompletionContributor;
@@ -32,7 +32,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
 
         PsiElement position = parameters.getPosition();
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(position.getProject()).getTopLevelFile(position);
-        if (DomUtils.isMybatisFile(topLevelFile)) {
+        if (MybatisDomUtils.isMybatisFile(topLevelFile)) {
             if (shouldAddElement(position.getContainingFile(), parameters.getOffset())) {
                 process(topLevelFile, result, position);
             }

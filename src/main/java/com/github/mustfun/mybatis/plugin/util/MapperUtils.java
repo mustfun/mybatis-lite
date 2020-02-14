@@ -73,13 +73,18 @@ public final class MapperUtils {
 
     public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
         PsiFile psiFile = element.getContainingFile();
-        return element instanceof XmlElement && DomUtils.isMybatisFile(psiFile);
+        return element instanceof XmlElement && MybatisDomUtils.isMybatisFile(psiFile);
     }
 
+    /**
+     * 找到所有的mapper
+     * @param project
+     * @return
+     */
     @NotNull
     @NonNls
     public static Collection<Mapper> findMappers(@NotNull Project project) {
-        return DomUtils.findDomElements(project, Mapper.class);
+        return MybatisDomUtils.findDomElements(project, Mapper.class);
     }
 
     @NotNull
@@ -196,7 +201,7 @@ public final class MapperUtils {
     }
 
     private static Collection<Configuration> getMybatisConfigurations(Project project) {
-        return DomUtils.findDomElements(project, Configuration.class);
+        return MybatisDomUtils.findDomElements(project, Configuration.class);
     }
 
     public static void processConfiguredPackage(@NotNull Project project,
