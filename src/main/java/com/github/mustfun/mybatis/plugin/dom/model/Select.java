@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
  */
 public interface Select extends GroupTwo, ResultMapGroup {
 
@@ -16,4 +17,17 @@ public interface Select extends GroupTwo, ResultMapGroup {
     @Attribute("resultType")
     @Convert(AliasConverter.class)
     public GenericAttributeValue<PsiClass> getResultType();
+
+    /**
+     * 格式固定或者用@TagValue注解
+     */
+    @Override
+    String getValue();
+
+    /**
+     * 格式固定或者用@TagValue注解
+     * @param s
+     */
+    @Override
+    void setValue(String s);
 }

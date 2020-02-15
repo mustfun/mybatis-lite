@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.generate;
 
 import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
+import com.github.mustfun.mybatis.plugin.dom.model.Insert;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.intellij.psi.PsiMethod;
 import org.jetbrains.annotations.NotNull;
@@ -10,15 +11,20 @@ import org.jetbrains.annotations.NotNull;
  * @updater itar
  * @function 生成insert语句
  */
-public class InsertGenerator extends AbstractStatementGenerator {
+public class InsertGenerator extends AbstractStatementGenerator<Insert> {
 
     public InsertGenerator(@NotNull String... patterns) {
         super(patterns);
     }
 
+    @Override
+    protected void setContent(@NotNull Mapper mapper, @NotNull Insert target) {
+
+    }
+
     @NotNull
     @Override
-    protected GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
+    protected Insert getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
         return mapper.addInsert();
     }
 

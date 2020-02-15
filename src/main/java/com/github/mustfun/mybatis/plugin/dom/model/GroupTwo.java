@@ -5,16 +5,15 @@ import com.github.mustfun.mybatis.plugin.dom.converter.DaoMethodConverter;
 import com.github.mustfun.mybatis.plugin.dom.converter.ParameterMapConverter;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.Convert;
-import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.SubTagList;
+import com.intellij.util.xml.*;
+
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * xml中的一些节点，parameterMap , parameterType
  * @author yanglin
+ * @updater itar
  */
 public interface GroupTwo extends GroupOne, IdDomElement {
 

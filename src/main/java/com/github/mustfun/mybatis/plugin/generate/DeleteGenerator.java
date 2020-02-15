@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.generate;
 
+import com.github.mustfun.mybatis.plugin.dom.model.Delete;
 import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.intellij.psi.PsiMethod;
@@ -10,15 +11,21 @@ import org.jetbrains.annotations.NotNull;
  * @updater itar
  * @function 生成delete语句
  */
-public class DeleteGenerator extends AbstractStatementGenerator {
+public class DeleteGenerator extends AbstractStatementGenerator<Delete> {
 
     public DeleteGenerator(@NotNull String... patterns) {
         super(patterns);
     }
 
+    @Override
+    protected void setContent(@NotNull Mapper mapper, @NotNull Delete target) {
+
+    }
+
+
     @NotNull
     @Override
-    protected GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
+    protected Delete getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
         return mapper.addDelete();
     }
 

@@ -1,10 +1,6 @@
 package com.github.mustfun.mybatis.plugin.dom.model;
 
-import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.NameValue;
-import com.intellij.util.xml.Required;
+import com.intellij.util.xml.*;
 
 /**
  * @author yanglin
@@ -21,5 +17,15 @@ public interface IdDomElement extends DomElement {
     @Attribute("id")
     GenericAttributeValue<String> getId();
 
+    /**
+     * 固定格式setValue方法，否则加@TagValue注解
+     * @param content
+     */
     void setValue(String content);
+
+
+    /**
+     * 固定格式getValue，否则加@TagValue注解
+     */
+    String getValue();
 }

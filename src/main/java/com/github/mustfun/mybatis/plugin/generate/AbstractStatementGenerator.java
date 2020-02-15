@@ -2,6 +2,7 @@ package com.github.mustfun.mybatis.plugin.generate;
 
 import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
+import com.github.mustfun.mybatis.plugin.dom.model.Update;
 import com.github.mustfun.mybatis.plugin.service.EditorService;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.setting.MybatisSetting;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -33,7 +35,7 @@ import java.util.Set;
  * @updater itar
  * @function 语句生成抽象类
  */
-public abstract class AbstractStatementGenerator {
+public abstract class AbstractStatementGenerator<T> {
 
 
     /**
@@ -54,14 +56,17 @@ public abstract class AbstractStatementGenerator {
                 .of(updateGenerator, selectGenerator, deleteGenerator, insertGenerator);
     }
 
+    /**
+     * 获取xml文件的路径
+     */
     private static final Function<Mapper, String> FUN = new Function<Mapper, String>() {
         @Override
         public String apply(Mapper mapper) {
-            VirtualFile vf = mapper.getXmlTag().getContainingFile().getVirtualFile();
+            VirtualFile vf = Objects.requireNonNull(mapper.getXmlTag()).getContainingFile().getVirtualFile();
             if (null == vf) {
                 return "";
             }
-            return vf.getCanonicalPath();
+            return vf.getName();
         }
     };
 
@@ -148,6 +153,7 @@ public abstract class AbstractStatementGenerator {
             return;
         }
         CommonProcessors.CollectProcessor<Mapper> processor = new CommonProcessors.CollectProcessor<Mapper>();
+        //找到相关联的xml文件放置于processor中
         JavaService.getInstance(method.getProject()).process(psiClass, processor);
         final List<Mapper> mappers = Lists.newArrayList(processor.getResults());
         if (1 == mappers.size()) {
@@ -155,7 +161,7 @@ public abstract class AbstractStatementGenerator {
         } else if (mappers.size() > 1) {
             Collection<String> paths = Collections2.transform(mappers, FUN);
             UiComponentFacade.getInstance(method.getProject())
-                .showListPopup("【请选择目标mapper xml文件路径】", new ListSelectionListener() {
+                .showListPopup("【请选择目标mapper xml文件】", new ListSelectionListener() {
                     @Override
                     public void selected(int index) {
                         setupTag(method, mappers.get(index));
@@ -171,16 +177,25 @@ public abstract class AbstractStatementGenerator {
 
     private void setupTag(PsiMethod method, Mapper mapper) {
         WriteCommandAction.runWriteCommandAction(method.getProject(), () -> {
-            GroupTwo target = getTarget(mapper, method);
+            T result = getTarget(mapper, method);
+            setContent(mapper, result);
+
+            GroupTwo target=(GroupTwo) result;
             target.getId().setStringValue(method.getName());
-            target.setValue(" ");
             XmlTag tag = target.getXmlTag();
-            int offset = tag.getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
+            int offset = Objects.requireNonNull(tag).getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
             EditorService editorService = EditorService.getInstance(method.getProject());
             editorService.format(tag.getContainingFile(), tag);
             editorService.scrollTo(tag, offset);
         });
     }
+
+    /**
+     * 给生成的语句加内容
+     * @param mapper
+     * @param target
+     */
+    protected abstract void setContent(@NotNull Mapper mapper, @NotNull T target);
 
     @Override
     public String toString() {
@@ -188,7 +203,7 @@ public abstract class AbstractStatementGenerator {
     }
 
     @NotNull
-    protected abstract GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method);
+    protected abstract T getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method);
 
     @NotNull
     public abstract String getId();

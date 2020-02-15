@@ -1,12 +1,6 @@
 package com.github.mustfun.mybatis.plugin.dom.model;
 
-import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.NameValue;
-import com.intellij.util.xml.Required;
-import com.intellij.util.xml.SubTagList;
-import com.intellij.util.xml.SubTagsList;
+import com.intellij.util.xml.*;
 
 import java.util.List;
 
@@ -97,7 +91,7 @@ public interface Mapper extends DomElement {
     public List<Select> getSelects();
 
     /**
-     * 新增select标签
+     * 新增select标签,格式固定
      *
      * @return
      */

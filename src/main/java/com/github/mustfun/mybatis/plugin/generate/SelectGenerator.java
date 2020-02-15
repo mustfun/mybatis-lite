@@ -6,6 +6,7 @@ import com.github.mustfun.mybatis.plugin.dom.model.Select;
 import com.google.common.base.Optional;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.util.xml.GenericDomValue;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,15 +14,20 @@ import org.jetbrains.annotations.NotNull;
  * @updater itar
  * @function 生成select语句
  */
-public class SelectGenerator extends AbstractStatementGenerator {
+public class SelectGenerator extends AbstractStatementGenerator<Select> {
 
     public SelectGenerator(@NotNull String... patterns) {
         super(patterns);
     }
 
+    @Override
+    protected void setContent(@NotNull Mapper mapper, @NotNull Select target) {
+        target.setValue("select * from mysql");
+    }
+
     @NotNull
     @Override
-    protected GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
+    protected Select getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
         Select select = mapper.addSelect();
         setupResultType(method, select);
         return select;
