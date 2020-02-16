@@ -9,6 +9,11 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.util.xml.GenericDomValue;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 /**
  * @author yanglin
  * @updater itar
@@ -16,13 +21,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SelectGenerator extends AbstractStatementGenerator<Select> {
 
+    //private static Pattern tableNamePatten = Pattern.compile("from.*?where");
+
+
     public SelectGenerator(@NotNull String... patterns) {
         super(patterns);
     }
 
     @Override
     protected void setContent(@NotNull Mapper mapper, @NotNull Select target) {
-        target.setValue("select * from mysql");
+        List<Select> selects = mapper.getSelects();
+         selects.forEach(select->{
+            String value = select.getValue();
+             String from = value.split("from")[1];
+             String tableName = from.split("where")[0];
+             tableName = tableName.replace("<", "");
+             //System.out.println("tableName = " + tableName);
+         });
+        target.setValue("select * from");
     }
 
     @NotNull

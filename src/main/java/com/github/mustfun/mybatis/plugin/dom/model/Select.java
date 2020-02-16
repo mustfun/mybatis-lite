@@ -18,16 +18,5 @@ public interface Select extends GroupTwo, ResultMapGroup {
     @Convert(AliasConverter.class)
     public GenericAttributeValue<PsiClass> getResultType();
 
-    /**
-     * 格式固定或者用@TagValue注解
-     */
-    @Override
-    String getValue();
 
-    /**
-     * 格式固定或者用@TagValue注解
-     * @param s
-     */
-    @Override
-    void setValue(String s);
 }
