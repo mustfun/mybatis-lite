@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
-    <version>1.0.14</version>
+    <version>1.0.15</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.0.15</h4>
+      <ul>
+          <li>fix 2 compatibility problems</li>
+      </ul>
       <h4>1.0.14</h4>
       <ul>
           <li>fix bugs</li>
@@ -74,8 +78,8 @@
 
     <!--多个函数得用到新api-->
     <idea-version since-build="191.4213"/>
-    <!--<depends optional="true" config-file="">com.intellij.database</depends>-->
-    <!--<depends optional="true" config-file="">com.intellij.spring</depends>-->
+    <depends optional="true" config-file="">com.intellij.database</depends>
+    <depends optional="true" config-file="">com.intellij.spring</depends>
     <depends config-file="">com.intellij.modules.java</depends>
     <depends config-file="">com.intellij.modules.ultimate</depends>
 
