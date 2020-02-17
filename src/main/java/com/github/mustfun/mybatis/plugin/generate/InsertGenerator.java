@@ -44,7 +44,9 @@ public class InsertGenerator extends AbstractStatementGenerator<Insert> {
     @NotNull
     @Override
     protected Insert getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
-        return mapper.addInsert();
+        Insert insert = mapper.addInsert(mapper.getMergedDaoElements().size()+1);
+        insert.getId().setStringValue(method.getName());
+        return insert;
     }
 
     @NotNull

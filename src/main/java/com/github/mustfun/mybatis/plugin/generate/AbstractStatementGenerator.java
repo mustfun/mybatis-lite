@@ -57,7 +57,7 @@ public abstract class AbstractStatementGenerator<T> {
     }
 
     /**
-     * 获取xml文件的路径
+     * 获取xml文件的路径 ,简化为XXDao.xml
      */
     private static final Function<Mapper, String> FUN = new Function<Mapper, String>() {
         @Override
@@ -181,7 +181,6 @@ public abstract class AbstractStatementGenerator<T> {
             setContent(mapper, result);
 
             GroupTwo target=(GroupTwo) result;
-            target.getId().setStringValue(method.getName());
             XmlTag tag = target.getXmlTag();
             int offset = Objects.requireNonNull(tag).getTextOffset() + tag.getTextLength() - tag.getName().length() -3;
             EditorService editorService = EditorService.getInstance(method.getProject());

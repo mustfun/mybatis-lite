@@ -21,7 +21,7 @@ public interface Mapper extends DomElement {
      */
     @NotNull
     @SubTagsList({"insert", "update", "delete", "select"})
-    public List<IdDomElement> getDaoElements();
+    public List<IdDomElement> getMergedDaoElements();
 
     @Required
     /**
@@ -94,31 +94,32 @@ public interface Mapper extends DomElement {
      * 新增select标签,格式固定
      *
      * @return
+     * @Param  index 要添加的顺序
      */
-    @SubTagList("select")
-    public Select addSelect();
+    @SubTagsList(value={"insert", "update", "delete", "select"}, tagName="select")
+    public Select addSelect(int index);
 
     /**
      * 新增update标签
      *
      * @return
      */
-    @SubTagList("update")
-    public Update addUpdate();
+    @SubTagsList(value={"insert", "update", "delete", "select"}, tagName="update")
+    public Update addUpdate(int index);
 
     /**
      * 新增insert标签
      *
      * @return
      */
-    @SubTagList("insert")
-    public Insert addInsert();
+    @SubTagsList(value={"insert", "update", "delete", "select"}, tagName="insert")
+    public Insert addInsert(int index);
 
     /**
      * 新增delete标签
      *
      * @return
      */
-    @SubTagList("delete")
-    public Delete addDelete();
+    @SubTagsList(value={"insert", "update", "delete", "select"}, tagName="delete")
+    public Delete addDelete(int index);
 }

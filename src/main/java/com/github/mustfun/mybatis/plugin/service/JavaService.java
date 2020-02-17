@@ -74,7 +74,7 @@ public class JavaService {
         //找出所有的mapper文件
         Collection<Mapper> mappers = MapperUtils.findMappers(psiMethod.getProject());
         for (Mapper mapper : mappers) {
-            for (IdDomElement idDomElement : mapper.getDaoElements()) {
+            for (IdDomElement idDomElement : mapper.getMergedDaoElements()) {
                 //如果在mapper中找到的id签名和这个方法一致，就加入processor的list里面
                 if (MapperUtils.getIdSignature(idDomElement).equals(id)) {
                     processor.process(idDomElement);

@@ -66,7 +66,9 @@ public class UpdateGenerator extends AbstractStatementGenerator<Update> {
     @NotNull
     @Override
     protected Update getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
-        return mapper.addUpdate();
+        Update update = mapper.addUpdate(mapper.getMergedDaoElements().size()+1);
+        update.getId().setStringValue(method.getName());
+        return update;
     }
 
     @NotNull

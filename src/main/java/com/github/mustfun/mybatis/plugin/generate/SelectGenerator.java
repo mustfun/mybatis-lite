@@ -57,7 +57,8 @@ public class SelectGenerator extends AbstractStatementGenerator<Select> {
     @NotNull
     @Override
     protected Select getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
-        Select select = mapper.addSelect();
+        Select select = mapper.addSelect(mapper.getMergedDaoElements().size()+1);
+        select.getId().setStringValue(method.getName());
         setupResultType(method, select);
         return select;
     }

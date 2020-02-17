@@ -50,7 +50,9 @@ public class DeleteGenerator extends AbstractStatementGenerator<Delete> {
     @NotNull
     @Override
     protected Delete getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
-        return mapper.addDelete();
+        Delete delete = mapper.addDelete(mapper.getMergedDaoElements().size()+1);
+        delete.getId().setStringValue(method.getName());
+        return delete;
     }
 
     @NotNull
