@@ -4,9 +4,11 @@ import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.dom.model.Select;
 import com.google.common.base.Optional;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.xml.GenericDomValue;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
  * @function 生成select语句
  */
 public class SelectGenerator extends AbstractStatementGenerator<Select> {
+    public static final String SELECT_TAG = "<select>";
 
     //private static Pattern tableNamePatten = Pattern.compile("from.*?where");
 
@@ -31,14 +34,24 @@ public class SelectGenerator extends AbstractStatementGenerator<Select> {
     @Override
     protected void setContent(@NotNull Mapper mapper, @NotNull Select target) {
         List<Select> selects = mapper.getSelects();
-         selects.forEach(select->{
+        final String[] mostLikeTableName = new String[1];
+        selects.forEach(select -> {
             String value = select.getValue();
-             String from = value.split("from")[1];
-             String tableName = from.split("where")[0];
-             tableName = tableName.replace("<", "");
-             //System.out.println("tableName = " + tableName);
-         });
-        target.setValue("select * from");
+            if (StringUtils.isEmpty(value)){
+                return ;
+            }
+            String[] froms = value.split("from");
+            if (froms.length<2){
+                return;
+            }
+            String from = froms[1];
+            String tableName = from.split("where")[0];
+            tableName = tableName.replace("<", "");
+            if (StringUtils.isNotEmpty(tableName)){
+                mostLikeTableName[0] = tableName;
+            }
+        });
+        target.setValue("\n        select * from "+ mostLikeTableName[0]+"\n"+"    ");
     }
 
     @NotNull

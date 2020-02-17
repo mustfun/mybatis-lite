@@ -183,7 +183,7 @@ public abstract class AbstractStatementGenerator<T> {
             GroupTwo target=(GroupTwo) result;
             target.getId().setStringValue(method.getName());
             XmlTag tag = target.getXmlTag();
-            int offset = Objects.requireNonNull(tag).getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
+            int offset = Objects.requireNonNull(tag).getTextOffset() + tag.getTextLength() - tag.getName().length() -3;
             EditorService editorService = EditorService.getInstance(method.getProject());
             editorService.format(tag.getContainingFile(), tag);
             editorService.scrollTo(tag, offset);
