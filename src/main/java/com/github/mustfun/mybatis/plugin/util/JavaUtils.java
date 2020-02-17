@@ -70,6 +70,7 @@ public final class JavaUtils {
 
     @NotNull
     public static Optional<PsiClass> findClazz(@NotNull Project project, @NotNull String clazzName) {
+        //找到一个类
         return Optional
             .fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
     }

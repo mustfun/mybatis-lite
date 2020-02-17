@@ -1,20 +1,17 @@
 package com.github.mustfun.mybatis.plugin.generate;
 
-import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.dom.model.Select;
 import com.google.common.base.Optional;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import com.intellij.util.xml.GenericDomValue;
+import com.intellij.psi.xml.XmlTag;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author yanglin
@@ -59,13 +56,24 @@ public class SelectGenerator extends AbstractStatementGenerator<Select> {
     protected Select getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
         Select select = mapper.addSelect(mapper.getMergedDaoElements().size()+1);
         select.getId().setStringValue(method.getName());
-        setupResultType(method, select);
+        setupResultType(method, select, mapper);
         return select;
     }
 
-    private void setupResultType(PsiMethod method, Select select) {
+    private void setupResultType(PsiMethod method, Select select, Mapper mapper) {
         Optional<PsiClass> clazz = AbstractStatementGenerator.getSelectResultType(method);
         if (clazz.isPresent()) {
+            final String[] xmlTag = {null};
+            mapper.getResultMaps().forEach(map->{
+                if (Objects.requireNonNull(map.getType().getRawText()).equalsIgnoreCase(clazz.get().getQualifiedName())){
+                    xmlTag[0] = map.getId().getRawText();
+                }
+            });
+            if (!xmlTag[0].isEmpty()){
+                //我比较喜欢用resultMap一些
+                select.getResultMap().setStringValue(xmlTag[0]);
+                return ;
+            }
             select.getResultType().setValue(clazz.get());
         }
     }

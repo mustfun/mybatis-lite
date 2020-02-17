@@ -2,7 +2,6 @@ package com.github.mustfun.mybatis.plugin.generate;
 
 import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
-import com.github.mustfun.mybatis.plugin.dom.model.Update;
 import com.github.mustfun.mybatis.plugin.service.EditorService;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.setting.MybatisSetting;
@@ -75,9 +74,11 @@ public abstract class AbstractStatementGenerator<T> {
             return Optional.absent();
         }
         PsiType returnType = method.getReturnType();
-        if (returnType instanceof PsiPrimitiveType && returnType != PsiType.VOID) {
-            return JavaUtils.findClazz(method.getProject(), ((PsiPrimitiveType) returnType).getBoxedTypeName());
+        if (returnType instanceof PsiPrimitiveType && !PsiType.VOID.equals(returnType)) {
+            //如果是基本类型且不是void的时候
+            return JavaUtils.findClazz(method.getProject(), Objects.requireNonNull(((PsiPrimitiveType) returnType).getBoxedTypeName()));
         } else if (returnType instanceof PsiClassReferenceType) {
+            //如果是引用类型的时候
             PsiClassReferenceType type = (PsiClassReferenceType) returnType;
             if (type.hasParameters()) {
                 PsiType[] parameters = type.getParameters();
