@@ -11,6 +11,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,14 +56,22 @@ public class AliasFacade {
         this.registerResolver(AliasResolverFactory.createInnerAliasResolver(project));
     }
 
+    /**
+     * 利用jetbrains提供的javaPsiFacade内部方法找到一个类
+     * @param element
+     * @param shortName  全限定名
+     * @return
+     */
     @NotNull
     public Optional<PsiClass> findPsiClass(@Nullable PsiElement element, @NotNull String shortName) {
         PsiClass clazz = javaPsiFacade.findClass(shortName, GlobalSearchScope.allScope(project));
         if (null != clazz) {
             return Optional.of(clazz);
         }
+        //如果传递的是一个list这样的别名过来了，那么就不能通过全限定名找到
         for (AliasResolver resolver : resolvers) {
-            for (AliasDesc desc : resolver.getClassAliasDescriptions(element)) {
+            Set<AliasDesc> classAliasDescriptions = resolver.getClassAliasDescriptions(element);
+            for (AliasDesc desc : classAliasDescriptions) {
                 if (desc.getAlias().equals(shortName)) {
                     return Optional.of(desc.getClazz());
                 }

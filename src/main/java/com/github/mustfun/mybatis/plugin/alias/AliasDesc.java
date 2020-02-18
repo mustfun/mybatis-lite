@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 别名的一个描述类，左边是类，右边是别名
  */
 public class AliasDesc {
 

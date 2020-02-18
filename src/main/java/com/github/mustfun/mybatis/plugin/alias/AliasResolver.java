@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 别名解析抽象类
  */
 public abstract class AliasResolver {
 
@@ -20,6 +22,13 @@ public abstract class AliasResolver {
         this.project = project;
     }
 
+    /**
+     * 新增别名描述
+     * @param descs
+     * @param clazz
+     * @param alias
+     * @return
+     */
     @NotNull
     protected Optional<AliasDesc> addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clazz,
         @Nullable String alias) {
@@ -33,6 +42,11 @@ public abstract class AliasResolver {
         return Optional.of(desc);
     }
 
+    /**
+     * 获取别名描述
+     * @param element
+     * @return
+     */
     @NotNull
     public abstract Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element);
 
