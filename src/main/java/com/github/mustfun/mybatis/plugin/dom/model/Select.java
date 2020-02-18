@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  * @updater itar
- * select有resultMap标签
+ * select有resultMap标签和resultType标签
  */
 public interface Select extends GroupTwo, ResultMapGroup {
 

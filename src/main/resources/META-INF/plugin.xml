@@ -88,8 +88,8 @@
         <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.ConfigurationDescription"/>
         -->
-        <dom.fileMetaData rootTagName="com.github.mustfun.mybatis.plugin.dom.description.MapperDescription" domVersion="1"/>
-        <dom.fileMetaData rootTagName="com.github.mustfun.mybatis.plugin.dom.description.ConfigurationDescription" domVersion="1"/>
+        <dom.fileMetaData rootTagName="mapper" implementation="com.github.mustfun.mybatis.plugin.dom.description.MapperDescription" domVersion="1"/>
+        <dom.fileMetaData rootTagName="configuration"  implementation="com.github.mustfun.mybatis.plugin.dom.description.ConfigurationDescription" domVersion="1"/>
 
         <definitionsSearch implementation="com.github.mustfun.mybatis.plugin.definitionsearch.MapperDefinitionSearch"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.JavaService"/>
