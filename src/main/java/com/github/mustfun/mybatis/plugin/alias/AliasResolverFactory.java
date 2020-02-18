@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 解决依赖引用用的工厂类
  */
 public class AliasResolverFactory {
 

@@ -19,6 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @funcion 注解解析器
+
  */
 public class AnnotationAliasResolver extends AliasResolver {
 

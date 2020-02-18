@@ -5,6 +5,7 @@ import com.intellij.psi.util.ReferenceSetBase;
 
 /**
  * @author itar
+ * @function 常量配置
  */
 public final class MybatisConstants {
 

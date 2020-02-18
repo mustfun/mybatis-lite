@@ -14,6 +14,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Select extends GroupTwo, ResultMapGroup {
 
+    /**
+     * 事实上如果是简单的PSIClass也可以不需要转换器，可以注释掉那一行
+     * @return
+     */
     @NotNull
     @Attribute("resultType")
     @Convert(AliasConverter.class)

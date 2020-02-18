@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @funcion 单个别名解析器
  */
 public class SingleAliasResolver extends AliasResolver {
 

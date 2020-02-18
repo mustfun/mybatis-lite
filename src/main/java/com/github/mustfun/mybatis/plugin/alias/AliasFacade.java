@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 依赖转换用的服务类
  */
 public class AliasFacade {
 
@@ -36,8 +38,12 @@ public class AliasFacade {
         initResolvers();
     }
 
+    /**
+     * 初始化解析类
+     */
     private void initResolvers() {
         try {
+            //spring扩展的一个类，理论上通过serviceManager应该也是可以拿到的
             Class.forName("com.intellij.spring.model.utils.SpringModelUtils");
             this.registerResolver(AliasResolverFactory.createBeanResolver(project));
         } catch (ClassNotFoundException e) {

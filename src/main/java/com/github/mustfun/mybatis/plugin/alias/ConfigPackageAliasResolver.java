@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @funcion 配置包路径解析器
  */
 public class ConfigPackageAliasResolver extends PackageAliasResolver {
 

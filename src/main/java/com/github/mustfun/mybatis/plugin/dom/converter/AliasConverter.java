@@ -20,11 +20,21 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function String转PsiClass的一个Converter，事实上系统内置PsiClassConverter ，这里是别名使用，比如list就要解析成java.util.list
+ * 为返回的GenericDomValue创建PsiReferences时调用，
+ * PsiReferences应该是soft (软引用)(PsiReference.isSoft()应该返回true)。要突出显示未解析的引用，请创建com.intellij.util.xml.highlight.DomElementsInspection并注册上去
  */
 public class AliasConverter extends AbstractConverterAdaptor<PsiClass> implements CustomReferenceConverter<PsiClass> {
 
     private PsiClassConverter delegate = new PsiClassConverter();
 
+    /**
+     * 从string返回PSIClass
+     * @param s
+     * @param context
+     * @return
+     */
     @Nullable
     @Override
     public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
@@ -38,6 +48,12 @@ public class AliasConverter extends AbstractConverterAdaptor<PsiClass> implement
             GlobalSearchScope.allScope(context.getProject()));
     }
 
+    /**
+     * 从PSIClass返回到string
+     * @param psiClass
+     * @param context
+     * @return
+     */
     @Nullable
     @Override
     public String toString(@Nullable PsiClass psiClass, ConvertContext context) {

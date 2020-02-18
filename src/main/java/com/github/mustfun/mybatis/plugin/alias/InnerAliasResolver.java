@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @funcion 简单类型 解析器
  */
 public class InnerAliasResolver extends AliasResolver {
 

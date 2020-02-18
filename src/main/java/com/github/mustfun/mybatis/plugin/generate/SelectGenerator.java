@@ -69,7 +69,7 @@ public class SelectGenerator extends AbstractStatementGenerator<Select> {
                     xmlTag[0] = map.getId().getRawText();
                 }
             });
-            if (!xmlTag[0].isEmpty()){
+            if (xmlTag[0]!=null&&!xmlTag[0].isEmpty()){
                 //我比较喜欢用resultMap一些
                 select.getResultMap().setStringValue(xmlTag[0]);
                 return ;

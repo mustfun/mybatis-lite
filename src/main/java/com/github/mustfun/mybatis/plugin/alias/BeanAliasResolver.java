@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @funcion bean别名解析器
  */
 public class BeanAliasResolver extends PackageAliasResolver {
 
