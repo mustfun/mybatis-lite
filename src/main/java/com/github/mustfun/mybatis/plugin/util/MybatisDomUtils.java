@@ -51,6 +51,11 @@ public final class MybatisDomUtils {
         return null != rootTag && rootTag.getName().equals("mapper");
     }
 
+    /**
+     * 是否是mybatis 配置文件
+     * @param file
+     * @return
+     */
     public static boolean isMybatisConfigurationFile(@NotNull PsiFile file) {
         if (!isXmlFile(file)) {
             return false;

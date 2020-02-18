@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater mapper的描述文件
  */
 public class MapperDescription extends DomFileDescription<Mapper> {
 

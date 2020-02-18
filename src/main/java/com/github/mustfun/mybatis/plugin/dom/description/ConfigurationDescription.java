@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function mybatis配置文件的描述文件
  */
 public class ConfigurationDescription extends DomFileDescription<Configuration> {
 
