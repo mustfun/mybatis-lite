@@ -4,6 +4,8 @@ import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.ResolvingConverter;
 import java.util.Collection;
 import java.util.Collections;
+
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +20,14 @@ public abstract class AbstractConverterAdaptor<T> extends ResolvingConverter<T> 
     @Override
     public Collection<? extends T> getVariants(ConvertContext context) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public String getErrorMessage(@Nullable String s, ConvertContext context) {
+        if (StringUtils.isEmpty(s)){
+            return "不能为空哦";
+        }
+        return super.getErrorMessage(s, context);
     }
 
     @Nullable
