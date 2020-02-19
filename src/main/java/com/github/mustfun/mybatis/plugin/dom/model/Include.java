@@ -9,6 +9,8 @@ import com.intellij.util.xml.GenericAttributeValue;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 各个sql里面的include标签
  */
 public interface Include extends DomElement {
 

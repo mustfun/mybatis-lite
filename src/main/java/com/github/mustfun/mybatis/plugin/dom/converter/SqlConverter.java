@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function mapper的sql标签使用，指向id
  */
 public class SqlConverter extends IdBasedTagConverter {
 

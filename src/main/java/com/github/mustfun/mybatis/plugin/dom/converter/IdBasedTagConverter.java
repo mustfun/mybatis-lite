@@ -4,7 +4,6 @@ import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
@@ -16,19 +15,12 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.CustomReferenceConverter;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomUtil;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.util.xml.PsiClassConverter;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.intellij.util.xml.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 /**
  * @author yanglin
@@ -59,7 +51,7 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
     @Nullable
     @Override
     public XmlAttributeValue fromString(@Nullable @NonNls String value, ConvertContext context) {
-        return matchIdDomElement(selectStrategy(context).getValue(), value, context).orNull();
+        return matchIdDomElement(selectStrategy(context).getValue(), value, context).orElse(null);
     }
 
     /**
@@ -71,15 +63,15 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
      */
     @NotNull
     private Optional<XmlAttributeValue> matchIdDomElement(Collection<? extends IdDomElement> idDomElements,
-        String value, ConvertContext context) {
+                                                          String value, ConvertContext context) {
         Mapper contextMapper = MapperUtils.getMapper(context.getInvocationElement());
         for (IdDomElement idDomElement : idDomElements) {
             if (MapperUtils.getIdSignature(idDomElement).equals(value) ||
                 MapperUtils.getIdSignature(idDomElement, contextMapper).equals(value)) {
-                return Optional.of(idDomElement.getId().getXmlAttributeValue());
+                return Optional.of(Objects.requireNonNull(idDomElement.getId().getXmlAttributeValue()));
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @Nullable
@@ -232,7 +224,7 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
             Set<String> res =
                 getElement().getText().contains(MybatisConstants.DOT_SEPARATOR) ? setupContextIdSignature()
                     : setupGlobalIdSignature();
-            return res.toArray(new String[res.size()]);
+            return res.toArray(new String[0]);
         }
 
         private Set<String> setupContextIdSignature() {
