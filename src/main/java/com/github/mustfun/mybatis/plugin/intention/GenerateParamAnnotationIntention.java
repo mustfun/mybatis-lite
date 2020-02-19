@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GenerateParamAnnotationIntention extends GenericIntention {
 
-    public static final String ADD_MYBATIS_PARAM_ANNOTATION = "add Mybatis @Param annotation";
+    public static final String ADD_MYBATIS_PARAM_ANNOTATION = "[mybatis lite]添加@param注解";
 
     public GenerateParamAnnotationIntention() {
         super(GenerateParamChooser.INSTANCE);

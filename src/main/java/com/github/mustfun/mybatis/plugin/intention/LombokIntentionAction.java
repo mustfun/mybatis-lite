@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 /**
+ * [Mybatis Lite]生成@Getter和@Setter注解
  * @author dengzhiyuan
  * @version 1.0
  * @date 2018/6/11
@@ -33,7 +34,7 @@ public class LombokIntentionAction implements IntentionAction {
     @NotNull
     @Override
     public String getText() {
-        return "[Lombok] generate @Getter and @Setter";
+        return "[Mybatis Lite]生成@Getter和@Setter注解";
     }
 
     @Nls

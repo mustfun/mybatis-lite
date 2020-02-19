@@ -123,11 +123,17 @@
         --><!--<intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>-->
+        <!--监听alt+enter生成@set @get注解注解-->
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.LombokIntentionAction</className>
         </intentionAction>
+        <!--监听alt+enter生成sql语句注解-->
         <intentionAction>
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateStatementIntention</className>
+        </intentionAction>
+        <!--监听alt+enter生成@param注解-->
+        <intentionAction>
+            <className>com.github.mustfun.mybatis.plugin.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.GenerateMapperIntention</className>
