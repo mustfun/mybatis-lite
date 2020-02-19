@@ -132,6 +132,12 @@ public final class MapperUtils {
         return null != containingClass ? findFirstMapper(project, containingClass) : Optional.<Mapper>absent();
     }
 
+    /**
+     * 从domElement查找父节点对象 - domElement一般是GeneticAttributeValue对象，如<resultMap extends='BaseResultMap'></resultMap>
+     * 那么拿到的就是resultMap这个父节点
+     * @param element
+     * @return
+     */
     @SuppressWarnings("unchecked")
     @NotNull
     @NonNls
@@ -168,12 +174,25 @@ public final class MapperUtils {
         return domElement.getId().getRawText();
     }
 
+    /**
+     * 获得id签名，全限定名+id
+     * @param domElement
+     * @param <T>
+     * @return
+     */
     @NotNull
     @NonNls
     public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement) {
         return getNamespace(domElement) + "." + getId(domElement);
     }
 
+    /**
+     * 获得id签名，全限定名+id,如果第一个的签名和第二个的签名是一样的情况，就返回短一点的id
+     * 其实本签名就是返回id
+     * @param domElement
+     * @param <T>
+     * @return
+     */
     @NotNull
     @NonNls
     public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement, @NotNull Mapper mapper) {

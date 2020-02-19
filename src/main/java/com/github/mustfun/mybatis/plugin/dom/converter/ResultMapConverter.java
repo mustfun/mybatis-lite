@@ -14,9 +14,20 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function resultMap解析器，如果发现了extends属性就会调用这个converterl
  */
 public class ResultMapConverter extends IdBasedTagConverter {
 
+    /**
+     * 上层getValue调用  - string转为xmlValue
+     * @param mapper mapper in the project, null if {@link #IdBasedTagConverter} is false
+     * @param context the dom convert context
+     * @return
+     * @function 如果唤醒的上下文是<resultMap extends='BaseResultMap'></resultMap>引起的转换
+     *           那么toString的时候就将整个 resultMap给它
+     *           如果唤醒的是<select id='BaseResultMap'></select>，那么就获取所有的resultMap然后filter
+     */
     @NotNull
     @Override
     public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context) {

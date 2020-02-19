@@ -33,8 +33,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @version 1.0
- * @update itar
+ * @updater itar
  * @since jdk1.8
+ * @function id解析器
  */
 public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAttributeValue> implements
     CustomReferenceConverter<XmlAttributeValue> {
@@ -49,12 +50,25 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
         this.crossMapperSupported = crossMapperSupported;
     }
 
+    /**
+     * 从string转化为XmlAttributeValue
+     * @param value
+     * @param context
+     * @return
+     */
     @Nullable
     @Override
     public XmlAttributeValue fromString(@Nullable @NonNls String value, ConvertContext context) {
         return matchIdDomElement(selectStrategy(context).getValue(), value, context).orNull();
     }
 
+    /**
+     * 从上文拿到的
+     * @param idDomElements
+     * @param value
+     * @param context
+     * @return
+     */
     @NotNull
     private Optional<XmlAttributeValue> matchIdDomElement(Collection<? extends IdDomElement> idDomElements,
         String value, ConvertContext context) {
@@ -79,7 +93,13 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
         return MapperUtils.getIdSignature((IdDomElement) domElement, contextMapper);
     }
 
-    private TraverseStrategy selectStrategy(ConvertContext context) {
+    /**
+     * 选择一个id转换策略
+     * @param context
+     * @return
+     */
+    private AbstractTraverseStrategy selectStrategy(ConvertContext context) {
+        //mapper交叉开启的时候，就用交叉策略，否则内部mapper策略，resultMap等只能在内部使用，这样更加节省性能
         return crossMapperSupported ? new CrossMapperStrategy(context) : new InsideMapperStrategy(context);
     }
 
@@ -90,18 +110,30 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
     @NotNull
     public abstract Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context);
 
-    private abstract class TraverseStrategy {
+    @NotNull
+    @Override
+    public PsiReference[] createReferences(GenericDomValue<XmlAttributeValue> value, PsiElement element,
+        ConvertContext context) {
+        return PsiClassConverter.createJavaClassReferenceProvider(value, null, new ValueReferenceProvider(context))
+            .getReferencesByElement(element);
+    }
+
+
+    /**
+     * 抽象遍历策略
+     */
+    private abstract static class AbstractTraverseStrategy {
 
         protected ConvertContext context;
 
-        public TraverseStrategy(@NotNull ConvertContext context) {
+        public AbstractTraverseStrategy(@NotNull ConvertContext context) {
             this.context = context;
         }
 
         public abstract Collection<? extends IdDomElement> getValue();
     }
 
-    private class InsideMapperStrategy extends TraverseStrategy {
+    private class InsideMapperStrategy extends AbstractTraverseStrategy {
 
         public InsideMapperStrategy(@NotNull ConvertContext context) {
             super(context);
@@ -114,7 +146,10 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
 
     }
 
-    private class CrossMapperStrategy extends TraverseStrategy {
+    /**
+     * 跳转mapper策略 - getValue方法提供所有的mapper文件
+     */
+    private class CrossMapperStrategy extends AbstractTraverseStrategy {
 
         public CrossMapperStrategy(@NotNull ConvertContext context) {
             super(context);
@@ -133,13 +168,6 @@ public abstract class IdBasedTagConverter extends AbstractConverterAdaptor<XmlAt
 
     }
 
-    @NotNull
-    @Override
-    public PsiReference[] createReferences(GenericDomValue<XmlAttributeValue> value, PsiElement element,
-        ConvertContext context) {
-        return PsiClassConverter.createJavaClassReferenceProvider(value, null, new ValueReferenceProvider(context))
-            .getReferencesByElement(element);
-    }
 
     private class ValueReferenceProvider extends JavaClassReferenceProvider {
 
