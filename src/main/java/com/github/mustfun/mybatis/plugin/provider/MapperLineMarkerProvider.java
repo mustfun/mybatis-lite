@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @author yanglin
  * @update itar
  * @function 继承RelatedItemLineMarkerProvider 实现标记和跳转，修改性能
+ * 方法级别跳转  -  方法跳转到方法
  */
 public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
@@ -36,6 +37,11 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
     };
 
+    /**
+     * 这个地方PsiClass和PsiMethod都会进来
+     * @param element
+     * @param result
+     */
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element,
         @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
@@ -57,12 +63,13 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
                 //构建导航图标的builder
                 NavigationGutterIconBuilder<PsiElement> builder =
-                    NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
-                        .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                        .setTargets(Collections2.transform(results, FUN))
-                        .setTooltipTitle("Navigation to target in mapper xml");
-                result.add(builder.createLineMarkerInfo(
-                    Objects.requireNonNull(((PsiNameIdentifierOwner) element).getNameIdentifier())));
+                        NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
+                                .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                                .setTargets(Collections2.transform(results, FUN))
+                                .setTooltipTitle("导航到mapper xml中的方法");
+                RelatedItemLineMarkerInfo<PsiElement> lineMarkerInfo = builder.createLineMarkerInfo(
+                        Objects.requireNonNull(((PsiNameIdentifierOwner) element).getNameIdentifier()));
+                result.add(lineMarkerInfo);
             }
         }
     }
