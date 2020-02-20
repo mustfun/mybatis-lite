@@ -60,6 +60,11 @@ public final class JavaUtils {
         return fields.toArray(new PsiField[fields.size()]);
     }
 
+    /**
+     * 判断本身是不是接口，否则看元素的父类是不是一个接口
+     * @param element
+     * @return
+     */
     public static boolean isElementWithinInterface(@Nullable PsiElement element) {
         if (element instanceof PsiClass && ((PsiClass) element).isInterface()) {
             return true;

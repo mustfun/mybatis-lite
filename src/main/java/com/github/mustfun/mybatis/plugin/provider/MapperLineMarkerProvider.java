@@ -13,6 +13,8 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
+import com.intellij.psi.PsiParameterListOwner;
+import com.intellij.psi.impl.source.PsiParameterImpl;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.xml.DomElement;
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  * @update itar
- * @function Go to related symbol
+ * @function 继承RelatedItemLineMarkerProvider 实现标记和跳转，修改性能
  */
 public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
@@ -43,8 +45,9 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
             return;
         }
 
-        //如果element是PsiNameIdentifierOwner对象，且是接口
-        if (element instanceof PsiNameIdentifierOwner && JavaUtils.isElementWithinInterface(element)) {
+        //如果element是PsiNameIdentifierOwner对象(String id (参数))   int deleteByPrimary(String id) (方法))，且是接口
+        if (element instanceof PsiNameIdentifierOwner && !(element instanceof PsiParameterImpl)
+                && JavaUtils.isElementWithinInterface(element)) {
             //表示ID元素的一个集合列表
             CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<>();
             JavaService.getInstance(element.getProject()).process(element, processor);
