@@ -16,10 +16,20 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function <result propertity=''></result> 等使用的需要可以跳转到java的属性类
  */
 public class PropertyConverter extends AbstractConverterAdaptor<XmlAttributeValue> implements
     CustomReferenceConverter<XmlAttributeValue> {
 
+    /**
+     * 跟java实体类做一个连接，可以跳转
+     * @param value
+     * @param element
+     * @param context
+     * @return
+     * @see com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider#getReferencesByElement(PsiElement) 
+     */
     @NotNull
     @Override
     public PsiReference[] createReferences(GenericDomValue<XmlAttributeValue> value, PsiElement element,
@@ -28,6 +38,7 @@ public class PropertyConverter extends AbstractConverterAdaptor<XmlAttributeValu
         if (s == null) {
             return PsiReference.EMPTY_ARRAY;
         }
+        //这个类更加底层一点，确定元素的位置，进行跳转
         return new ResultPropertyReferenceSet(s, element, ElementManipulators.getOffsetInElement(element))
             .getPsiReferences();
     }

@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function referenceSet的一个工厂类
  */
 public final class ReferenceSetResolverFactory {
 

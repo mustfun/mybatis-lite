@@ -9,6 +9,8 @@ import com.intellij.util.xml.GenericAttributeValue;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function <result propertity=''></result> 等使用的需要可以跳转到java的属性类
  */
 public interface PropertyGroup extends DomElement {
 

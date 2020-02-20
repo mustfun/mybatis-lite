@@ -11,10 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 要想构造ReferenceSet必须继承ReferenceSetBase
  */
 public class ResultPropertyReferenceSet extends ReferenceSetBase<PsiReference> {
 
     public ResultPropertyReferenceSet(String text, @NotNull PsiElement element, int offset) {
+        //最后一个是分隔符
         super(text, element, offset, DOT_SEPARATOR);
     }
 

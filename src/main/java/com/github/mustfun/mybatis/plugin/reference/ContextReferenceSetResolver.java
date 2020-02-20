@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function
  */
 public abstract class ContextReferenceSetResolver<F extends PsiElement, K extends PsiElement> {
 
@@ -58,7 +60,7 @@ public abstract class ContextReferenceSetResolver<F extends PsiElement, K extend
     public abstract Optional<K> getStartElement(@Nullable String firstText);
 
     @NotNull
-    public abstract String getText();
+    public abstract String  getText();
 
     @NotNull
     public abstract Optional<K> resolve(@NotNull K current, @NotNull String text);

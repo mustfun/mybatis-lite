@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function java属性跳转用
  */
 public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue> {
 
