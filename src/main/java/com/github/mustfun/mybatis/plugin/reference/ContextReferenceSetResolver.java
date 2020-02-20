@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @updater itar
- * @function
+ * @function 最原始的上下文解决类
  */
 public abstract class ContextReferenceSetResolver<F extends PsiElement, K extends PsiElement> {
 
