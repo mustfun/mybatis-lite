@@ -1,9 +1,8 @@
 package com.github.mustfun.mybatis.plugin.contributor;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
-import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
-import com.google.common.base.Optional;
+import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -15,6 +14,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 
 /**

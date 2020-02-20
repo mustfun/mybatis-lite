@@ -4,7 +4,6 @@ import com.github.mustfun.mybatis.plugin.dom.MapperBacktrackingUtils;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
-import com.google.common.base.Optional;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -13,6 +12,8 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.xml.XmlAttributeValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -31,12 +32,11 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
         resolver = ReferenceSetResolverFactory.createPsiFieldResolver(element);
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public PsiElement resolve() {
-        Optional<PsiElement> resolved = resolver.resolve(index);
-        return resolved.orNull();
+        Optional resolved = resolver.resolve(index);
+        return (PsiElement) resolved.get();
     }
 
     @NotNull
@@ -50,14 +50,14 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
     private Optional<PsiClass> getTargetClazz() {
         if (getElement().getValue().contains(MybatisConstants.DOT_SEPARATOR)) {
             int ind = 0 == index ? 0 : index - 1;
-            Optional<PsiElement> resolved = resolver.resolve(ind);
+            Optional resolved = resolver.resolve(ind);
             if (resolved.isPresent()) {
-                return JavaService.getInstance(myElement.getProject()).getReferenceClazzOfPsiField(resolved.get());
+                return JavaService.getInstance(myElement.getProject()).getReferenceClazzOfPsiField((PsiElement) resolved.get());
             }
         } else {
             return MapperBacktrackingUtils.getPropertyClazz(myElement);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public ContextReferenceSetResolver getResolver() {

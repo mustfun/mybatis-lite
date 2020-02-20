@@ -6,7 +6,6 @@ import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
 import com.github.mustfun.mybatis.plugin.locator.MapperLocator;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -16,10 +15,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.xml.DomElement;
-import java.util.ArrayList;
-import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -35,25 +36,21 @@ public class MapperMethodInspection extends MapperInspection {
             return EMPTY_ARRAY;
         }
         List<ProblemDescriptor> res = createProblemDescriptors(method, manager, isOnTheFly);
-        return res.toArray(new ProblemDescriptor[res.size()]);
+        return res.toArray(new ProblemDescriptor[0]);
     }
 
     private List<ProblemDescriptor> createProblemDescriptors(PsiMethod method, InspectionManager manager,
         boolean isOnTheFly) {
         ArrayList<ProblemDescriptor> res = Lists.newArrayList();
         Optional<ProblemDescriptor> p1 = checkStatementExists(method, manager, isOnTheFly);
-        if (p1.isPresent()) {
-            res.add(p1.get());
-        }
+        p1.ifPresent(res::add);
         Optional<ProblemDescriptor> p2 = checkResultType(method, manager, isOnTheFly);
-        if (p2.isPresent()) {
-            res.add(p2.get());
-        }
+        p2.ifPresent(res::add);
         return res;
     }
 
     private Optional<ProblemDescriptor> checkResultType(PsiMethod method, InspectionManager manager,
-        boolean isOnTheFly) {
+                                                                  boolean isOnTheFly) {
         Optional<DomElement> ele = JavaService.getInstance(method.getProject()).findStatement(method);
         if (ele.isPresent()) {
             DomElement domElement = ele.get();
@@ -76,18 +73,18 @@ public class MapperMethodInspection extends MapperInspection {
                 }
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     private Optional<ProblemDescriptor> checkStatementExists(PsiMethod method, InspectionManager manager,
-        boolean isOnTheFly) {
+                                                                       boolean isOnTheFly) {
         PsiIdentifier ide = method.getNameIdentifier();
         if (!JavaService.getInstance(method.getProject()).findStatement(method).isPresent() && null != ide) {
             return Optional
                 .of(manager.createProblemDescriptor(ide, "Statement with id=\"#ref\" not defined in mapper xml",
                     new StatementNotExistsQuickFix(method), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
 }

@@ -4,9 +4,10 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.google.common.collect.ImmutableSet;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Set;
 
 /**
  * @author yanglin

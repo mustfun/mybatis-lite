@@ -1,7 +1,5 @@
 package com.github.mustfun.mybatis.plugin.provider;
 
-import com.google.common.base.Optional;
-import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.ide.util.PropertiesComponent;
@@ -9,19 +7,21 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.Function;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.Icon;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.Optional;
 
 /**
  * @author yanglin
  * @update itar
  * @function 自定义lineMarkerProvider ， 从F跳转到T
  */
-public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends MarkerProviderAdaptor {
+public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElement, T> extends AbstractMarkerProviderAdaptor {
 
     @Override
     public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
@@ -42,14 +42,14 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends 
 
         //Psi对象转化为T对象
         Optional<T> processResult = apply((F) element);
-        return processResult.isPresent() ? new LineMarkerInfo<F>(
-            (F) element,
-            element.getTextRange(),
-            getIcon(),
-            getTooltipProvider(processResult.get()),
-            getNavigationHandler(processResult.get()),
-            GutterIconRenderer.Alignment.CENTER
-        ) : null;
+        return processResult.map(t -> new LineMarkerInfo<>(
+                (F) element,
+                element.getTextRange(),
+                getIcon(),
+                getTooltipProvider(t),
+                getNavigationHandler(t),
+                GutterIconRenderer.Alignment.CENTER
+        )).orElse(null);
     }
 
     private Function<F, String> getTooltipProvider(final T target) {

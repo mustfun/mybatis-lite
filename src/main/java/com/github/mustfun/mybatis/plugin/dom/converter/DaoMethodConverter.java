@@ -20,7 +20,7 @@ public class DaoMethodConverter extends AbstractConverterAdaptor<PsiMethod> {
         //获取唤醒的当前元素的mapper对象
         Mapper mapper = MapperUtils.getMapper(context.getInvocationElement());
         //找到当前mapper的方法
-        return JavaUtils.findMethod(context.getProject(), MapperUtils.getNamespace(mapper), id).orNull();
+        return JavaUtils.findMethod(context.getProject(), MapperUtils.getNamespace(mapper), id).orElse(null);
     }
 
 }

@@ -3,17 +3,19 @@ package com.github.mustfun.mybatis.plugin.alias;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.xml.XmlAttributeValue;
-import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * @author yanglin
  * @updater itar
  * @funciton 别名类跳转，比如int直接可以跳转到Integer源码
- * @see com.intellij.psi.PsiReference PsiReference: 对PSI元素的引用。例如，表达式中使用的变量名,可以使用“Go to Declaration”操作从引用转到它引用的元素
+ * @see PsiReference PsiReference: 对PSI元素的引用。例如，表达式中使用的变量名,可以使用“Go to Declaration”操作从引用转到它引用的元素
  */
 public class AliasClassReference extends PsiReferenceBase<XmlAttributeValue> {
 
@@ -34,7 +36,7 @@ public class AliasClassReference extends PsiReferenceBase<XmlAttributeValue> {
         XmlAttributeValue attributeValue = getElement();
         //把 long ,int 这种转化为psiElement
         return AliasFacade.getInstance(attributeValue.getProject())
-            .findPsiClass(attributeValue, attributeValue.getValue()).orNull();
+                .findPsiClass(attributeValue, attributeValue.getValue()).orElse(null);
     }
 
     /**

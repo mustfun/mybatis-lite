@@ -10,7 +10,6 @@ import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -24,10 +23,7 @@ import com.intellij.util.CommonProcessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author yanglin
@@ -71,7 +67,7 @@ public abstract class AbstractStatementGenerator<T> {
 
     public static Optional<PsiClass> getSelectResultType(@Nullable PsiMethod method) {
         if (null == method) {
-            return Optional.absent();
+            return Optional.empty();
         }
         PsiType returnType = method.getReturnType();
         if (returnType instanceof PsiPrimitiveType && !PsiType.VOID.equals(returnType)) {
@@ -86,9 +82,9 @@ public abstract class AbstractStatementGenerator<T> {
                     type = (PsiClassReferenceType) parameters[0];
                 }
             }
-            return Optional.fromNullable(type.resolve());
+            return Optional.ofNullable(type.resolve());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public static void applyGenerate(@Nullable final PsiMethod method) {

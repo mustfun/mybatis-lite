@@ -6,13 +6,7 @@ import com.github.mustfun.mybatis.plugin.util.Icons;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
-import com.google.common.base.Optional;
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionProvider;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.XmlPatterns;
@@ -21,6 +15,8 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -39,7 +35,7 @@ public class TestParamContributor extends CompletionContributor {
                     @NotNull CompletionResultSet result) {
                     PsiElement position = parameters.getPosition();
                     addElementForPsiParameter(position.getProject(), result,
-                        MapperUtils.findParentIdDomElement(position).orNull());
+                            MapperUtils.findParentIdDomElement(position).orElse(null));
                 }
             });
     }

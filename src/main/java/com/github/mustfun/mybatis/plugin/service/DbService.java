@@ -267,6 +267,7 @@ public class DbService {
                     realPackageName = JavaUtils.getNotExistPackageNameFromDirectory(vFile);
                 }
 
+                assert fileName != null;
                 fileHashMap.put(template.getVmType(), realPackageName + "." + fileName.split("\\.")[0]);
                 //给VM填充
                 importNeedClass(context, template.getVmType(), table.getClassName());

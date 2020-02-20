@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * @updater itar
  * @function 行标记的一个适配器
  */
-public abstract class MarkerProviderAdaptor implements LineMarkerProvider {
+public abstract class AbstractMarkerProviderAdaptor implements LineMarkerProvider {
 
     @Override
     public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {

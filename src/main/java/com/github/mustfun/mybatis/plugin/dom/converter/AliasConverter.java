@@ -9,11 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.CustomReferenceConverter;
-import com.intellij.util.xml.DomJavaUtil;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.util.xml.PsiClassConverter;
+import com.intellij.util.xml.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +44,7 @@ public class AliasConverter extends AbstractConverterAdaptor<PsiClass> implement
         //如果不包含点就说明是别名
         if (!s.contains(MybatisConstants.DOT_SEPARATOR)) {
             //通过别名（如list/map）找到PsiClass
-            return AliasFacade.getInstance(context.getProject()).findPsiClass(context.getXmlElement(), s).orNull();
+            return AliasFacade.getInstance(context.getProject()).findPsiClass(context.getXmlElement(), s).orElse(null);
         }
         //包含点就从file找到PSIclass
         return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(),
