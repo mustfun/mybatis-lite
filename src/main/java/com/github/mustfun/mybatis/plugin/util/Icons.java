@@ -21,8 +21,8 @@ public interface Icons {
     Icon SPRING_BEAN_ICON = IconLoader.getIcon("/images/springBean.png");
     Icon SPRING_INJECTION_ICON = IconLoader.getIcon("/images/showAutowiredDependencies.png");
 
-    Icon MYBATIS_LOGO_TRUE = IconLoader.getIcon("/images/logo.png");
+    Icon MYBATIS_LOGO_TRUE = IconLoader.getIcon("/images/logo_raw.png");
 
     Icon MYBATIS_FAVICON = IconLoader.getIcon("/images/favicon.ico");
-    Icon MYBATIS_LOGO_MINI = IconLoader.getIcon("/images/logo_16.png");
+    Icon MYBATIS_LOGO_MINI = IconLoader.getIcon("/images/logo_17.png");
 }

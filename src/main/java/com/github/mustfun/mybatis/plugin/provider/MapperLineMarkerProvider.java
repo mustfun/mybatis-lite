@@ -50,6 +50,7 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
                 && JavaUtils.isElementWithinInterface(element)) {
             //表示ID元素的一个集合列表
             CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<>();
+            //找出xml的namespace跟element相等的文件
             JavaService.getInstance(element.getProject()).process(element, processor);
             Collection<IdDomElement> results = processor.getResults();
             if (!results.isEmpty()) {

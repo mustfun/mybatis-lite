@@ -71,7 +71,7 @@ public class JavaService {
         }
         //id为 全限定名 + 方法名称
         String id = psiClass.getQualifiedName() + "." + psiMethod.getName();
-        //找出所有的mapper文件
+        //找出所有的mapper xml文件
         Collection<Mapper> mappers = MapperUtils.findMappers(psiMethod.getProject());
         for (Mapper mapper : mappers) {
             for (IdDomElement idDomElement : mapper.getMergedDaoElements()) {
