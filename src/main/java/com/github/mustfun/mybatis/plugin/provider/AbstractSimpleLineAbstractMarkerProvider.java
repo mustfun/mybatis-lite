@@ -35,16 +35,17 @@ public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElem
         if (!naviOpenStatus) {
             return null;
         }
-        //检测是不是需要标记的元素
+        //检测是不是需要标记的元素 - 用子元素做检测，增强性能，父元素操作
         if (!isTheElement(element)) {
             return null;
         }
+        PsiElement parentElement = element.getParent();
 
         //Psi对象转化为T对象 (T为psiMethod F为xmlTag)
-        Optional<T> processResult = apply((F) element);
+        Optional<T> processResult = apply((F) parentElement);
         return processResult.map(t -> new LineMarkerInfo<>(
-                (F) element,
-                element.getTextRange(),
+                (F) parentElement,
+                parentElement.getTextRange(),
                 getIcon(),
                 getTooltipProvider(t),
                 getNavigationHandler(t),

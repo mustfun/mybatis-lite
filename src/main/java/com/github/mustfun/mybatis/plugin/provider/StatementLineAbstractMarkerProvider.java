@@ -8,7 +8,9 @@ import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.xml.XmlTagImpl;
+import com.intellij.psi.impl.source.xml.XmlTokenImpl;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import org.jetbrains.annotations.NotNull;
@@ -33,11 +35,25 @@ public class StatementLineAbstractMarkerProvider extends AbstractSimpleLineAbstr
                     Delete.class)
     );
 
+    public static final List<String> TARGET_TOKEN = Collections.unmodifiableList(Arrays.asList("select", "update", "insert", "delete","mapper"));
+    public static final String XML_START_TAG_START = "<";
+
+    /**
+     * 系统推荐检测元素尽量的小，这里做一个小调整，增强性能
+     * 用token来校验
+     * @param element
+     * @return
+     */
     @Override
     public boolean isTheElement(@NotNull PsiElement element) {
-        return element instanceof XmlTag
-            && MapperUtils.isElementWithinMybatisFile(element)
-            && isTargetType(element);
+        return element instanceof XmlToken && isTargetToken(element) && element.getParent() instanceof XmlTag
+            && MapperUtils.isElementWithinMybatisFile(element.getParent())
+            && isTargetType(element.getParent());
+    }
+
+    private boolean isTargetToken(PsiElement element) {
+        return TARGET_TOKEN.contains(element.getText()) &&
+                element.getPrevSibling().getText().equalsIgnoreCase(XML_START_TAG_START);
     }
 
     @NotNull
