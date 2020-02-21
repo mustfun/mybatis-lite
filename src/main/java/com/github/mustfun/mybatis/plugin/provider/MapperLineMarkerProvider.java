@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @author yanglin
  * @update itar
  * @function 继承RelatedItemLineMarkerProvider 实现标记和跳转，修改性能
- * 方法级别跳转  -  方法跳转到方法
+ * 方法级别跳转  -  方法跳转到方法   PsiNameIdentifierOwner 有标识符名称的一个所有者，所有有标识符的地方都会继承他,包括方法里面有标识符的一行代码，如List<String> aa =new ArrayList<>()
  */
 public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
