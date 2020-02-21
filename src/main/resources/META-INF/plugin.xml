@@ -101,7 +101,7 @@
 
         <!--实现跳转的lineMarkerProvider-->
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineAbstractMarkerProviderAbstract"/>
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineAbstractMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
         <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
         <applicationService serviceInterface="com.github.mustfun.mybatis.plugin.setting.MybatisSetting" serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>

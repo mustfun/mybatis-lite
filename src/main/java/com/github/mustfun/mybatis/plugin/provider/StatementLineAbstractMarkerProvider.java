@@ -7,6 +7,7 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.xml.XmlTagImpl;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
@@ -21,9 +22,9 @@ import java.util.Optional;
 /**
  * @author yanglin
  * @update itar
- * @function
+ * @function xml跳转到java里面，找到具体的method
  */
-public class StatementLineAbstractMarkerProviderAbstract extends AbstractSimpleLineAbstractMarkerProvider<XmlTag, PsiNameIdentifierOwner> {
+public class StatementLineAbstractMarkerProvider extends AbstractSimpleLineAbstractMarkerProvider<XmlTag, PsiNameIdentifierOwner> {
 
     private static final List<Class<? extends GroupTwo>> TARGET_TYPES = Collections.unmodifiableList(
             Arrays.asList(Select.class,
@@ -79,6 +80,10 @@ public class StatementLineAbstractMarkerProviderAbstract extends AbstractSimpleL
             }
         }
         if (domElement instanceof Mapper) {
+            XmlTagImpl xmlTag = (XmlTagImpl) element;
+            if (!"mapper".equalsIgnoreCase(xmlTag.getName())){
+                return false;
+            }
             return true;
         }
         return false;
