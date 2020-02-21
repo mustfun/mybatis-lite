@@ -19,7 +19,7 @@ import java.util.Optional;
 /**
  * @author yanglin
  * @update itar
- * @function 自定义lineMarkerProvider ， 从F跳转到T
+ * @function 自定义lineMarkerProvider ， 从F跳转到T   F是xmlToken T是PsiMethod
  */
 public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElement, T> extends AbstractMarkerProviderAdaptor {
 
@@ -39,13 +39,12 @@ public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElem
         if (!isTheElement(element)) {
             return null;
         }
-        PsiElement parentElement = element.getParent();
 
         //Psi对象转化为T对象 (T为psiMethod F为xmlTag)
-        Optional<T> processResult = apply((F) parentElement);
+        Optional<T> processResult = apply((F) element);
         return processResult.map(t -> new LineMarkerInfo<>(
-                (F) parentElement,
-                parentElement.getTextRange(),
+                (F) element,
+                element.getTextRange(),
                 getIcon(),
                 getTooltipProvider(t),
                 getNavigationHandler(t),

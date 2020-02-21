@@ -26,7 +26,7 @@ import java.util.Optional;
  * @update itar
  * @function xml跳转到java里面，找到具体的method
  */
-public class StatementLineAbstractMarkerProvider extends AbstractSimpleLineAbstractMarkerProvider<XmlTag, PsiNameIdentifierOwner> {
+public class StatementLineAbstractMarkerProvider extends AbstractSimpleLineAbstractMarkerProvider<XmlToken, PsiNameIdentifierOwner> {
 
     private static final List<Class<? extends GroupTwo>> TARGET_TYPES = Collections.unmodifiableList(
             Arrays.asList(Select.class,
@@ -58,7 +58,8 @@ public class StatementLineAbstractMarkerProvider extends AbstractSimpleLineAbstr
 
     @NotNull
     @Override
-    public Optional<PsiNameIdentifierOwner> apply(@NotNull XmlTag from) {
+    public Optional<PsiNameIdentifierOwner> apply(@NotNull XmlToken rawToken) {
+        XmlTag from = (XmlTag) rawToken.getParent();
         Optional<PsiNameIdentifierOwner> optional = Optional.empty();
         DomElement domElement = DomUtil.getDomElement(from);
         //如果是Mapper
@@ -107,13 +108,13 @@ public class StatementLineAbstractMarkerProvider extends AbstractSimpleLineAbstr
 
     @NotNull
     @Override
-    public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiNameIdentifierOwner target) {
+    public Navigatable getNavigatable(@NotNull XmlToken from, @NotNull PsiNameIdentifierOwner target) {
         return (Navigatable) target.getNavigationElement();
     }
 
     @NotNull
     @Override
-    public String getTooltip(@NotNull XmlTag from, @NotNull PsiNameIdentifierOwner target) {
+    public String getTooltip(@NotNull XmlToken from, @NotNull PsiNameIdentifierOwner target) {
         return "跳转到相应JAVA方法";
     }
 
