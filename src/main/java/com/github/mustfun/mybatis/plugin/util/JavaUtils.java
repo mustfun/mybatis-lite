@@ -72,13 +72,20 @@ public final class JavaUtils {
         return Optional.ofNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
     }
 
+    /**
+     * 通过全限定名找到PSiClass,通过findMethodsByName找到相关的PSIMethod
+     * @param project
+     * @param clazzName
+     * @param methodName
+     * @return
+     */
     @NotNull
     public static Optional<PsiMethod> findMethod(@NotNull Project project, @Nullable String clazzName,
                                                            @Nullable String methodName) {
         if (StringUtils.isBlank(clazzName) && StringUtils.isBlank(methodName)) {
             return Optional.empty();
         }
-        Optional<PsiClass> clazz = findClazz(project, clazzName);
+        Optional<PsiClass> clazz = findClazz(project, Objects.requireNonNull(clazzName));
         if (clazz.isPresent()) {
             PsiMethod[] methods = clazz.get().findMethodsByName(methodName, true);
             return ArrayUtils.isEmpty(methods) ? Optional.<PsiMethod>empty() : Optional.of(methods[0]);
@@ -86,6 +93,12 @@ public final class JavaUtils {
         return Optional.empty();
     }
 
+    /**
+     * 从xml里面的id来获取对应的方法
+     * @param project
+     * @param element
+     * @return
+     */
     @NotNull
     public static Optional<PsiMethod> findMethod(@NotNull Project project, @NotNull IdDomElement element) {
         return findMethod(project, MapperUtils.getNamespace(element), MapperUtils.getId(element));

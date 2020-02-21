@@ -65,6 +65,7 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
                 NavigationGutterIconBuilder<PsiElement> builder =
                         NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
                                 .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                                //target是xmlTag
                                 .setTargets(Collections2.transform(results, FUN))
                                 .setTooltipTitle("导航到mapper xml中的方法");
                 RelatedItemLineMarkerInfo<PsiElement> lineMarkerInfo = builder.createLineMarkerInfo(

@@ -39,7 +39,6 @@ public class StatementLineAbstractMarkerProviderAbstract extends AbstractSimpleL
             && isTargetType(element);
     }
 
-    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public Optional<PsiNameIdentifierOwner> apply(@NotNull XmlTag from) {
@@ -67,6 +66,11 @@ public class StatementLineAbstractMarkerProviderAbstract extends AbstractSimpleL
         return optional;
     }
 
+    /**
+     * 检查XMLTag是否是4种类型
+     * @param element
+     * @return
+     */
     private boolean isTargetType(PsiElement element) {
         DomElement domElement = DomUtil.getDomElement(element);
         for (Class<?> clazz : TARGET_TYPES) {
@@ -80,7 +84,6 @@ public class StatementLineAbstractMarkerProviderAbstract extends AbstractSimpleL
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiNameIdentifierOwner target) {
@@ -90,7 +93,7 @@ public class StatementLineAbstractMarkerProviderAbstract extends AbstractSimpleL
     @NotNull
     @Override
     public String getTooltip(@NotNull XmlTag from, @NotNull PsiNameIdentifierOwner target) {
-        return "Data access object found - ";
+        return "跳转到相应JAVA方法";
     }
 
     @NotNull

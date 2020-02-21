@@ -40,7 +40,7 @@ public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElem
             return null;
         }
 
-        //Psi对象转化为T对象
+        //Psi对象转化为T对象 (T为psiMethod F为xmlTag)
         Optional<T> processResult = apply((F) element);
         return processResult.map(t -> new LineMarkerInfo<>(
                 (F) element,
