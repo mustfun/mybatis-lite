@@ -2,6 +2,8 @@ package com.github.mustfun.mybatis.plugin.util;
 
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.PlatformIcons;
+import icons.SpringApiIcons;
+
 import javax.swing.Icon;
 
 /**
@@ -20,7 +22,7 @@ public interface Icons {
 
     Icon SPRING_BEAN_ICON = IconLoader.getIcon("/images/springBean.png");
     Icon SPRING_INJECTION_ICON = IconLoader.getIcon("/images/showAutowiredDependencies.png");
-
+    Icon SPRING_INJECTION_ICON_NEW = SpringApiIcons.Gutter.ShowAutowiredDependencies;
     Icon MYBATIS_LOGO_TRUE = IconLoader.getIcon("/images/logo_raw.png");
 
     Icon MYBATIS_FAVICON = IconLoader.getIcon("/images/favicon.ico");

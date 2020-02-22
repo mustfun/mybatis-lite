@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -58,10 +59,10 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
 
         NavigationGutterIconBuilder<PsiElement> builder =
-            NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON)
+            NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON_NEW)
                 .setAlignment(GutterIconRenderer.Alignment.CENTER)
                 .setTarget(psiClass)
-                .setTooltipTitle("Data access object found - " + psiClass.getQualifiedName());
+                .setTooltipTitle("导航至文件 - " + psiClass.getQualifiedName());
         result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
     }
 
@@ -72,7 +73,7 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
         Optional<PsiAnnotation> resourceAnno = JavaUtils.getPsiAnnotation(field, Annotation.RESOURCE);
         if (resourceAnno.isPresent()) {
             PsiAnnotationMemberValue nameValue = resourceAnno.get().findAttributeValue("name");
-            String name = nameValue.getText().replaceAll("\"", "");
+            String name = Objects.requireNonNull(nameValue).getText().replaceAll("\"", "");
             return StringUtils.isBlank(name) || name.equals(field.getName());
         }
         return false;
