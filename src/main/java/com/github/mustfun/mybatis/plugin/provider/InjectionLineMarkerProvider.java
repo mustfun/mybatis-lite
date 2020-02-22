@@ -66,6 +66,11 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
         result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
     }
 
+    /**
+     * AUTOWIRED注解或者resource上的name和 filed的name一致
+     * @param field
+     * @return
+     */
     private boolean isTargetField(PsiField field) {
         if (JavaUtils.isAnnotationPresent(field, Annotation.AUTOWIRED)) {
             return true;
