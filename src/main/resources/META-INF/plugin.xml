@@ -115,13 +115,14 @@
         <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
         <refactoring.elementListenerProvider implementation="com.github.mustfun.mybatis.plugin.refactoring.MapperRefactoringProvider"/>
 
-        <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Mapper xml inspection"
-                         groupName="Mybatis"
-                         implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperXmlInspection"/>
         -->
         <localInspection language="JAVA" shortName="MabatisInspection" displayName="Mapper method inspection"
-                         groupName="Mybatis" enabledByDefault="true" level="ERROR"
+                         groupName="Mybatis Lite" enabledByDefault="true" level="ERROR"
                          implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperMethodInspection"/>
+        <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Mapper xml inspection"
+                         groupName="Mybatis Lite"
+                         implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperXmlInspection"/>
+
         <!--监听alt+enter生成@set @get注解注解-->
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.LombokIntentionAction</className>
@@ -140,7 +141,7 @@
     </extensions>
     <actions>
         <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
-               text="Mybatis Lite" description="mybatis lite menu" icon="/images/logo_16.png">
+               text="Mybatis Lite" description="mybatis lite menu" icon="/images/logo_17.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
 

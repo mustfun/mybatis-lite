@@ -7,6 +7,8 @@ import com.intellij.util.xml.highlighting.DomHighlightingHelper;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function xml里面的语法校验
  */
 public class MapperXmlInspection extends BasicDomElementsInspection<DomElement> {
 
