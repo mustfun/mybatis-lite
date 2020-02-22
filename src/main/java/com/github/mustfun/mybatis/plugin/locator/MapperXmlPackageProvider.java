@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 找到所有mapper文件对应的包信息
  */
 public class MapperXmlPackageProvider extends PackageProvider {
 

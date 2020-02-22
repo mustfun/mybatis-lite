@@ -4,17 +4,23 @@ import com.github.mustfun.mybatis.plugin.generate.AbstractStatementGenerator;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function xml不存在的一个快速修复
  */
 public class StatementNotExistsQuickFix extends GenericQuickFix {
 
-    private PsiMethod method;
+    private SmartPsiElementPointer<PsiMethod> methodPointer;
 
     public StatementNotExistsQuickFix(@NotNull PsiMethod method) {
-        this.method = method;
+        methodPointer = SmartPointerManager.getInstance(method.getProject()).createSmartPsiElementPointer(method, method.getContainingFile());
     }
 
     @NotNull
@@ -25,16 +31,11 @@ public class StatementNotExistsQuickFix extends GenericQuickFix {
 
     @Override
     public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-        AbstractStatementGenerator.applyGenerate(method);
+        AbstractStatementGenerator.applyGenerate(methodPointer.getElement());
     }
 
     @NotNull
     public PsiMethod getMethod() {
-        return method;
+        return Objects.requireNonNull(methodPointer.getElement());
     }
-
-    public void setMethod(@NotNull PsiMethod method) {
-        this.method = method;
-    }
-
 }

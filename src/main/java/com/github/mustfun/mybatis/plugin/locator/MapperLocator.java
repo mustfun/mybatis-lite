@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function mapper定位工具类
  */
 public class MapperLocator {
 

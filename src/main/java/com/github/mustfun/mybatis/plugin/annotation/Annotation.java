@@ -10,6 +10,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ import java.util.Set;
  * Simple implementation
  *
  * @author yanglin
+ * @updater itar
+ * @function 自定义简单注解存储类
  */
 public class Annotation implements Cloneable {
 
@@ -153,4 +156,22 @@ public class Annotation implements Cloneable {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Annotation that = (Annotation) o;
+        return Objects.equals(label, that.label) &&
+                Objects.equals(qualifiedName, that.qualifiedName) &&
+                Objects.equals(attributePairs, that.attributePairs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(label, qualifiedName, attributePairs);
+    }
 }

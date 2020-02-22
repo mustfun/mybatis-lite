@@ -24,13 +24,16 @@ import java.util.Optional;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function mapper方法缺失时候下标飘红
  */
-public class MapperMethodInspection extends MapperInspection {
+public class MapperMethodInspection extends AbstractMapperInspection {
 
     @Nullable
     @Override
     public ProblemDescriptor[] checkMethod(@NotNull PsiMethod method, @NotNull InspectionManager manager,
         boolean isOnTheFly) {
+        //判断如果不是@select等注解或者 不是标准的dao层文件就退出
         if (!MapperLocator.getInstance(method.getProject()).process(method) || JavaUtils
             .isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES)) {
             return EMPTY_ARRAY;
@@ -81,7 +84,7 @@ public class MapperMethodInspection extends MapperInspection {
         PsiIdentifier ide = method.getNameIdentifier();
         if (!JavaService.getInstance(method.getProject()).findStatement(method).isPresent() && null != ide) {
             return Optional
-                .of(manager.createProblemDescriptor(ide, "Statement with id=\"#ref\" not defined in mapper xml",
+                .of(manager.createProblemDescriptor(ide, "\"#ref\" 方法在XML配置文件中没有定义",
                     new StatementNotExistsQuickFix(method), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
         }
         return Optional.empty();

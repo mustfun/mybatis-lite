@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 包的提供者
  */
 public abstract class PackageProvider {
 

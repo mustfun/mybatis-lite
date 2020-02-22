@@ -104,7 +104,7 @@
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineAbstractMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
         <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
-        <applicationService serviceInterface="com.github.mustfun.mybatis.plugin.setting.MybatisSetting" serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
+        <applicationService serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
 
         <!--代码补全贡献方-->
         <completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.TestParamContributor"/>
@@ -114,15 +114,14 @@
         <typedHandler implementation="com.github.mustfun.mybatis.plugin.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
         <refactoring.elementListenerProvider implementation="com.github.mustfun.mybatis.plugin.refactoring.MapperRefactoringProvider"/>
-        <localInspection language="JAVA" shortName="MybatisMapperMethodInspection" displayName="Mapper method inspection"
-                         groupName="Mybatis" enabledByDefault="true" level="ERROR"
-                         implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperMethodInspection"/>
+
         <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Mapper xml inspection"
                          groupName="Mybatis"
                          implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperXmlInspection"/>
-        --><!--<intentionAction>
-            <className>com.github.mustfun.mybatis.plugin.intention.GenerateParamAnnotationIntention</className>
-        </intentionAction>-->
+        -->
+        <localInspection language="JAVA" shortName="MabatisInspection" displayName="Mapper method inspection"
+                         groupName="Mybatis" enabledByDefault="true" level="ERROR"
+                         implementationClass="com.github.mustfun.mybatis.plugin.inspection.MapperMethodInspection"/>
         <!--监听alt+enter生成@set @get注解注解-->
         <intentionAction order="first">
             <className>com.github.mustfun.mybatis.plugin.intention.LombokIntentionAction</className>

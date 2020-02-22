@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -51,11 +52,10 @@ public class JavaService {
 
     public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
         CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
-        process(method, processor);
+        process(Objects.requireNonNull(method), processor);
         return processor.isFound() ? Optional.ofNullable(processor.getFoundValue()) : Optional.<DomElement>empty();
     }
 
-    @SuppressWarnings("unchecked")
     public void process(@NotNull PsiMethod psiMethod, @NotNull Processor<IdDomElement> processor) {
         PsiClass psiClass = psiMethod.getContainingClass();
         if (null == psiClass) {
@@ -80,7 +80,6 @@ public class JavaService {
      * @param clazz  要执行的psi类
      * @param processor  被执行的类，也可以换成list通用
      */
-    @SuppressWarnings("unchecked")
     public void process(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
         String ns = clazz.getQualifiedName();
         Collection<Mapper> mappers = MapperUtils.findMappers(clazz.getProject());
