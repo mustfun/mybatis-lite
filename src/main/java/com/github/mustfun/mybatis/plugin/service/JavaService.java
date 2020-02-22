@@ -50,6 +50,11 @@ public class JavaService {
             : Optional.<PsiClass>empty();
     }
 
+    /**
+     * 用java方法找到该sql语句
+     * @param method
+     * @return
+     */
     public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
         CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
         process(Objects.requireNonNull(method), processor);

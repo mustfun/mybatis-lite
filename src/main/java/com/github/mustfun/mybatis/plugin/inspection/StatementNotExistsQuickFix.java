@@ -17,6 +17,7 @@ import java.util.Objects;
  */
 public class StatementNotExistsQuickFix extends GenericQuickFix {
 
+    public static final String GENERATE_STATEMENT = "生成SQL语句";
     private SmartPsiElementPointer<PsiMethod> methodPointer;
 
     public StatementNotExistsQuickFix(@NotNull PsiMethod method) {
@@ -26,7 +27,7 @@ public class StatementNotExistsQuickFix extends GenericQuickFix {
     @NotNull
     @Override
     public String getName() {
-        return "Generate statement";
+        return GENERATE_STATEMENT;
     }
 
     @Override

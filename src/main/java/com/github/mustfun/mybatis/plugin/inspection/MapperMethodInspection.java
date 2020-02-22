@@ -45,8 +45,10 @@ public class MapperMethodInspection extends AbstractMapperInspection {
     private List<ProblemDescriptor> createProblemDescriptors(PsiMethod method, InspectionManager manager,
         boolean isOnTheFly) {
         ArrayList<ProblemDescriptor> res = Lists.newArrayList();
+        //检查语句是否存在
         Optional<ProblemDescriptor> p1 = checkStatementExists(method, manager, isOnTheFly);
         p1.ifPresent(res::add);
+        //检查返回值是否正常
         Optional<ProblemDescriptor> p2 = checkResultType(method, manager, isOnTheFly);
         p2.ifPresent(res::add);
         return res;
@@ -54,26 +56,27 @@ public class MapperMethodInspection extends AbstractMapperInspection {
 
     private Optional<ProblemDescriptor> checkResultType(PsiMethod method, InspectionManager manager,
                                                                   boolean isOnTheFly) {
+        //找到相应的sql语句
         Optional<DomElement> ele = JavaService.getInstance(method.getProject()).findStatement(method);
-        if (ele.isPresent()) {
-            DomElement domElement = ele.get();
-            if (domElement instanceof Select) {
-                Select select = (Select) domElement;
-                Optional<PsiClass> target = AbstractStatementGenerator.getSelectResultType(method);
-                PsiClass clazz = select.getResultType().getValue();
-                PsiIdentifier ide = method.getNameIdentifier();
-                if (null != ide && null == select.getResultMap().getValue()) {
-                    if (target.isPresent() && (null == clazz || !target.get().equals(clazz))) {
-                        return Optional
-                            .of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
+        if (!ele.isPresent()||!(ele.get() instanceof Select)) {
+            return Optional.empty();
+        }
+        Select select = (Select) ele.get();
+        //找到方法的返回值对应的PsiClass
+        Optional<PsiClass> target = AbstractStatementGenerator.getSelectResultType(method);
+        PsiClass clazz = select.getResultType().getValue();
+        PsiIdentifier ide = method.getNameIdentifier();
+        if (null != ide && null == select.getResultMap().getValue()) {
+            if (!target.isPresent() && null != clazz) {
+                return Optional
+                        .of(manager.createProblemDescriptor(ide, "返回值和SQL select id=\"#ref\" 返回值不匹配",
+                                (LocalQuickFix) null, ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
+            }
+            if (target.isPresent() && (null == clazz || !target.get().equals(clazz))) {
+                return Optional
+                        .of(manager.createProblemDescriptor(ide, "返回值和SQL select id=\"#ref\" 返回值不匹配",
                                 new ResultTypeQuickFix(select, target.get()), ProblemHighlightType.GENERIC_ERROR,
                                 isOnTheFly));
-                    } else if (!target.isPresent() && null != clazz) {
-                        return Optional
-                            .of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
-                                (LocalQuickFix) null, ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
-                    }
-                }
             }
         }
         return Optional.empty();
