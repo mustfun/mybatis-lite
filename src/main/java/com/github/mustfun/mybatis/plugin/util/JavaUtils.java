@@ -370,7 +370,7 @@ public final class JavaUtils {
         }
         Optional<PsiClass> clazz = findClazz(project, Objects.requireNonNull(namespace));
         if (clazz.isPresent()) {
-            PsiMethod[] methods = clazz.get().getAllMethods();
+            PsiMethod[] methods = clazz.get().getMethods();
             return Arrays.asList(methods);
         }
         return Collections.emptyList();

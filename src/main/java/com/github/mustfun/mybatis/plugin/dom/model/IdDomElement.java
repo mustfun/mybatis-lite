@@ -11,6 +11,7 @@ public interface IdDomElement extends DomElement {
 
     /**
      * 通用的属性值
+     * NameValue表示这里的id有可能是string，有可能是其他值
      */
     @Required
     @NameValue
