@@ -16,6 +16,13 @@ public class MapperXmlInspection extends BasicDomElementsInspection<DomElement> 
         super(DomElement.class);
     }
 
+    /**
+     * 会对xml的value进行校验 , 底层会调用resolve方法校验value是否是一个psiElement
+     * 首先会用element.getValue方法得到converter之后的值，如<select id=""></select> 就拿到的是一个PsiMethod，那么就不会报错了，高级
+     * @param element
+     * @param holder
+     * @param helper
+     */
     @Override
     protected void checkDomElement(DomElement element, DomElementAnnotationHolder holder,
         DomHighlightingHelper helper) {

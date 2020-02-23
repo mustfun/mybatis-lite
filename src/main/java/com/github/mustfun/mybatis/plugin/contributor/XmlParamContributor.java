@@ -21,18 +21,19 @@ import java.util.Optional;
 /**
  * @author yanglin
  * @update itar
+ * @function xml中的代码补全
  */
-public class TestParamContributor extends CompletionContributor {
+public class XmlParamContributor extends CompletionContributor {
 
-    @SuppressWarnings("unchecked")
-    public TestParamContributor() {
+    public XmlParamContributor() {
         extend(CompletionType.BASIC,
+            //指定代码补全的位置，xmlAttributeValue，xmlAttribute
             XmlPatterns.psiElement()
-                .inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))),
+                .inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName())),
             new CompletionProvider<CompletionParameters>() {
                 @Override
-                protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
-                    @NotNull CompletionResultSet result) {
+                protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context,
+                                              @NotNull CompletionResultSet result) {
                     PsiElement position = parameters.getPosition();
                     addElementForPsiParameter(position.getProject(), result,
                             MapperUtils.findParentIdDomElement(position).orElse(null));
@@ -41,7 +42,7 @@ public class TestParamContributor extends CompletionContributor {
     }
 
     public static void addElementForPsiParameter(@NotNull Project project, @NotNull CompletionResultSet result,
-        @Nullable IdDomElement element) {
+                                          @Nullable IdDomElement element) {
         if (null == element) {
             return;
         }

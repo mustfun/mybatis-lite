@@ -47,7 +47,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
         int offset = documentWindow.injectedToHost(position.getTextOffset());
         Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(xmlFile.findElementAt(offset));
         if (idDomElement.isPresent()) {
-            TestParamContributor.addElementForPsiParameter(position.getProject(), result, idDomElement.get());
+            XmlParamContributor.addElementForPsiParameter(position.getProject(), result, idDomElement.get());
             result.stopHere();
         }
     }
