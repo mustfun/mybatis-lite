@@ -358,6 +358,24 @@ public final class JavaUtils {
         return virtualFile.getPath().split("src/main/java/")[1].replace("/",".");
     }
 
+    /**
+     * 获取所有的方法，根据nameSpace
+     * @param project
+     * @param namespace
+     * @return
+     */
+    public static Collection<? extends PsiMethod> findMethods(Project project, String namespace) {
+        if (StringUtils.isBlank(namespace)) {
+            return Collections.emptyList();
+        }
+        Optional<PsiClass> clazz = findClazz(project, Objects.requireNonNull(namespace));
+        if (clazz.isPresent()) {
+            PsiMethod[] methods = clazz.get().getAllMethods();
+            return Arrays.asList(methods);
+        }
+        return Collections.emptyList();
+    }
+
 
     /**
      * 通过类名找一个类

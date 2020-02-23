@@ -95,6 +95,20 @@ public class JavaService {
         }
     }
 
+    /**
+     * 根据domElement找到method
+     * @param domElement
+     * @param processor
+     */
+    public void ProcessDaoMethod(@NotNull DomElement domElement,@NotNull Processor<PsiMethod> processor){
+
+    }
+
+    /**
+     * 根据条件找到合适的mapper放在processor中待使用
+     * @param target
+     * @param processor
+     */
     @SuppressWarnings("unchecked")
     public void process(@NotNull PsiElement target, @NotNull Processor processor) {
         if (target instanceof PsiMethod) {

@@ -5,6 +5,7 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.intellij.psi.PsiMethod;
 import com.intellij.util.xml.ConvertContext;
+import com.intellij.util.xml.DomElement;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,7 @@ public class DaoMethodConverter extends AbstractConverterAdaptor<PsiMethod> {
     @NotNull
     @Override
     public Collection<? extends PsiMethod> getVariants(ConvertContext context) {
-        return super.getVariants(context);
+        Mapper mapper = MapperUtils.getMapper(context.getInvocationElement());
+        return JavaUtils.findMethods(context.getProject(), MapperUtils.getNamespace(mapper));
     }
 }

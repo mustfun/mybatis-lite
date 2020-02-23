@@ -4,6 +4,7 @@ import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.ResolvingConverter;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NonNls;
@@ -20,6 +21,17 @@ public abstract class AbstractConverterAdaptor<T> extends ResolvingConverter<T> 
     @Override
     public Collection<? extends T> getVariants(ConvertContext context) {
         return Collections.emptyList();
+    }
+
+    /**
+     * 跟上面不同的是，加在这个候选项里面，就不会标记为语法错误
+     * @param context
+     * @return
+     */
+    @NotNull
+    @Override
+    public Set<String> getAdditionalVariants(@NotNull ConvertContext context) {
+        return super.getAdditionalVariants(context);
     }
 
     @Override
