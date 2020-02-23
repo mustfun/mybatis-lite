@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @updater itar
- * @function 最原始的上下文解决类
+ * @function 最原始的上下文解析类    将string解析为psiElement   -reference用
  */
 public abstract class ContextReferenceSetResolver<F extends PsiElement, K extends PsiElement> {
 

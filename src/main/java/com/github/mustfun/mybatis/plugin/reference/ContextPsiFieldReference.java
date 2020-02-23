@@ -32,13 +32,21 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
         resolver = ReferenceSetResolverFactory.createPsiFieldResolver(element);
     }
 
+    /**
+     * 返回值是对应的真是类型
+     * @return
+     */
     @Nullable
     @Override
     public PsiElement resolve() {
         Optional resolved = resolver.resolve(index);
-        return (PsiElement) resolved.get();
+        return resolved.isPresent()?(PsiElement) resolved.get():null;
     }
 
+    /**
+     * class的所有属性全部都
+     * @return
+     */
     @NotNull
     @Override
     public Object[] getVariants() {
