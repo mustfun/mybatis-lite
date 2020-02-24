@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
 import com.intellij.ui.CheckBoxList;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
@@ -67,6 +68,12 @@ public class ConnectDbSetting {
     private JButton serviceButton;
     private JBLabel serviceLabel;
     private JCheckBox poStyle;
+    private JBCheckBox daoPositionCheckBox;
+    private JBCheckBox mapperPositionCheckBox;
+    private JBCheckBox modelPositionCheckBox;
+    private JBCheckBox controllerPositionCheckBox;
+    private JBCheckBox servicePositionCheckBox;
+    private JBLabel alert;
 
     public ConnectDbSetting() {
         port.addKeyListener(new KeyAdapter() {
