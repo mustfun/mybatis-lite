@@ -17,6 +17,8 @@ import lombok.Setter;
  * @version 1.0
  * @date 2018/6/13
  * @since 1.0
+ * @ui design中改了不会立即生效，需要重启一下这个类，重新打开才能看到效果，暂时不知道解决办法
+ *
  */
 @Setter
 @Getter
@@ -72,6 +74,17 @@ public class ConnectDbSetting {
     private JBCheckBox servicePositionCheckBox;
     private JTextPane alertPane;
 
+    /**
+     * 可以快速运行，样式捉急，还是算了
+     */
+    /*public static void main(String[] args) {
+        JFrame frame = new JFrame("ConnectDbSetting");
+        frame.setContentPane(new ConnectDbSetting().mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }*/
+
     public ConnectDbSetting() {
         port.addKeyListener(new KeyAdapter() {
             @Override
@@ -82,5 +95,9 @@ public class ConnectDbSetting {
                 }
             }
         });
+        String text = "Tips:\r\n1.不勾选PO大写生成的Model文件为XXPo.java\r\n\r\n2.记住当前位置作用于当前项目\n" +
+                "\n\r\n";
+        alertPane.setText(text);
+        alertPane.setToolTipText(text);
     }
 }
