@@ -7,11 +7,8 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -73,7 +70,7 @@ public class ConnectDbSetting {
     private JBCheckBox modelPositionCheckBox;
     private JBCheckBox controllerPositionCheckBox;
     private JBCheckBox servicePositionCheckBox;
-    private JBLabel alert;
+    private JTextPane alertPane;
 
     public ConnectDbSetting() {
         port.addKeyListener(new KeyAdapter() {
