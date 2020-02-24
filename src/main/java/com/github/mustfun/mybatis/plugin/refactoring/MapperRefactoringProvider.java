@@ -10,6 +10,8 @@ import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.listeners.RefactoringElementListenerProvider;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +49,7 @@ public class MapperRefactoringProvider implements RefactoringElementListenerProv
         Collection<Mapper> mappers = MapperUtils.findMappers(oldClazz.getProject(), oldClazz);
         try {
             for (Mapper mapper : mappers) {
-                VirtualFile vf = mapper.getXmlTag().getOriginalElement().getContainingFile().getVirtualFile();
+                VirtualFile vf = Objects.requireNonNull(mapper.getXmlTag()).getOriginalElement().getContainingFile().getVirtualFile();
                 if (null != vf) {
                     vf.rename(MapperRefactoringProvider.this, newClazz.getName() + "." + vf.getExtension());
                 }

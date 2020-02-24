@@ -9,6 +9,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.spring.CommonSpringModel;
 import com.intellij.spring.SpringManager;
+import com.intellij.spring.SpringModelVisitorUtils;
 import com.intellij.spring.model.SpringBeanPointer;
 import com.intellij.spring.model.utils.SpringPropertyUtils;
 import com.intellij.spring.model.xml.beans.SpringPropertyDefinition;
@@ -42,8 +43,8 @@ public class BeanAliasResolver extends PackageAliasResolver {
     public Collection<String> getPackages(@Nullable PsiElement element) {
         Set<String> res = Sets.newHashSet();
         for (Module module : moduleManager.getModules()) {
-            //TODO remove 2020.1
-            for (CommonSpringModel springModel : springManager.getCombinedModel(module).getModelsToProcess()) {
+            Set<CommonSpringModel> relatedModels = springManager.getCombinedModel(module).getRelatedModels();
+            for (CommonSpringModel springModel : relatedModels) {
                 addPackages(res, springModel);
             }
         }
@@ -53,8 +54,7 @@ public class BeanAliasResolver extends PackageAliasResolver {
     private void addPackages(Set<String> res, CommonSpringModel springModel) {
         Optional<PsiClass> sqlSessionFactoryClazzOpt = JavaUtils.findClazz(project, MAPPER_ALIAS_PACKAGE_CLASS);
         if (sqlSessionFactoryClazzOpt.isPresent()) {
-            //TODO remove 2020.1
-            Collection domBeans = springModel.getAllDomBeans();
+            Collection domBeans = SpringModelVisitorUtils.getAllDomBeans(springModel);
             PsiClass sqlSessionFactoryClazz = (PsiClass) sqlSessionFactoryClazzOpt.get();
 
             for (Object domBean : domBeans) {
