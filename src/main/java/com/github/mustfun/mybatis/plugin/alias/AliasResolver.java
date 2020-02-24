@@ -51,6 +51,16 @@ public abstract class AliasResolver {
     @NotNull
     public abstract Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element);
 
+    /**
+     * 获取别名描述 - 根据名称
+     * @param name
+     * @return
+     */
+    @Nullable
+    public  AliasDesc getClassAliasByName(String name){
+        return null;
+    }
+
     public Project getProject() {
         return project;
     }

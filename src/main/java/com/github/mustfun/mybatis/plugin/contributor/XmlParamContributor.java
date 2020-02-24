@@ -1,5 +1,7 @@
 package com.github.mustfun.mybatis.plugin.contributor;
 
+import com.github.mustfun.mybatis.plugin.alias.AliasDesc;
+import com.github.mustfun.mybatis.plugin.alias.AliasResolverFactory;
 import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.github.mustfun.mybatis.plugin.util.Icons;
@@ -12,9 +14,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.patterns.XmlElementPattern;
 import com.intellij.patterns.XmlPatterns;
 import com.intellij.patterns.XmlTagPattern;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
+import com.intellij.psi.util.PsiUtil;
+import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,7 +83,39 @@ public class XmlParamContributor extends CompletionContributor {
                     .withIcon(Icons.PARAM_COMPLETION_ICON);
                 //变成一个有优先级的对象，其实不加也行
                 result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
+            }else{
+                //参数为简单类型的时候 - String
+                PsiClassReferenceType type = (PsiClassReferenceType) parameter.getType();
+                if (type.hasParameters()){
+                    type = (PsiClassReferenceType)type.getParameters()[0];
+                }
+                String name = type.getName();
+                AliasDesc classAliasByName = AliasResolverFactory.createInnerAliasResolver(project).getClassAliasByName(name);
+                if (classAliasByName!=null){
+                    LookupElementBuilder builder = LookupElementBuilder.create(parameter.getName())
+                            .withIcon(Icons.PARAM_COMPLETION_ICON);
+                    //变成一个有优先级的对象，其实不加也行
+                    result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
+                    continue;
+                }
+
+                //参数为实体的时候，不管怎么样，提示再说
+                PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
+                if (psiClass!=null){
+                    PsiField[] fields = psiClass.getFields();
+                    addLookupElements(result, fields);
+                }
+
             }
+        }
+    }
+
+    private static void addLookupElements(@NotNull CompletionResultSet result, PsiField[] fields) {
+        for (PsiField field : fields) {
+            LookupElementBuilder builder = LookupElementBuilder.create(field.getName())
+                    .withIcon(PlatformIcons.FIELD_ICON);
+            //变成一个有优先级的对象，其实不加也行
+            result.addElement(builder);
         }
     }
 }

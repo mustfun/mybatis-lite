@@ -47,4 +47,14 @@ public class InnerAliasResolver extends AliasResolver {
         return innerAliasDescs;
     }
 
+    @Nullable
+    @Override
+    public AliasDesc getClassAliasByName(String name) {
+        for (AliasDesc innerAliasDesc : innerAliasDescs) {
+            if (innerAliasDesc.getAlias().equalsIgnoreCase(name)){
+                return innerAliasDesc;
+            }
+        }
+        return null;
+    }
 }

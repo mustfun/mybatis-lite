@@ -66,6 +66,10 @@ public class SqlParamCompletionContributor extends CompletionContributor {
         String text = file.getText();
         for (int i = offset - 1; i > 0; i--) {
             char c = text.charAt(i);
+            //如果有.应该应用.的唤醒，不应用下面唤醒
+            if (c=='.'){
+                return true;
+            }
             if (c == '{' && text.charAt(i - 1) == '#') {
                 return true;
             }
