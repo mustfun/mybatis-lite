@@ -17,14 +17,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  * @update itar 主要是自动补全用
+ * @function 自动补全的监控
  */
 public class MybatisTypedHandler extends TypedHandlerDelegate {
 
     /**
      * 自动弹出候选项,写.的时候弹出
      */
+    @NotNull
     @Override
-    public Result checkAutoPopup(char charTyped, final Project project, final Editor editor, PsiFile file) {
+    public Result checkAutoPopup(char charTyped, @NotNull final Project project, @NotNull final Editor editor, @NotNull PsiFile file) {
         //在xml里面打个. 唤醒自动补全
         if (charTyped == '.' && MybatisDomUtils.isMybatisFile(file)) {
             autoPopupParameter(project, editor);
@@ -58,7 +60,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     }
 
     /**
-     * 当特殊符号被输入被唤醒
+     * 当特殊符号输入之前唤醒
      */
     @NotNull
     @Override

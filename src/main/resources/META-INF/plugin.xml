@@ -106,12 +106,14 @@
         <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
         <applicationService serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
 
+
+        <!--输入控制，便于唤醒自动补全-->
+        <typedHandler implementation="com.github.mustfun.mybatis.plugin.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <!--代码补全贡献方-->
         <!--<completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.XmlParamContributor"/>-->
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
 
         <!--<fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
-        <typedHandler implementation="com.github.mustfun.mybatis.plugin.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
         <refactoring.elementListenerProvider implementation="com.github.mustfun.mybatis.plugin.refactoring.MapperRefactoringProvider"/>
 
