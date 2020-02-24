@@ -104,6 +104,12 @@ public final class JavaUtils {
         return findMethod(project, MapperUtils.getNamespace(element), MapperUtils.getId(element));
     }
 
+    /**
+     * 判断修饰符是否跟@Param相等 ， 注解也是一种修饰符
+     * @param target
+     * @param annotation
+     * @return
+     */
     public static boolean isAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
         PsiModifierList modifierList = target.getModifierList();
         return null != modifierList && null != modifierList.findAnnotation(annotation.getQualifiedName());
@@ -125,6 +131,7 @@ public final class JavaUtils {
             return Optional.empty();
         }
         Optional<PsiAnnotation> psiAnnotation = getPsiAnnotation(target, annotation);
+        //是否为空，不为空就找出@param 注解 value属性
         return psiAnnotation.map(value -> value.findAttributeValue(attrName));
     }
 

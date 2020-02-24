@@ -24,6 +24,8 @@ import java.util.Collection;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function Mapper的一些util
  */
 public final class MapperUtils {
 
@@ -31,8 +33,14 @@ public final class MapperUtils {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * 传进来的element如果是IdDomElement，那么直接传出，如果不是，就找他的parent
+     * @param element
+     * @return
+     */
     @NotNull
     public static Optional<IdDomElement> findParentIdDomElement(@Nullable PsiElement element) {
+        //PSI Element转化为domElement
         DomElement domElement = DomUtil.getDomElement(element);
         if (null == domElement) {
             return Optional.empty();
