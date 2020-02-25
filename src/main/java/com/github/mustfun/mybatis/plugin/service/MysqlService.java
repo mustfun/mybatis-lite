@@ -10,12 +10,10 @@ import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -35,8 +33,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.SystemIndependent;
 
 
 /**
@@ -45,7 +41,7 @@ import org.jetbrains.annotations.SystemIndependent;
  * @date 2018/6/13
  * @since 1.0
  */
-public class DbService {
+public class MysqlService {
 
     public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String DEFAULT_PACKAGE_PATH = "com.github.mustfun";
@@ -58,7 +54,7 @@ public class DbService {
 
     private  Project project;
 
-    public DbService(Project project) {
+    public MysqlService(Project project) {
         this.project = project;
     }
 
@@ -220,7 +216,7 @@ public class DbService {
         map.put("mainPath", mainPath);
         map.put("author", sqlLiteService.queryPluginConfigByKey("author").getValue());
         map.put("email", sqlLiteService.queryPluginConfigByKey("email").getValue());
-        map.put("datetime", DateUtils.formatDate(new Date(), DbService.DATE_TIME_PATTERN));
+        map.put("datetime", DateUtils.formatDate(new Date(), MysqlService.DATE_TIME_PATTERN));
         VelocityContext context = new VelocityContext(map);
 
         //vmList排序

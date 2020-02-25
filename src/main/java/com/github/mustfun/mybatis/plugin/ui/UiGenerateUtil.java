@@ -4,28 +4,15 @@ import com.github.mustfun.mybatis.plugin.listener.CheckMouseListener;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.model.Template;
-import com.github.mustfun.mybatis.plugin.service.DbService;
+import com.github.mustfun.mybatis.plugin.service.MysqlService;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
-import com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
-import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
-import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
-import com.intellij.ide.DataManager;
-import com.intellij.ide.actions.ShowSettingsUtilImpl;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurableGroup;
-import com.intellij.openapi.options.ex.ConfigurableVisitor;
-import com.intellij.openapi.options.newEditor.SettingsDialogFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
@@ -36,7 +23,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JButton;
 
-import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.ide.SearchConfigurableByNameHelper;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -222,14 +206,14 @@ public final class UiGenerateUtil {
             dbSourcePo.setUserName(userName);
             dbSourcePo.setPassword(password);
             //连接数据库
-            DbService dbService = DbServiceFactory.getInstance(project).createMysqlService();
+            MysqlService mysqlService = DbServiceFactory.getInstance(project).createMysqlService();
             //每次都要连接一个新的连接，保存旧的也没用，清空掉吧
-            Connection connection = dbService.getNewConnection(dbSourcePo);
+            Connection connection = mysqlService.getNewConnection(dbSourcePo);
             if (connection == null) {
                 Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
                 return;
             }
-            List<LocalTable> tables = dbService.getTables(connection);
+            List<LocalTable> tables = mysqlService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
                 tableCheckBox.addItem(table.getTableName(), table.getTableName(), false);

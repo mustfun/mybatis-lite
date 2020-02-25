@@ -1,9 +1,8 @@
 package com.github.mustfun.mybatis.plugin.ui.custom;
 
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
-import com.github.mustfun.mybatis.plugin.service.DbService;
+import com.github.mustfun.mybatis.plugin.service.MysqlService;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
-import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
@@ -65,7 +64,7 @@ public class DialogWrapperPanel extends DialogWrapper {
         //tempLateList需要根据vmType排个顺序
         String tablePrefix = connectDbSetting.getTablePrefixInput().getText();
         //连接数据库
-        DbService dbService = DbServiceFactory.getInstance(project).createMysqlService();
+        MysqlService mysqlService = DbServiceFactory.getInstance(project).createMysqlService();
         Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
         Connection sqlLiteConnection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         try {
@@ -76,10 +75,10 @@ public class DialogWrapperPanel extends DialogWrapper {
                 ResultSet rs = connection.getMetaData()
                     .getTables(null, null, (String) s, new String[]{"TABLE", "VIEW"});
                 while (rs.next()) {
-                    table = dbService.initLocalTable(connection, rs);
+                    table = mysqlService.initLocalTable(connection, rs);
                 }
                 //生成代码啦，替换模板
-                dbService.generateCodeUseTemplate(connectDbSetting, sqlLiteConnection, table, tablePrefix,
+                mysqlService.generateCodeUseTemplate(connectDbSetting, sqlLiteConnection, table, tablePrefix,
                     collectTemplateList);
             }
         } catch (Exception e) {

@@ -30,8 +30,8 @@ public class DbServiceFactory {
      * 获取mysql的service
      * @return
      */
-    public DbService createMysqlService(){
-        return new DbService(project);
+    public MysqlService createMysqlService(){
+        return new MysqlService(project);
     }
 
     /**
