@@ -4,6 +4,7 @@ import com.github.mustfun.mybatis.plugin.listener.CheckMouseListener;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.model.Template;
+import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.service.MysqlService;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
@@ -16,7 +17,9 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.newvfs.impl.VirtualFileImpl;
 import com.intellij.ui.CheckBoxList;
 
 import java.awt.event.ActionListener;
@@ -26,6 +29,7 @@ import java.sql.Connection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JButton;
@@ -75,33 +79,126 @@ public final class UiGenerateUtil {
         //监听主面板点击事件
         connectDbSetting.getConnectButton().addActionListener(getActionListener());
 
-        //找出dao层所在目录
-        JButton daoPanel = connectDbSetting.getDaoButton();
+        SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
         VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
-        VirtualFile daoPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.java", "Dao.java","/dao/", "/dal/");
-        if (daoPath == null) {
-            daoPath = baseDir;
+
+        //找出dao层所在目录
+        fillDaoPath(uiComponentFacade, sqlLiteService, baseDir);
+
+        //找出Mapper层所在目录
+        fillMapperPath(uiComponentFacade, sqlLiteService, baseDir);
+
+        //找出model所在的目录
+        fillModelPath(uiComponentFacade, sqlLiteService, baseDir);
+
+        // 找出Service所在的目录
+        fillServicePath(uiComponentFacade, sqlLiteService, baseDir);
+
+        // 找出controller所在的目录
+        fillControllerPath(uiComponentFacade, sqlLiteService, baseDir);
+
+        //读取ymal或者property进行填充
+        fillPanelText(connectDbSetting);
+
+        return new DialogWrapperPanel(project, true, connectDbSetting);
+    }
+
+    private void fillControllerPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
+        VirtualFile controllerPath = baseDir;
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.CONTROLLER);
+        if (poUserPreferPath != null) {
+            connectDbSetting.getControllerPositionCheckBox().setSelected(true);
+            controllerPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
+        }else{
+            VirtualFile findPath = JavaUtils
+                .getFilePattenPath(Objects.requireNonNull(baseDir), "/facade/", "/controller/", "controller.java");
+            if (findPath != null) {
+                controllerPath = findPath;
+            }
         }
-        connectDbSetting.getDaoInput().setText(daoPath.getPath());
-        VirtualFile finalDaoPath = daoPath;
-        daoPanel.addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", finalDaoPath, baseDir);
+        connectDbSetting.getControllerInput().setText(Objects.requireNonNull(controllerPath).getPath());
+
+        VirtualFile finalControllerPath = controllerPath;
+        connectDbSetting.getControllerButton().addActionListener(e -> {
+            VirtualFile vf = uiComponentFacade
+                .showSingleFolderSelectionDialog("请选择Controller层存放目录", finalControllerPath, baseDir);
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getControllerInput().setText(path);
+        });
+    }
+
+    private void fillServicePath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
+        VirtualFile servicePath = baseDir;
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.SERVICE);
+        if (poUserPreferPath != null) {
+            connectDbSetting.getServicePositionCheckBox().setSelected(true);
+            servicePath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
+        }else{
+            VirtualFile findPath = JavaUtils.getFilePattenPath(baseDir, "/service/", "service.java");
+            if (findPath != null) {
+                servicePath = findPath;
+            }
+        }
+        connectDbSetting.getServiceInput().setText(Objects.requireNonNull(servicePath).getPath());
+
+        VirtualFile finalServicePath = servicePath;
+        connectDbSetting.getServiceButton().addActionListener(e -> {
+            VirtualFile vf = uiComponentFacade
+                .showSingleFolderSelectionDialog("请选择Service层存放目录", finalServicePath, baseDir);
             if (vf == null) {
                 return;
             }
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
-            connectDbSetting.getDaoInput().setText(path);
+            connectDbSetting.getServiceInput().setText(path);
         });
+    }
 
-        //找出Mapper层所在目录
-        JButton mapperButton = connectDbSetting.getMapperButton();
-        VirtualFile mapperPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.xml", "Dao.xml","resources/mapper","resources/dao","resources/mybatis");
-        if (mapperPath == null) {
-            mapperPath = baseDir;
+    private void fillModelPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
+        VirtualFile modelPath = baseDir;
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.MODEL_PO);
+        if (poUserPreferPath != null) {
+            connectDbSetting.getModelPositionCheckBox().setSelected(true);
+            modelPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
+        }else{
+            VirtualFile findPath = JavaUtils.getFilePattenPath(baseDir, "/model/");
+            if (findPath != null) {
+                modelPath = findPath;
+            }
         }
-        connectDbSetting.getMapperInput().setText(mapperPath.getPath());
+        connectDbSetting.getPoInput().setText(Objects.requireNonNull(modelPath).getPath());
+
+        VirtualFile finalModelPath = modelPath;
+        connectDbSetting.getPoButton().addActionListener(e -> {
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择实体层存放目录", finalModelPath, baseDir);
+            if (vf == null) {
+                return;
+            }
+            //打印的就是选择的路径
+            String path = vf.getPath();
+            System.out.println("path = " + path);
+            connectDbSetting.getPoInput().setText(path);
+        });
+    }
+
+    private void fillMapperPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
+        VirtualFile mapperPath = baseDir;
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.MAPPER);
+        if (poUserPreferPath != null) {
+            connectDbSetting.getMapperPositionCheckBox().setSelected(true);
+            mapperPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
+        }else{
+            VirtualFile findPath = JavaUtils.getFilePattenPath(baseDir,  "Mapper.xml", "Dao.xml","resources/mapper","resources/dao","resources/mybatis");
+            if (findPath != null) {
+                mapperPath = findPath;
+            }
+        }
+        connectDbSetting.getMapperInput().setText(Objects.requireNonNull(mapperPath).getPath());
+
+        JButton mapperButton = connectDbSetting.getMapperButton();
         VirtualFile finalMapperPath = mapperPath;
         mapperButton.addActionListener(e -> {
             VirtualFile vf = uiComponentFacade
@@ -114,65 +211,40 @@ public final class UiGenerateUtil {
             System.out.println("path = " + path);
             connectDbSetting.getMapperInput().setText(path);
         });
+    }
 
-        //找出model所在的目录
-        VirtualFile modelPath = JavaUtils.getFilePattenPath(baseDir, "/model/");
-        if (modelPath == null) {
-            modelPath = baseDir;
+    /**
+     * 找出dao层所在目录
+     * @param uiComponentFacade
+     * @param sqlLiteService
+     * @param baseDir
+     */
+    private void fillDaoPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
+        VirtualFile daoPath = baseDir;
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.MODEL_PO);
+        if (poUserPreferPath != null) {
+            connectDbSetting.getDaoPositionCheckBox().setSelected(true);
+            daoPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
+        }else{
+            VirtualFile findPath = JavaUtils.getFilePattenPath(Objects.requireNonNull(baseDir), "Mapper.java", "Dao.java", "/dao/", "/dal/");
+            if (findPath != null) {
+                daoPath = findPath;
+            }
         }
-        VirtualFile finalModelPath = modelPath;
-        connectDbSetting.getPoInput().setText(modelPath.getPath());
-        connectDbSetting.getPoButton().addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择实体层存放目录", finalModelPath, baseDir);
+        connectDbSetting.getDaoInput().setText(Objects.requireNonNull(daoPath).getPath());
+
+        JButton daoPanel = connectDbSetting.getDaoButton();
+        VirtualFile finalDaoPath = daoPath;
+        daoPanel.addActionListener(e -> {
+            VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("请选择dao层存放目录", finalDaoPath, baseDir);
             if (vf == null) {
                 return;
             }
             //打印的就是选择的路径
             String path = vf.getPath();
             System.out.println("path = " + path);
-            connectDbSetting.getPoInput().setText(path);
+            connectDbSetting.getDaoInput().setText(path);
         });
-
-        // 找出Service所在的目录
-        VirtualFile servicePath = JavaUtils.getFilePattenPath(baseDir, "/service/", "service.java");
-        if (servicePath == null) {
-            servicePath = baseDir;
-        }
-        VirtualFile finalServicePath = servicePath;
-        connectDbSetting.getServiceInput().setText(servicePath.getPath());
-        connectDbSetting.getServiceButton().addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade
-                .showSingleFolderSelectionDialog("请选择Service层存放目录", finalServicePath, baseDir);
-            if (vf == null) {
-                return;
-            }
-            //打印的就是选择的路径
-            String path = vf.getPath();
-            System.out.println("path = " + path);
-            connectDbSetting.getServiceInput().setText(path);
-        });
-
-        // 找出controller所在的目录
-        VirtualFile controllerPath = JavaUtils
-            .getFilePattenPath(baseDir, "/facade/", "/controller/", "controller.java");
-        if (controllerPath == null) {
-            controllerPath = baseDir;
-        }
-        VirtualFile finalControllerPath = controllerPath;
-        connectDbSetting.getControllerInput().setText(controllerPath.getPath());
-        connectDbSetting.getControllerButton().addActionListener(e -> {
-            VirtualFile vf = uiComponentFacade
-                .showSingleFolderSelectionDialog("请选择Controller层存放目录", finalControllerPath, baseDir);
-            //打印的就是选择的路径
-            String path = vf.getPath();
-            System.out.println("path = " + path);
-            connectDbSetting.getControllerInput().setText(path);
-        });
-
-        //读取ymal或者property进行填充
-        fillPanelText(connectDbSetting);
-
-        return new DialogWrapperPanel(project, true, connectDbSetting);
     }
 
     @NotNull
@@ -228,8 +300,6 @@ public final class UiGenerateUtil {
             SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
             //插入连接数据库的信息
             sqlLiteService.insertDbConnectionInfo(dbSourcePo);
-            sqlLiteService.saveUserPreferPath(connectDbSetting);
-
             List<Template> templates = sqlLiteService.queryTemplateList();
             CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {

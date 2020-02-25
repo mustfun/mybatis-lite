@@ -255,8 +255,8 @@ public class SqlLiteService {
             }
             for (VmTypeEnums vmTypeEnums : map.keySet()) {
                 String key = ClASS_POSITION + vmTypeEnums.getCode();
-                Boolean userPreferPathByVmType = getUserPreferPathByVmType(vmTypeEnums);
-                if (userPreferPathByVmType){
+                String userPreferPath = getUserPreferPathByVmType(vmTypeEnums);
+                if (userPreferPath!=null){
                     String deleteSql = "delete from user_preference where up_key='" + ClASS_POSITION + vmTypeEnums.getCode()+"'";
                     statement.executeUpdate(deleteSql);
                 }
@@ -269,17 +269,17 @@ public class SqlLiteService {
         }
     }
 
-    public Boolean getUserPreferPathByVmType(VmTypeEnums vmTypeEnums){
+    public String getUserPreferPathByVmType(VmTypeEnums vmTypeEnums){
         String key = ClASS_POSITION + vmTypeEnums.getCode();
         try {
-            ResultSet resultSet = statement.executeQuery("select id from user_preference where up_key='" + key + "'");
+            ResultSet resultSet = statement.executeQuery("select up_value from user_preference where up_key='" + key + "'");
             while (resultSet.next()){
-                return true;
+                return resultSet.getString("up_value");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
         }
-        return false;
+        return null;
     }
 }

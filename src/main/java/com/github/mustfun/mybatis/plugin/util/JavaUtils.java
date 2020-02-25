@@ -20,6 +20,8 @@ import java.util.*;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 工具类
  */
 public final class JavaUtils {
 
