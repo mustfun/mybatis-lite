@@ -18,14 +18,6 @@ import lombok.Setter;
 @Getter
 public class MybatisSettingForm {
 
-    public JTextField insertPatternTextField;
-
-    public JTextField deletePatternTextField;
-
-    public JTextField updatePatternTextField;
-
-    public JTextField selectPatternTextField;
-
     public JPanel mainPanel;
 
     public JComboBox modelComboBox;
@@ -33,6 +25,13 @@ public class MybatisSettingForm {
     public JRadioButton openNaviButton;
     public JLabel openNaviLabel;
     public JRadioButton closeNaviRadioButton;
+    private JPanel generateSettingPanel;
+    private JPanel naviPanel;
+    private JTextField insertPatternInput;
+    private JTextField updatePatternInput;
+    private JTextField selectPattenInput;
+    private JTextField deletePattenInput;
+    private JPanel otherSettingPanel1;
 
     public MybatisSettingForm() {
         ButtonGroup buttonGroup = new ButtonGroup();

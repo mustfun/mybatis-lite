@@ -87,13 +87,11 @@ public class MybatisConfigurable implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        return mybatisSetting.getStatementGenerateModel().getIdentifier() != mybatisSettingForm.modelComboBox
-            .getSelectedIndex()
+        return false;
             //|| !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
             //|| !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
             //|| !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
             //|| !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText())
-            || naviOpenStatus != mybatisSettingForm.openNaviButton.isSelected();
     }
 
     @Override
