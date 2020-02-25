@@ -5,6 +5,7 @@ import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.service.DbService;
+import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable;
@@ -221,13 +222,13 @@ public final class UiGenerateUtil {
             dbSourcePo.setUserName(userName);
             dbSourcePo.setPassword(password);
             //连接数据库
-            DbService dbService = DbService.getInstance(project);
-            Connection connection = dbService.getConnection(dbSourcePo);
+            DbService dbService = DbServiceFactory.getInstance(project).createMysqlService();
+            //每次都要连接一个新的连接，保存旧的也没用，清空掉吧
+            Connection connection = dbService.getNewConnection(dbSourcePo);
             if (connection == null) {
                 Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
                 return;
             }
-            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION, connection);
             List<LocalTable> tables = dbService.getTables(connection);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
@@ -240,9 +241,7 @@ public final class UiGenerateUtil {
                 }
 
             }
-            Connection sqlLiteConnection = dbService.getSqlLiteConnection();
-            ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, sqlLiteConnection);
-            SqlLiteService sqlLiteService = SqlLiteService.getInstance(sqlLiteConnection);
+            SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
             //插入连接数据库的信息
             sqlLiteService.insertDbConnectionInfo(dbSourcePo);
 
@@ -281,8 +280,7 @@ public final class UiGenerateUtil {
      * 从数据库中读取最近一条历史记录
      */
     private boolean readFromConnectLog(ConnectDbSetting connectDbSetting) {
-        Connection sqlLiteConnection = DbService.getInstance(project).getSqlLiteConnection();
-        SqlLiteService sqlLiteService = SqlLiteService.getInstance(sqlLiteConnection);
+        SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
         DbSourcePo dbSourcePo = sqlLiteService.queryLatestConnectLog();
         if (dbSourcePo != null) {
             connectDbSetting.getDbName().setText(dbSourcePo.getDbName());

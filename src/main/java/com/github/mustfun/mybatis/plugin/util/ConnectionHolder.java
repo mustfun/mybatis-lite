@@ -13,20 +13,28 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class ConnectionHolder {
 
-    private static ConcurrentHashMap<String, Connection> connectionMap = new ConcurrentHashMap<>(4);
+    private static ThreadLocal<ConcurrentHashMap<String, Connection>> connectionMapThreadLocal = new ThreadLocal<>();
 
 
     public static void addConnection(String key, Connection connection) {
         String digest = DigestUtils.md5Hex(key.getBytes());
-        connectionMap.put(digest, connection);
+        ConcurrentHashMap<String, Connection> stringConnectionConcurrentHashMap = connectionMapThreadLocal.get();
+        if (stringConnectionConcurrentHashMap==null){
+            stringConnectionConcurrentHashMap = new ConcurrentHashMap<>(4);
+        }
+        stringConnectionConcurrentHashMap.put(digest, connection);
+        connectionMapThreadLocal.set(stringConnectionConcurrentHashMap);
     }
 
     public static Connection getConnection(String key) {
-        return connectionMap.get(DigestUtils.md5Hex(key.getBytes()));
+        if (connectionMapThreadLocal.get()==null){
+            return  null;
+        }
+        return connectionMapThreadLocal.get().get(DigestUtils.md5Hex(key.getBytes()));
     }
 
     public static void remove() {
-        connectionMap.clear();
+        connectionMapThreadLocal.remove();
     }
 
 }

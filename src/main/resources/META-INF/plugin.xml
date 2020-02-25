@@ -95,7 +95,7 @@
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.JavaService"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.AnnotationService"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.EditorService"/>
-        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.DbService"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.DbServiceFactory"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.alias.AliasFacade"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.locator.MapperLocator"/>
 

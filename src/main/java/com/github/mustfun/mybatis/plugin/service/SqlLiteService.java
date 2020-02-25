@@ -3,6 +3,9 @@ package com.github.mustfun.mybatis.plugin.service;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.PluginConfig;
 import com.github.mustfun.mybatis.plugin.model.Template;
+import com.github.mustfun.mybatis.plugin.util.DbUtil;
+import com.intellij.openapi.project.Project;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,12 +24,16 @@ public class SqlLiteService {
     private Connection connection;
     private Statement statement;
 
-    public static SqlLiteService getInstance(Connection connection) {
-        return new SqlLiteService(connection);
+
+
+    public Connection getSqlLiteConnection() {
+        return this.connection;
     }
 
-    public SqlLiteService(Connection connection) {
-        this.connection = connection;
+
+    public SqlLiteService() {
+        DbUtil dbUtil = new DbUtil();
+        this.connection = dbUtil.getSqlliteConnection();
         try {
             this.statement = connection.createStatement();
         } catch (SQLException e) {
@@ -197,5 +204,13 @@ public class SqlLiteService {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 保存用户想要的路径 dao /po 等层的
+     * @param
+     */
+    public void saveUserPreferPath() {
+
     }
 }

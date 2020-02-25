@@ -2,6 +2,8 @@ package com.github.mustfun.mybatis.plugin.ui.custom;
 
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.service.DbService;
+import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
+import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
@@ -63,10 +65,11 @@ public class DialogWrapperPanel extends DialogWrapper {
         //tempLateList需要根据vmType排个顺序
         String tablePrefix = connectDbSetting.getTablePrefixInput().getText();
         //连接数据库
-        DbService dbService = DbService.getInstance(project);
+        DbService dbService = DbServiceFactory.getInstance(project).createMysqlService();
         Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
         Connection sqlLiteConnection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         try {
+            DbServiceFactory.getInstance(project).createSqlLiteService().saveUserPreferPath();
             for (Object s : collectTableBoxList) {
                 System.out.println("需要生成代码的表{} = " + s);
                 LocalTable table = new LocalTable();

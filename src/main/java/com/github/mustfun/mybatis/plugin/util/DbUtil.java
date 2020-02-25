@@ -47,6 +47,10 @@ public class DbUtil {
 
 
     public Connection getConnection() {
+        Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
+        if (connection!=null){
+            return connection;
+        }
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -65,6 +69,7 @@ public class DbUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION, conn);
         return conn;
     }
 
@@ -73,6 +78,10 @@ public class DbUtil {
      * @return
      */
     public Connection getSqlliteConnection() {
+        Connection connection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+        if (connection!=null){
+            return connection;
+        }
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -93,6 +102,7 @@ public class DbUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, conn);
         return conn;
     }
 

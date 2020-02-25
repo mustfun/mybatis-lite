@@ -2,7 +2,7 @@ package com.github.mustfun.mybatis.plugin.action;
 
 import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
-import com.github.mustfun.mybatis.plugin.service.DbService;
+import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.MyTableModel;
@@ -28,16 +28,18 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.impl.file.PsiDirectoryFactory;
 import com.intellij.ui.table.JBTable;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.JButton;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import java.util.Objects;
 
 /**
  * @author itar
@@ -56,10 +58,8 @@ public class TemplateEditMenuAction extends AnAction {
         JBTable templateList = templateListForm.getTemplateList();
         String[] headName = {"模板名称", "创建人", "模板类型", "操作"};
 
-        DbService dbService = DbService.getInstance(project);
-        Connection connection = dbService.getSqlLiteConnection();
-        SqlLiteService sqlLiteService = SqlLiteService.getInstance(connection);
-        ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, connection);
+        SqlLiteService sqlLiteService = DbServiceFactory.getInstance(Objects.requireNonNull(project)).createSqlLiteService();
+        Connection connection = sqlLiteService.getSqlLiteConnection();
 
         List<Template> templates = sqlLiteService.queryTemplateList();
         Object[][] obj = new Object[templates.size()][];
@@ -156,7 +156,7 @@ public class TemplateEditMenuAction extends AnAction {
                                     if (connection == null) {
                                         return;
                                     }
-                                    SqlLiteService instance = SqlLiteService.getInstance(connection);
+                                    SqlLiteService instance = DbServiceFactory.getInstance(project).createSqlLiteService();
                                     Template updatePo = new Template();
                                     updatePo.setId(editingTemplate.getId());
                                     updatePo.setTepContent(text);

@@ -6,6 +6,7 @@ import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.provider.FileProviderFactory;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.application.WriteAction;
@@ -22,12 +23,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -60,15 +56,13 @@ public class DbService {
      */
     private static ConcurrentHashMap<Integer, String> fileHashMap = new ConcurrentHashMap<>(10);
 
-    private static Project project;
+    private  Project project;
 
-    public static DbService getInstance(@NotNull Project project) {
-        DbService.project = project;
-        return ServiceManager.getService(project, DbService.class);
+    public DbService(Project project) {
+        this.project = project;
     }
 
     public Connection getConnection(DbSourcePo configPo) {
-
         DbUtil dbUtil;
         if (configPo.getPort() == null) {
             dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(),
@@ -81,9 +75,9 @@ public class DbService {
         return dbUtil.getConnection();
     }
 
-    public Connection getSqlLiteConnection() {
-        DbUtil dbUtil = new DbUtil();
-        return dbUtil.getSqlliteConnection();
+    public Connection getNewConnection(DbSourcePo dbSourcePo) {
+        ConnectionHolder.remove();
+        return getConnection(dbSourcePo);
     }
 
     public List<LocalTable> getTables(Connection connection) {
@@ -161,10 +155,10 @@ public class DbService {
     }
 
 
-    public static void generatorCode(ConnectDbSetting connectDbSetting, Connection connection, LocalTable table,
+    public void generatorCode(ConnectDbSetting connectDbSetting, Connection connection, LocalTable table,
         List<LocalColumn> columns, String tablePrefix, List<Integer> vmList) {
         fileHashMap.clear();
-        SqlLiteService sqlLiteService = SqlLiteService.getInstance(connection);
+        SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
 
         boolean maxModelFlag = connectDbSetting.getPoStyle().isSelected();
         boolean hasBigDecimal = false;
@@ -320,7 +314,7 @@ public class DbService {
     /**
      * 导入包
      */
-    private static void importNeedClass(VelocityContext context, Integer vmType, String className) {
+    private  void importNeedClass(VelocityContext context, Integer vmType, String className) {
         ArrayList<String> arrayList = new ArrayList<>();
         String poImport = fileHashMap.get(VmTypeEnums.MODEL_PO.getCode());
         String daoImport = fileHashMap.get(VmTypeEnums.DAO.getCode());
@@ -329,11 +323,11 @@ public class DbService {
         // FIXME: 2018/6/27
         if (StringUtils.isEmpty(poImport)) {
             VirtualFile filePattenPath = JavaUtils
-                .getFilePattenPath(ProjectUtil.guessProjectDir(project), className + "po.java", className + ".java");
+                .getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "po.java", className + ".java");
             poImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(daoImport)) {
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(ProjectUtil.guessProjectDir(project), className + "Dao.java");
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Dao.java");
             daoImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(serverImport)) {
