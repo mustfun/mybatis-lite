@@ -36,6 +36,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
+ * @updater itar
+ * @function 一些公共的UI组件
  */
 public final class UiComponentFacade {
 

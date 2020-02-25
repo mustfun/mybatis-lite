@@ -7,13 +7,24 @@ import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.service.DbService;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
+import com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
+import com.intellij.ide.DataManager;
+import com.intellij.ide.actions.ShowSettingsUtilImpl;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurableGroup;
+import com.intellij.openapi.options.ex.ConfigurableVisitor;
+import com.intellij.openapi.options.newEditor.SettingsDialogFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
@@ -24,14 +35,18 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JButton;
+
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.ide.SearchConfigurableByNameHelper;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -39,6 +54,15 @@ import org.yaml.snakeyaml.Yaml;
  * @version 1.0
  * @date 2018/6/12
  * @since jdk1.8
+ * List<Configurable> configurableGroups = ShowSettingsUtilImpl.getConfigurables(project, true);
+ *                     SettingsDialogFactory.getInstance().create(project, "MybatisLiteSettings", configurableGroups.get(0), true, true).show();
+ *                     if(true) {
+ *                         return;
+ *                     }
+ *                     SearchConfigurableByNameHelper settings1 = new SearchConfigurableByNameHelper("settings", project);
+ *                     ConfigurableGroup settings = settings1.getRootGroup();
+ *                     Configurable configurable = settings1.searchByName();
+ *                     SettingsDialogFactory.getInstance().create(project, Arrays.asList(settings), configurable, null).show();
  */
 public final class UiGenerateUtil {
 
