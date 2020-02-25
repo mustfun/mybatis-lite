@@ -3,15 +3,18 @@ package com.github.mustfun.mybatis.plugin.service;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.PluginConfig;
 import com.github.mustfun.mybatis.plugin.model.Template;
+import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
+import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
-import com.intellij.openapi.project.Project;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dengzhiyuan
@@ -21,6 +24,7 @@ import java.util.List;
  */
 public class SqlLiteService {
 
+    public static final String ClASS_POSITION="GENERATE_CLASS_POSITION_";
     private Connection connection;
     private Statement statement;
 
@@ -178,7 +182,7 @@ public class SqlLiteService {
     }
 
     /**
-     * 新增数据库连接历史 , 还可以做个模糊匹配
+     * 新增数据库连接历史 , 还可以做个模糊匹配 - 不好意思，当时id没有设置自增.......
      */
     public boolean insertDbConnectionInfo(DbSourcePo dbSourcePo) {
         try {
@@ -209,8 +213,39 @@ public class SqlLiteService {
     /**
      * 保存用户想要的路径 dao /po 等层的
      * @param
+     * @param connectDbSetting
      */
-    public void saveUserPreferPath() {
-
+    public void saveUserPreferPath(ConnectDbSetting connectDbSetting) {
+        boolean daoPositionSelect = connectDbSetting.getDaoPositionCheckBox().isSelected();
+        boolean mapperPositionSelect = connectDbSetting.getMapperPositionCheckBox().isSelected();
+        boolean modelPositionSelect = connectDbSetting.getModelPositionCheckBox().isSelected();
+        boolean controllerPositionSelect = connectDbSetting.getControllerPositionCheckBox().isSelected();
+        boolean servicePositionSelect = connectDbSetting.getServicePositionCheckBox().isSelected();
+        Map<VmTypeEnums, String> map = new HashMap<>(5);
+        if (daoPositionSelect){
+            map.put(VmTypeEnums.DAO, connectDbSetting.getDaoInput().getText());
+        }
+        if (mapperPositionSelect){
+            map.put(VmTypeEnums.MAPPER, connectDbSetting.getMapperInput().getText());
+        }
+        if (modelPositionSelect){
+            map.put(VmTypeEnums.MODEL_PO, connectDbSetting.getModelPositionCheckBox().getText());
+        }
+        if (controllerPositionSelect){
+            map.put(VmTypeEnums.CONTROLLER, connectDbSetting.getControllerInput().getText());
+        }
+        if (servicePositionSelect){
+            map.put(VmTypeEnums.SERVICE, connectDbSetting.getServiceInput().getText());
+        }
+        try {
+            for (VmTypeEnums vmTypeEnums : map.keySet()) {
+                String key = ClASS_POSITION + vmTypeEnums.getCode();
+                statement.executeUpdate(
+                        "insert into user_preference(up_key, up_value, up_desc, create_time)" +
+                                " values('"+key+"','"+map.get(vmTypeEnums)+"','用户指定"+vmTypeEnums.getMgs()+"位置','now()')");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -228,6 +228,7 @@ public final class UiGenerateUtil {
             SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
             //插入连接数据库的信息
             sqlLiteService.insertDbConnectionInfo(dbSourcePo);
+            sqlLiteService.saveUserPreferPath(connectDbSetting);
 
             List<Template> templates = sqlLiteService.queryTemplateList();
             CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
