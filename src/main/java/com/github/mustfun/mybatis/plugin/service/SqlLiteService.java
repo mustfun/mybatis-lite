@@ -6,6 +6,7 @@ import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
+import com.intellij.openapi.project.Project;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 public class SqlLiteService {
 
-    public static final String ClASS_POSITION="GENERATE_CLASS_POSITION_";
+    public static final String ClASS_POSITION="_GENERATE_CLASS_POSITION_";
     private Connection connection;
     private Statement statement;
 
@@ -213,9 +214,10 @@ public class SqlLiteService {
     /**
      * 保存用户想要的路径 dao /po 等层的
      * @param
+     * @param project
      * @param connectDbSetting
      */
-    public void saveUserPreferPath(ConnectDbSetting connectDbSetting) {
+    public void saveUserPreferPath(Project project, ConnectDbSetting connectDbSetting) {
         boolean daoPositionSelect = connectDbSetting.getDaoPositionCheckBox().isSelected();
         boolean mapperPositionSelect = connectDbSetting.getMapperPositionCheckBox().isSelected();
         boolean modelPositionSelect = connectDbSetting.getModelPositionCheckBox().isSelected();
@@ -255,7 +257,7 @@ public class SqlLiteService {
             }
             for (VmTypeEnums vmTypeEnums : map.keySet()) {
                 String key = ClASS_POSITION + vmTypeEnums.getCode();
-                String userPreferPath = getUserPreferPathByVmType(vmTypeEnums);
+                String userPreferPath = getUserPreferPathByVmType(project.getName(), vmTypeEnums);
                 if (userPreferPath!=null){
                     String deleteSql = "delete from user_preference where up_key='" + ClASS_POSITION + vmTypeEnums.getCode()+"'";
                     statement.executeUpdate(deleteSql);
@@ -269,8 +271,8 @@ public class SqlLiteService {
         }
     }
 
-    public String getUserPreferPathByVmType(VmTypeEnums vmTypeEnums){
-        String key = ClASS_POSITION + vmTypeEnums.getCode();
+    public String getUserPreferPathByVmType(String groupName, VmTypeEnums vmTypeEnums){
+        String key = groupName + ClASS_POSITION + vmTypeEnums.getCode();
         try {
             ResultSet resultSet = statement.executeQuery("select up_value from user_preference where up_key='" + key + "'");
             while (resultSet.next()){

@@ -68,7 +68,7 @@ public class DialogWrapperPanel extends DialogWrapper {
         Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
         Connection sqlLiteConnection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         try {
-            DbServiceFactory.getInstance(project).createSqlLiteService().saveUserPreferPath(connectDbSetting);
+            DbServiceFactory.getInstance(project).createSqlLiteService().saveUserPreferPath(project,connectDbSetting);
             for (Object s : collectTableBoxList) {
                 System.out.println("需要生成代码的表{} = " + s);
                 LocalTable table = new LocalTable();

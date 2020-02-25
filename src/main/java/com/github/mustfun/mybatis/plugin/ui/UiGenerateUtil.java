@@ -19,7 +19,6 @@ import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.newvfs.impl.VirtualFileImpl;
 import com.intellij.ui.CheckBoxList;
 
 import java.awt.event.ActionListener;
@@ -105,7 +104,7 @@ public final class UiGenerateUtil {
 
     private void fillControllerPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
         VirtualFile controllerPath = baseDir;
-        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.CONTROLLER);
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(),VmTypeEnums.CONTROLLER);
         if (poUserPreferPath != null) {
             connectDbSetting.getControllerPositionCheckBox().setSelected(true);
             controllerPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
@@ -131,7 +130,7 @@ public final class UiGenerateUtil {
 
     private void fillServicePath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
         VirtualFile servicePath = baseDir;
-        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.SERVICE);
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.SERVICE);
         if (poUserPreferPath != null) {
             connectDbSetting.getServicePositionCheckBox().setSelected(true);
             servicePath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
@@ -159,7 +158,7 @@ public final class UiGenerateUtil {
 
     private void fillModelPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
         VirtualFile modelPath = baseDir;
-        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.MODEL_PO);
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.MODEL_PO);
         if (poUserPreferPath != null) {
             connectDbSetting.getModelPositionCheckBox().setSelected(true);
             modelPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
@@ -186,7 +185,7 @@ public final class UiGenerateUtil {
 
     private void fillMapperPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
         VirtualFile mapperPath = baseDir;
-        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.MAPPER);
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.MAPPER);
         if (poUserPreferPath != null) {
             connectDbSetting.getMapperPositionCheckBox().setSelected(true);
             mapperPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
@@ -221,7 +220,7 @@ public final class UiGenerateUtil {
      */
     private void fillDaoPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
         VirtualFile daoPath = baseDir;
-        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(VmTypeEnums.MODEL_PO);
+        String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.DAO);
         if (poUserPreferPath != null) {
             connectDbSetting.getDaoPositionCheckBox().setSelected(true);
             daoPath = LocalFileSystem.getInstance().findFileByIoFile(new File(poUserPreferPath));
