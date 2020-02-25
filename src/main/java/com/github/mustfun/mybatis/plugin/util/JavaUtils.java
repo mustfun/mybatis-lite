@@ -282,10 +282,10 @@ public final class JavaUtils {
     }
 
 
-    public static List collectSelectedCheckBox(CheckBoxList checkBoxList) {
-        List list = new ArrayList<>();
+    public static <T> List<T> collectSelectedCheckBox(CheckBoxList<T> checkBoxList) {
+        List<T> list = new ArrayList<>();
         for (int i = 0; i < checkBoxList.getItemsCount(); i++) {
-            Object itemAt = checkBoxList.getItemAt(i);
+            T itemAt = checkBoxList.getItemAt(i);
             if (checkBoxList.isItemSelected(itemAt)) {
                 list.add(itemAt);
             }

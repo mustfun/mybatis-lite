@@ -53,8 +53,8 @@ public class DialogWrapperPanel extends DialogWrapper {
         //然后做自己的事情,准备生成代码了
         CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
         CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
-        List collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
-        List collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
+        List<String> collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
+        List<Integer> collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
         if (collectTableBoxList.size() == 0 || collectTemplateList.size() == 0) {
             Messages.showErrorDialog("请至少勾选一个表和一个模板", "错误提示");
             return;

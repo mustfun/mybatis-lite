@@ -6,6 +6,8 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 
+import java.util.Objects;
+
 /**
  * @author dengzhiyuan
  * @version 1.0
@@ -17,7 +19,7 @@ public class GenerateCodeUIAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
-        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(project).getCommonDialog();
+        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(Objects.requireNonNull(project)).getCommonDialog();
         commonDialog.show();
     }
 
