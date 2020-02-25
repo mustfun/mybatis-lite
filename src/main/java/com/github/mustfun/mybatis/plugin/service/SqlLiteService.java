@@ -222,30 +222,64 @@ public class SqlLiteService {
         boolean controllerPositionSelect = connectDbSetting.getControllerPositionCheckBox().isSelected();
         boolean servicePositionSelect = connectDbSetting.getServicePositionCheckBox().isSelected();
         Map<VmTypeEnums, String> map = new HashMap<>(5);
+        Map<VmTypeEnums, String> deleteMap = new HashMap<>(5);
         if (daoPositionSelect){
             map.put(VmTypeEnums.DAO, connectDbSetting.getDaoInput().getText());
+        }else{
+            deleteMap.put(VmTypeEnums.DAO, null);
         }
         if (mapperPositionSelect){
             map.put(VmTypeEnums.MAPPER, connectDbSetting.getMapperInput().getText());
+        }else{
+            deleteMap.put(VmTypeEnums.MAPPER, null);
         }
         if (modelPositionSelect){
-            map.put(VmTypeEnums.MODEL_PO, connectDbSetting.getModelPositionCheckBox().getText());
+            map.put(VmTypeEnums.MODEL_PO, connectDbSetting.getPoInput().getText());
+        }else{
+            deleteMap.put(VmTypeEnums.MODEL_PO, null);
         }
         if (controllerPositionSelect){
             map.put(VmTypeEnums.CONTROLLER, connectDbSetting.getControllerInput().getText());
+        }else{
+            deleteMap.put(VmTypeEnums.CONTROLLER, null);
         }
         if (servicePositionSelect){
             map.put(VmTypeEnums.SERVICE, connectDbSetting.getServiceInput().getText());
+        }else{
+            deleteMap.put(VmTypeEnums.SERVICE, null);
         }
         try {
+            for (VmTypeEnums vmTypeEnums : deleteMap.keySet()) {
+                String deleteSql = "delete from user_preference where up_key='" + ClASS_POSITION + vmTypeEnums.getCode()+"'";
+                statement.executeUpdate(deleteSql);
+            }
             for (VmTypeEnums vmTypeEnums : map.keySet()) {
                 String key = ClASS_POSITION + vmTypeEnums.getCode();
+                Boolean userPreferPathByVmType = getUserPreferPathByVmType(vmTypeEnums);
+                if (userPreferPathByVmType){
+                    String deleteSql = "delete from user_preference where up_key='" + ClASS_POSITION + vmTypeEnums.getCode()+"'";
+                    statement.executeUpdate(deleteSql);
+                }
                 statement.executeUpdate(
                         "insert into user_preference(up_key, up_value, up_desc, create_time)" +
-                                " values('"+key+"','"+map.get(vmTypeEnums)+"','用户指定"+vmTypeEnums.getMgs()+"位置','now()')");
+                                " values('"+key+"','"+map.get(vmTypeEnums)+"','用户指定"+vmTypeEnums.getMgs()+"位置',current_date)");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Boolean getUserPreferPathByVmType(VmTypeEnums vmTypeEnums){
+        String key = ClASS_POSITION + vmTypeEnums.getCode();
+        try {
+            ResultSet resultSet = statement.executeQuery("select id from user_preference where up_key='" + key + "'");
+            while (resultSet.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        }
+        return false;
     }
 }
