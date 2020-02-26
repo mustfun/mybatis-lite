@@ -13,9 +13,8 @@ import java.util.Objects;
 
 
 /**
- * @author yanglin
- * @update itar
- * @function 配置相关
+ * @author itar
+ * @function 配置相关， 新增配置 transDataToMap 方法和reset方法小改一下就可以了，很方便
  */
 public class MybatisLiteConfigurable implements SearchableConfigurable {
 
