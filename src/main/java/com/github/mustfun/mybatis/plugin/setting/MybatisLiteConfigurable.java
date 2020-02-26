@@ -83,8 +83,14 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         mybatisSettingForm.getDeletePattenInput().setText(rawStateMap.get(MybatisConstants.DEFAULT_DELETE_PATTEN_KEY));
         mybatisSettingForm.getUpdatePatternInput().setText(rawStateMap.get(MybatisConstants.DEFAULT_UPDATE_PATTEN_KEY));
         mybatisSettingForm.getSelectPattenInput().setText(rawStateMap.get(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY));
-        mybatisSettingForm.openNaviButton.setSelected(true);
-        mybatisSettingForm.closeNaviRadioButton.setSelected(false);
+        boolean open = rawStateMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS).equalsIgnoreCase("1");
+        if (open) {
+            mybatisSettingForm.openNaviButton.setSelected(true);
+            mybatisSettingForm.closeNaviRadioButton.setSelected(false);
+        }else{
+            mybatisSettingForm.openNaviButton.setSelected(false);
+            mybatisSettingForm.closeNaviRadioButton.setSelected(true);
+        }
     }
 
 
