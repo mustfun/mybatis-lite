@@ -82,7 +82,7 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         mybatisSettingForm.getDeletePattenInput().setText(rawStateMap.get(MybatisConstants.DEFAULT_DELETE_PATTEN_KEY));
         mybatisSettingForm.getUpdatePatternInput().setText(rawStateMap.get(MybatisConstants.DEFAULT_UPDATE_PATTEN_KEY));
         mybatisSettingForm.getSelectPattenInput().setText(rawStateMap.get(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY));
-        boolean open = "1".equalsIgnoreCase(rawStateMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS));
+        boolean open = MybatisConstants.TRUE.equalsIgnoreCase(rawStateMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS));
         if (open) {
             mybatisSettingForm.openNaviButton.setSelected(true);
             mybatisSettingForm.closeNaviRadioButton.setSelected(false);
@@ -103,7 +103,7 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         map.put(MybatisConstants.DEFAULT_DELETE_PATTEN_KEY,mybatisSettingForm.getDeletePattenInput().getText());
         map.put(MybatisConstants.DEFAULT_UPDATE_PATTEN_KEY,mybatisSettingForm.getUpdatePatternInput().getText());
         map.put(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY,mybatisSettingForm.getSelectPattenInput().getText());
-        map.put(MybatisConstants.NAVIGATION_OPEN_STATUS, mybatisSettingForm.openNaviButton.isSelected() ? "1" : "0");
+        map.put(MybatisConstants.NAVIGATION_OPEN_STATUS, mybatisSettingForm.openNaviButton.isSelected() ? MybatisConstants.TRUE : "0");
         return map;
     }
 

@@ -1,5 +1,7 @@
 package com.github.mustfun.mybatis.plugin.provider;
 
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.ide.util.PropertiesComponent;
@@ -14,6 +16,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,8 +34,8 @@ public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElem
     @Nullable
     @Override
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
-        boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        if (!naviOpenStatus) {
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
             return null;
         }
         //检测是不是需要标记的元素 - 用子元素做检测，增强性能，父元素操作

@@ -62,6 +62,10 @@ public class MybatisLiteSetting implements PersistentStateComponent<MybatisLiteS
         this.mybatisLiteState = state;
     }
 
+    public Map<String,String> getValueMap(){
+        return mybatisLiteState.map;
+    }
+
     /**
      * 存储字段的map
      */
@@ -78,6 +82,14 @@ public class MybatisLiteSetting implements PersistentStateComponent<MybatisLiteS
         }
 
         public MybatisLiteState(Map<String, String> map) {
+            this.map = map;
+        }
+
+        public Map<String, String> getMap() {
+            return map;
+        }
+
+        public void setMap(Map<String, String> map) {
             this.map = map;
         }
     }

@@ -2,9 +2,11 @@ package com.github.mustfun.mybatis.plugin.provider;
 
 import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.Icons;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
@@ -16,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,8 +32,8 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element,
         Collection<? super RelatedItemLineMarkerInfo> result) {
-        boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        if (!naviOpenStatus) {
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
             return;
         }
 

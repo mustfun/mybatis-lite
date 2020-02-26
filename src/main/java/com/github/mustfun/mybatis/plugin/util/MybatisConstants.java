@@ -36,4 +36,5 @@ public final class MybatisConstants {
     public static final String DEFAULT_INSERT_PATTEN_KEY = "DEFAULT_INSERT_PATTEN";
     public static final String DEFAULT_DELETE_PATTEN_KEY = "DEFAULT_DELETE_PATTEN";
     public static final String NAVIGATION_OPEN_STATUS = "NAVIGATION_OPEN_STATUS";
+    public static final String TRUE = "1";
 }

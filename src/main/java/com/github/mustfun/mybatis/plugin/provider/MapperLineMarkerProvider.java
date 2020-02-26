@@ -2,8 +2,10 @@ package com.github.mustfun.mybatis.plugin.provider;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.Icons;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
@@ -19,6 +21,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.xml.DomElement;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,8 +49,8 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
     protected void collectNavigationMarkers(@NotNull PsiElement element,
         @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
 
-        boolean naviOpenStatus = PropertiesComponent.getInstance().getBoolean("naviOpenStatus");
-        if (!naviOpenStatus) {
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
             return;
         }
 
