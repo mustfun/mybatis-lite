@@ -103,8 +103,9 @@
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.github.mustfun.mybatis.plugin.provider.StatementLineAbstractMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.InjectionLineMarkerProvider"/>
-        <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisConfigurable"/>
-        <applicationService serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisSetting"/>
+        <!--应用设置相关-->
+        <applicationConfigurable instance="com.github.mustfun.mybatis.plugin.setting.MybatisLiteConfigurable"/>
+        <applicationService serviceImplementation="com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting"/>
 
 
         <!--输入控制，便于唤醒自动补全-->

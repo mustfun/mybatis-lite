@@ -45,7 +45,7 @@ public abstract class GenerateModel {
     public abstract int getIdentifier();
 
     /**
-     * 开始模态对话框
+     * 以xxx为前缀的生成模型
      */
     static class StartWithModel extends GenerateModel {
 

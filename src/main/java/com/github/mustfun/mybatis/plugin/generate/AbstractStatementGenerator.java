@@ -4,11 +4,12 @@ import com.github.mustfun.mybatis.plugin.dom.model.GroupTwo;
 import com.github.mustfun.mybatis.plugin.dom.model.Mapper;
 import com.github.mustfun.mybatis.plugin.service.EditorService;
 import com.github.mustfun.mybatis.plugin.service.JavaService;
-import com.github.mustfun.mybatis.plugin.setting.MybatisSetting;
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.ui.ListSelectionListener;
 import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.google.common.base.Function;
 import com.google.common.collect.*;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -38,14 +39,13 @@ public abstract class AbstractStatementGenerator<T> {
      * @return
      */
     public static Set<AbstractStatementGenerator> getALLGenerator(){
-        final AbstractStatementGenerator updateGenerator = new UpdateGenerator("update", "modify", "set");
+        final AbstractStatementGenerator updateGenerator = new UpdateGenerator(MybatisConstants.DEFAULT_UPDATE_PATTEN);
 
-        final AbstractStatementGenerator selectGenerator = new SelectGenerator("select", "get", "look", "find",
-                "list", "search", "count", "query");
+        final AbstractStatementGenerator selectGenerator = new SelectGenerator(MybatisConstants.DEFAULT_SELECT_PATTEN);
 
-        final AbstractStatementGenerator deleteGenerator = new DeleteGenerator("del", "cancel");
+        final AbstractStatementGenerator deleteGenerator = new DeleteGenerator(MybatisConstants.DEFAULT_DELETE_PATTEN);
 
-        final AbstractStatementGenerator insertGenerator = new InsertGenerator("insert", "add", "new","batch");
+        final AbstractStatementGenerator insertGenerator = new InsertGenerator(MybatisConstants.DEFAULT_INSERT_PATTEN);
 
         return ImmutableSet
                 .of(updateGenerator, selectGenerator, deleteGenerator, insertGenerator);
@@ -119,7 +119,7 @@ public abstract class AbstractStatementGenerator<T> {
      */
     @NotNull
     public static AbstractStatementGenerator[] getGenerators(@NotNull PsiMethod method) {
-        GenerateModel model = MybatisSetting.getInstance().getStatementGenerateModel();
+        GenerateModel model = new GenerateModel.StartWithModel();
         String target = method.getName();
         List<AbstractStatementGenerator> result = Lists.newArrayList();
         Set<AbstractStatementGenerator> allGenerator = getALLGenerator();
