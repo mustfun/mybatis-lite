@@ -72,7 +72,9 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
 
     @Override
     public void apply(){
-        MybatisLiteSetting.getInstance().loadState(new MybatisLiteSetting.MybatisLiteState(transDataToMap()));
+        Map<String, String> newMap = transDataToMap();
+        MybatisLiteSetting.getInstance().loadState(new MybatisLiteSetting.MybatisLiteState(newMap));
+        rawStateMap = newMap;
     }
 
     @Override
@@ -86,6 +88,10 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
     }
 
 
+    /**
+     * 如果有新配置项这里要改
+     * @return
+     */
     public Map<String,String> transDataToMap(){
         Map<String, String> map = new HashMap<>();
         map.put(MybatisConstants.DEFAULT_INSERT_PATTEN_KEY,mybatisSettingForm.getInsertPatternInput().getText());
