@@ -146,13 +146,13 @@ public class MysqlService {
 
 
     public void generateCodeUseTemplate(ConnectDbSetting connectDbSetting, Connection connection, LocalTable columns,
-        String tablePrefix, List<Integer> vmList) {
+        String tablePrefix, List<com.github.mustfun.mybatis.plugin.model.Template> vmList) {
         generatorCode(connectDbSetting, connection, columns, columns.getColumnList(), tablePrefix, vmList);
     }
 
 
     public void generatorCode(ConnectDbSetting connectDbSetting, Connection connection, LocalTable table,
-        List<LocalColumn> columns, String tablePrefix, List<Integer> vmList) {
+        List<LocalColumn> columns, String tablePrefix, List<com.github.mustfun.mybatis.plugin.model.Template> vmList) {
         fileHashMap.clear();
         SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
 
@@ -220,7 +220,7 @@ public class MysqlService {
         VelocityContext context = new VelocityContext(map);
 
         //vmList排序
-        vmList.sort(Comparator.comparing(o -> sqlLiteService.queryTemplateById(o).getVmType()));
+        vmList.sort(Comparator.comparing(o -> sqlLiteService.queryTemplateById(o.getId()).getVmType()));
 
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
         VirtualFile projectDir = ProjectUtil.guessProjectDir(project);
@@ -235,9 +235,9 @@ public class MysqlService {
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
 
         //获取模板列表
-        for (Integer templateId : vmList) {
+        for (com.github.mustfun.mybatis.plugin.model.Template template : vmList) {
             //取出模板
-            com.github.mustfun.mybatis.plugin.model.Template template = sqlLiteService.queryTemplateById(templateId);
+            //com.github.mustfun.mybatis.plugin.model.Template template = sqlLiteService.queryTemplateById(templateId);
             if (!checkNeedGenerate(template.getVmType())) {
                 continue;
             }

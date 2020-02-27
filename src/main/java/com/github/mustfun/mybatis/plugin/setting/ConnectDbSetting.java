@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
+import com.github.mustfun.mybatis.plugin.model.Template;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
@@ -40,7 +41,7 @@ public class ConnectDbSetting {
     private JTextField dbName;
     private JLabel dbNamePanel;
     private JBScrollPane templatePanel;
-    private CheckBoxList<Integer> templateCheckbox;
+    private CheckBoxList<Template> templateCheckbox;
     private JPanel configPanel;
     private JPanel generatePanel;
     private JBLabel tablePrefixLabel;

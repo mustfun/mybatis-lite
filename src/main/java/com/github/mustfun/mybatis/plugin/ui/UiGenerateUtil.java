@@ -300,11 +300,11 @@ public final class UiGenerateUtil {
             //插入连接数据库的信息
             sqlLiteService.insertDbConnectionInfo(dbSourcePo);
             List<Template> templates = sqlLiteService.queryTemplateList();
-            CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
+            CheckBoxList<Template> templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
-                templateCheckbox.addItem(template.getId(), template.getTepName(), false);
+                templateCheckbox.addItem(template, template.getTepName(), false);
             }
-            templateCheckbox.addMouseListener(new CheckMouseListener(project, 1, templates.get(2)));
+            templateCheckbox.addMouseListener(new CheckMouseListener(project));
         };
     }
 

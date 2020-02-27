@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.ui.custom;
 
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
+import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.service.MysqlService;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
@@ -53,9 +54,9 @@ public class DialogWrapperPanel extends DialogWrapper {
 
         //然后做自己的事情,准备生成代码了
         CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
-        CheckBoxList<Integer> templateCheckbox = connectDbSetting.getTemplateCheckbox();
+        CheckBoxList<Template> templateCheckbox = connectDbSetting.getTemplateCheckbox();
         List<String> collectTableBoxList = JavaUtils.collectSelectedCheckBox(tableCheckBox);
-        List<Integer> collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
+        List<Template> collectTemplateList = JavaUtils.collectSelectedCheckBox(templateCheckbox);
         if (collectTableBoxList.size() == 0 || collectTemplateList.size() == 0) {
             Messages.showErrorDialog("请至少勾选一个表和一个模板", "错误提示");
             return;

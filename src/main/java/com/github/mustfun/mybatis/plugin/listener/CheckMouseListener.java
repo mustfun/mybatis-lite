@@ -35,24 +35,25 @@ import static com.intellij.diff.util.DiffUtil.getDiffType;
  */
 public class CheckMouseListener implements MouseListener {
 
-    private Integer checkBoxId;
     private Project project;
-    private Template template;
 
-    public CheckMouseListener(Project project, Integer checkBoxId, Template template) {
-        this.checkBoxId = checkBoxId;
+    public CheckMouseListener(Project project) {
         this.project = project;
-        this.template = template;
     }
 
     /**
      * EditorTextFieldProvider用这个也挺方便的
      * @param e
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void mouseClicked(MouseEvent e) {
         int clickTimes = e.getClickCount();
-        CheckBoxList list = (CheckBoxList) e.getSource();
+        CheckBoxList<Template> list = (CheckBoxList<Template>) e.getSource();
+        Template template = list.getItemAt(list.locationToIndex(e.getPoint()));
+        if(template==null){
+            return ;
+        }
         if (clickTimes == 2) {
             TemplateEdit templateEdit = new TemplateEdit();
             EditorTextField editorTextField = templateEdit.getEditorTextField();
