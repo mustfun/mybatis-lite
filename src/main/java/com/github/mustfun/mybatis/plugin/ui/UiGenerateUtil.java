@@ -316,7 +316,7 @@ public final class UiGenerateUtil {
         }
         VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
         VirtualFile file = JavaUtils
-            .getFileByPattenName(baseDir, "application.properties", "application-dev.properties", "application.yml",
+            .getFileByPattenName(Objects.requireNonNull(baseDir), "application.properties", "application-dev.properties", "application.yml",
                 "application-dev.yml");
         if (file == null) {
             return;

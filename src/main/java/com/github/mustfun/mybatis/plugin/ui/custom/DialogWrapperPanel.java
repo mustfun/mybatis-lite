@@ -86,10 +86,6 @@ public class DialogWrapperPanel extends DialogWrapper {
             e.printStackTrace();
         }
 
-        for (Object o : collectTemplateList) {
-            System.out.println("o = " + o);
-        }
-
         ConnectionHolder.remove();
 
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);

@@ -1,18 +1,21 @@
 package com.github.mustfun.mybatis.plugin.listener;
 
 import com.github.mustfun.mybatis.plugin.model.Template;
+import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.setting.TemplateEdit;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateCodeEditPanel;
 import com.intellij.diff.fragments.DiffFragment;
 import com.intellij.diff.util.DiffDrawUtil;
 import com.intellij.diff.util.TextDiffType;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageParserDefinitions;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.openapi.fileTypes.FileTypes;
+import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -85,11 +88,14 @@ public class CheckMouseListener implements MouseListener {
 
                 //uEditor.getSettings().setTabSize(editor.getSettings().getTabSize(editor.getProject()));
                 //uEditor.getSettings().setUseTabCharacter(editor.getSettings().isUseTabCharacter(editor.getProject()));
-
-                uEditor.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(JavaFileType.INSTANCE, EditorColorsManager.getInstance().getGlobalScheme(),project));
+                LanguageFileType fileTypes = JavaFileType.INSTANCE;
+                if (VmTypeEnums.MAPPER.getCode().equals(template.getVmType())){
+                    fileTypes = XmlFileType.INSTANCE;
+                }
+                uEditor.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(fileTypes, EditorColorsManager.getInstance().getGlobalScheme(),project));
             });
             TemplateCodeEditPanel templateCodeEditPanel = new TemplateCodeEditPanel(project, true, templateEdit);
-            templateCodeEditPanel.setTitle("查看模板");
+            templateCodeEditPanel.setTitle("查看"+template.getTepName()+"模板");
              templateCodeEditPanel.show();
         }
     }
