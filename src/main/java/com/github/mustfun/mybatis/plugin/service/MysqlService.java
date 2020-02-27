@@ -23,6 +23,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.search.FilenameIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.http.client.utils.DateUtils;
@@ -225,12 +229,15 @@ public class MysqlService {
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
         VirtualFile projectDir = ProjectUtil.guessProjectDir(project);
         String poFileName = getFileName(VmTypeEnums.MODEL_PO.getCode(), className, maxModelFlag);
-        VirtualFile poFile = JavaUtils.getExistFilePathByName(projectDir, poFileName);
-        String poPackageName = JavaUtils.getFullClassPath(project, poFile, poFileName);
+        //VirtualFile poFile = JavaUtils.getExistFilePathByName(projectDir, poFileName);
+        PsiFile[] poFiles = FilenameIndex.getFilesByName(project, Objects.requireNonNull(poFileName), GlobalSearchScope.allScope(project));
+        String poPackageName = JavaUtils.getFullClassPath(poFiles[0],poFileName);
+
         fileHashMap.put(VmTypeEnums.MODEL_PO.getCode(),poPackageName);
         String daoFileName = getFileName(VmTypeEnums.DAO.getCode(), className, maxModelFlag);
-        VirtualFile daoFile = JavaUtils.getExistFilePathByName(projectDir,daoFileName );
-        String daoPackageName = JavaUtils.getFullClassPath(project, daoFile, daoFileName);
+        //VirtualFile daoFile = JavaUtils.getExistFilePathByName(projectDir,daoFileName );
+        PsiFile[] daoFiles = FilenameIndex.getFilesByName(project, Objects.requireNonNull(daoFileName), GlobalSearchScope.allScope(project));
+        String daoPackageName = JavaUtils.getFullClassPath(daoFiles[0],daoFileName);
         fileHashMap.put(VmTypeEnums.DAO.getCode(),daoPackageName);
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
 
@@ -283,16 +290,16 @@ public class MysqlService {
 
     private static void transSpecialDataType(LocalColumn column) {
         //BIGINT处理一下
-        if (column.getDataType().toUpperCase().equalsIgnoreCase("BITINT UNSIGNED") || column.getDataType().toUpperCase()
-            .equalsIgnoreCase("BITINT SIGNED")) {
+        if ("BITINT UNSIGNED".equalsIgnoreCase(column.getDataType().toUpperCase()) || "BITINT SIGNED"
+            .equalsIgnoreCase(column.getDataType().toUpperCase())) {
             column.setDataType("BIGINT");
         }
-        if (column.getDataType().toUpperCase().equalsIgnoreCase("INT UNSIGNED") || column.getDataType().toUpperCase()
-            .equalsIgnoreCase("INT SIGNED") || column.getDataType().toUpperCase().equalsIgnoreCase("INT")) {
+        if ("INT UNSIGNED".equalsIgnoreCase(column.getDataType().toUpperCase()) || "INT SIGNED"
+            .equalsIgnoreCase(column.getDataType().toUpperCase()) || column.getDataType().toUpperCase().equalsIgnoreCase("INT")) {
             column.setDataType("INTEGER");
         }
-        if (column.getDataType().toUpperCase().equalsIgnoreCase("DATETIME") || column.getDataType().toUpperCase()
-            .equalsIgnoreCase("DATE")) {
+        if ("DATETIME".equalsIgnoreCase(column.getDataType().toUpperCase()) || "DATE"
+            .equalsIgnoreCase(column.getDataType().toUpperCase())) {
             column.setDataType("TIMESTAMP");
         }
     }
@@ -327,12 +334,12 @@ public class MysqlService {
             daoImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(serverImport)) {
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(ProjectUtil.guessProjectDir(project), className + "Service.java");
+            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Service.java");
             serverImport = filePattenPath == null ? null : filePattenPath.getPath();
         }
         if (StringUtils.isEmpty(resultImport)) {
             VirtualFile filePattenPath = JavaUtils
-                .getFilePattenPath(ProjectUtil.guessProjectDir(project), "Result.java", "BaseResult.java", "BaseResponse.java",
+                .getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), "Result.java", "BaseResult.java", "BaseResponse.java",
                     "Response.java");
             resultImport = filePattenPath == null ? null : filePattenPath.getPath();
         }

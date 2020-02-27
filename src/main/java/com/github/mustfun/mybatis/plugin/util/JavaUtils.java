@@ -307,6 +307,15 @@ public final class JavaUtils {
     }
 
     /**
+     * 从PSI文件获取全限定名
+     * @param psiFile
+     * @return
+     */
+    public static String getFullClassPath(PsiFile psiFile,String className){
+        return getPackageName(psiFile)+ "." + className.split("\\.")[0];
+    }
+
+    /**
      * 从虚拟文件获取包名
      * @param project
      * @param virtualFile
