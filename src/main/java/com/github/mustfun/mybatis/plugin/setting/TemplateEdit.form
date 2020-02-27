@@ -10,23 +10,12 @@
     </properties>
     <border type="none"/>
     <children>
-      <scrollpane id="dbedd" class="com.intellij.ui.components.JBScrollPane" binding="scrollCodeAreaPane">
+      <component id="7933d" class="com.intellij.ui.EditorTextField" binding="editorTextField">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties>
-          <font name="Microsoft JhengHei UI"/>
-        </properties>
-        <border type="none"/>
-        <children>
-          <component id="ab2ae" class="javax.swing.JTextArea" binding="codeArea">
-            <constraints/>
-            <properties>
-              <font size="16"/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
+        <properties/>
+      </component>
     </children>
   </grid>
 </form>
