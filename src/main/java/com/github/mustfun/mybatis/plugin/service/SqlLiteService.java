@@ -252,14 +252,14 @@ public class SqlLiteService {
         }
         try {
             for (VmTypeEnums vmTypeEnums : deleteMap.keySet()) {
-                String deleteSql = "delete from user_preference where up_key='" + ClASS_POSITION + vmTypeEnums.getCode()+"'";
+                String deleteSql = "delete from user_preference where up_key='" + project.getName()+ClASS_POSITION + vmTypeEnums.getCode()+"'";
                 statement.executeUpdate(deleteSql);
             }
             for (VmTypeEnums vmTypeEnums : map.keySet()) {
-                String key = ClASS_POSITION + vmTypeEnums.getCode();
+                String key = project.getName()+ClASS_POSITION + vmTypeEnums.getCode();
                 String userPreferPath = getUserPreferPathByVmType(project.getName(), vmTypeEnums);
                 if (userPreferPath!=null){
-                    String deleteSql = "delete from user_preference where up_key='" + ClASS_POSITION + vmTypeEnums.getCode()+"'";
+                    String deleteSql = "delete from user_preference where up_key='" +project.getName()+ ClASS_POSITION + vmTypeEnums.getCode()+"'";
                     statement.executeUpdate(deleteSql);
                 }
                 statement.executeUpdate(
@@ -271,6 +271,12 @@ public class SqlLiteService {
         }
     }
 
+    /**
+     * 第一个表示存储的组， 一般是项目名称  ，第二个是参数，拼接成一个key
+     * @param groupName
+     * @param vmTypeEnums
+     * @return
+     */
     public String getUserPreferPathByVmType(String groupName, VmTypeEnums vmTypeEnums){
         String key = groupName + ClASS_POSITION + vmTypeEnums.getCode();
         try {

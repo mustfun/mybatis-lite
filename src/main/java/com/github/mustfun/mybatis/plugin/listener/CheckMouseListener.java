@@ -94,9 +94,9 @@ public class CheckMouseListener implements MouseListener {
                 }
                 uEditor.setHighlighter(EditorHighlighterFactory.getInstance().createEditorHighlighter(fileTypes, EditorColorsManager.getInstance().getGlobalScheme(),project));
             });
-            TemplateCodeEditPanel templateCodeEditPanel = new TemplateCodeEditPanel(project, true, templateEdit);
-            templateCodeEditPanel.setTitle("查看"+template.getTepName()+"模板");
-             templateCodeEditPanel.show();
+            TemplateCodeEditPanel templateCodeEditPanel = new TemplateCodeEditPanel(project, true, templateEdit,template);
+            templateCodeEditPanel.setTitle("查看或编辑"+template.getTepName());
+            templateCodeEditPanel.show();
         }
     }
 
