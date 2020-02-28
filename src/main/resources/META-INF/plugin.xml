@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
-    <version>1.0.15</version>
+    <version>1.1.0</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,16 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.1.0</h4>
+      <ul>
+          <li>跳转功能重写,性能增强</li>
+          <li>新增Sql智能提示,字段提示</li>
+          <li>新增模板快速编辑</li>
+          <li>新增记住生成位置,更智能</li>
+          <li>新增生成PO大小写功能</li>
+          <li>重新绘制设置UI</li>
+          <li>其它新增特性见github ReadMe文件</li>
+      </ul>
       <h4>1.0.15</h4>
       <ul>
           <li>fix 2 compatibility problems</li>
