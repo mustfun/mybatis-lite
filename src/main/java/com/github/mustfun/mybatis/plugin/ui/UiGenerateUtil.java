@@ -14,9 +14,11 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.ui.panel.ProgressPanel;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
@@ -31,8 +33,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JButton;
+import javax.swing.*;
 
+import com.intellij.util.ui.UI;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
@@ -282,12 +285,15 @@ public final class UiGenerateUtil {
             //连接数据库
             MysqlService mysqlService = DbServiceFactory.getInstance(project).createMysqlService();
             //每次都要连接一个新的连接，保存旧的也没用，清空掉吧
-            Connection connection = mysqlService.getNewConnection(dbSourcePo);
-            if (connection == null) {
+            final Connection[] connection = new Connection[1];
+            ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
+                connection[0] = mysqlService.getNewConnection(dbSourcePo);
+            }, "请稍等:正在连接数据库", false, project);
+            if (connection[0] == null) {
                 Messages.showMessageDialog("数据库连接失败", "连接数据库提示", Messages.getInformationIcon());
                 return;
             }
-            List<LocalTable> tables = mysqlService.getTables(connection);
+            List<LocalTable> tables = mysqlService.getTables(connection[0]);
             CheckBoxList<String> tableCheckBox = connectDbSetting.getTableCheckBox();
             for (LocalTable table : tables) {
                 tableCheckBox.addItem(table.getTableName(), table.getTableName(), false);
@@ -311,7 +317,10 @@ public final class UiGenerateUtil {
         };
     }
 
-
+    /**
+     *
+     * @param connectDbSetting
+     */
     private void fillPanelText(ConnectDbSetting connectDbSetting) {
         //优先从历史记录里面读取
         if (readFromConnectLog(connectDbSetting)) {
@@ -419,5 +428,19 @@ public final class UiGenerateUtil {
             e.printStackTrace();
         }
     }
+
+    /**
+     * private void showProgressBar() {
+     *      *         JPanel panel = new JPanel();
+     *      *         JProgressBar pb1 = new JProgressBar(0, 100);
+     *      *         //progressTimerRequest = new ProgressTimerRequest(pb1);
+     *      *         ProgressPanel progressPanel = ProgressPanel.getProgressPanel(pb1);
+     *      *         panel.add(UI.PanelFactory.grid().add(UI.PanelFactory.panel(pb1).
+     *      *                         withLabel("Label 1.1").
+     *      *                         withCancel(() ->{
+     *      *
+     *      *                         }).andCancelText("Stop")).createPanel());
+     *      *     }
+     */
 
 }
