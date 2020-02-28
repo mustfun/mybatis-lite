@@ -54,6 +54,9 @@ import org.yaml.snakeyaml.Yaml;
  */
 public final class UiGenerateUtil {
 
+    /**
+     * \w表示匹配数字字符下划线，前面一个\是转义符
+     */
     public static final String NUMBER_PATTEN = "^(\\w_)";
     private Project project;
 
