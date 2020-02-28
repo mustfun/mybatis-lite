@@ -69,7 +69,9 @@ public class DbUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION, conn);
+        if (conn!=null) {
+            ConnectionHolder.addConnection(MybatisConstants.MYSQL_DB_CONNECTION, conn);
+        }
         return conn;
     }
 
@@ -102,7 +104,9 @@ public class DbUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, conn);
+        if (conn!=null) {
+            ConnectionHolder.addConnection(MybatisConstants.SQL_LITE_CONNECTION, conn);
+        }
         return conn;
     }
 

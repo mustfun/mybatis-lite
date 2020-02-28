@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
-    <version>1.1.0</version>
+    <version>1.1.2</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -10,7 +10,7 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.1.0</h4>
+      <h4>1.1.2</h4>
       <ul>
           <li>跳转功能重写,性能增强</li>
           <li>新增Sql智能提示,字段提示</li>
