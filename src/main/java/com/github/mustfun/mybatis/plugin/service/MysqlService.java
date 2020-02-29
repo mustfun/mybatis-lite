@@ -328,11 +328,11 @@ public class MysqlService {
         String resultImport = fileHashMap.get(VmTypeEnums.RESULT.getCode());
         if (StringUtils.isEmpty(poImport)) {
             VirtualFile filePattenPath = JavaUtils
-                .getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "po.java", className + ".java");
+                .getFileByPattenName(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "po.java", className + ".java");
             poImport = filePattenPath == null ? null : JavaUtils.getFullClassPath(project, filePattenPath, filePattenPath.getName());
         }
         if (StringUtils.isEmpty(daoImport)) {
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Dao.java");
+            VirtualFile filePattenPath = JavaUtils.getFileByPattenName(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Dao.java");
             daoImport = filePattenPath == null ? null : JavaUtils.getFullClassPath(project, filePattenPath, filePattenPath.getName());
         }
         if (StringUtils.isEmpty(serverImport)) {
