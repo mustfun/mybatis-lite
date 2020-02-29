@@ -228,7 +228,6 @@ public class MysqlService {
         vmList.sort(Comparator.comparing(o -> sqlLiteService.queryTemplateById(o.getId()).getVmType()));
 
         //不管怎么样，都得找到po/dao/service/result等路径才行呀=============================
-        VirtualFile projectDir = ProjectUtil.guessProjectDir(project);
         String poFileName = getFileName(VmTypeEnums.MODEL_PO.getCode(), className, maxModelFlag);
         //VirtualFile poFile = JavaUtils.getExistFilePathByName(projectDir, poFileName);
         PsiFile[] poFiles = FilenameIndex.getFilesByName(project, Objects.requireNonNull(poFileName), GlobalSearchScope.allScope(project));
@@ -327,25 +326,24 @@ public class MysqlService {
         String daoImport = fileHashMap.get(VmTypeEnums.DAO.getCode());
         String serverImport = fileHashMap.get(VmTypeEnums.SERVICE.getCode());
         String resultImport = fileHashMap.get(VmTypeEnums.RESULT.getCode());
-        // FIXME: 2018/6/27
         if (StringUtils.isEmpty(poImport)) {
             VirtualFile filePattenPath = JavaUtils
                 .getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "po.java", className + ".java");
-            poImport = filePattenPath == null ? null : filePattenPath.getPath();
+            poImport = filePattenPath == null ? null : JavaUtils.getFullClassPath(project, filePattenPath, filePattenPath.getName());
         }
         if (StringUtils.isEmpty(daoImport)) {
             VirtualFile filePattenPath = JavaUtils.getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Dao.java");
-            daoImport = filePattenPath == null ? null : filePattenPath.getPath();
+            daoImport = filePattenPath == null ? null : JavaUtils.getFullClassPath(project, filePattenPath, filePattenPath.getName());
         }
         if (StringUtils.isEmpty(serverImport)) {
-            VirtualFile filePattenPath = JavaUtils.getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Service.java");
-            serverImport = filePattenPath == null ? null : filePattenPath.getPath();
+            VirtualFile filePattenPath = JavaUtils.getFileByPattenName(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), className + "Service.java");
+            serverImport = filePattenPath == null ? null : JavaUtils.getFullClassPath(project, filePattenPath, filePattenPath.getName());
         }
         if (StringUtils.isEmpty(resultImport)) {
             VirtualFile filePattenPath = JavaUtils
-                .getFilePattenPath(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), "Result.java", "BaseResult.java", "BaseResponse.java",
+                .getFileByPattenName(Objects.requireNonNull(ProjectUtil.guessProjectDir(project)), "Result.java", "BaseResult.java", "BaseResponse.java",
                     "Response.java");
-            resultImport = filePattenPath == null ? null : filePattenPath.getPath();
+            resultImport = filePattenPath == null ? null : JavaUtils.getFullClassPath(project, filePattenPath, filePattenPath.getName());
         }
         if (vmType.equals(VmTypeEnums.SERVICE.getCode())) {
             arrayList.add(poImport);

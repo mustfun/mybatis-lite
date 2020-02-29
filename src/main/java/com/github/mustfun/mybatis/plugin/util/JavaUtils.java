@@ -203,7 +203,8 @@ public final class JavaUtils {
      * @param patten 多个进行匹配,或者关系, 如DemoDao.java或者DemoMapper.java都可以
      */
     public static VirtualFile getFilePattenPath(VirtualFile base, String... patten) {
-        if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")) {
+        if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
+                || base.getPath().contains("/.target/")) {
             return null;
         }
         for (String s : patten) {
@@ -227,7 +228,7 @@ public final class JavaUtils {
 
 
     /**
-     * 根据文件名找文件路径 - 模糊匹配
+     * 根据文件名找文件详细位置 - 模糊匹配
      */
     public static VirtualFile getFileByPattenName(VirtualFile base, String... patten) {
         if (base.getPath().contains("/.git/") || base.getPath().contains("/.idea/")
