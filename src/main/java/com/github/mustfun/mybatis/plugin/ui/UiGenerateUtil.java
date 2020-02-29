@@ -311,7 +311,11 @@ public final class UiGenerateUtil {
             List<Template> templates = sqlLiteService.queryTemplateList();
             CheckBoxList<Template> templateCheckbox = connectDbSetting.getTemplateCheckbox();
             for (Template template : templates) {
-                templateCheckbox.addItem(template, template.getTepName(), false);
+                if(VmTypeEnums.MAPPER.getCode().equals(template.getVmType())){
+                    templateCheckbox.addItem(template, template.getTepName(), true);
+                }else{
+                    templateCheckbox.addItem(template, template.getTepName(), false);
+                }
             }
             templateCheckbox.addMouseListener(new CheckMouseListener(project));
         };
