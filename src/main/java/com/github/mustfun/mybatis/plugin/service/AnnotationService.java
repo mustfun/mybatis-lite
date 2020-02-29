@@ -18,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author yanglin
+ * @updater itar
+ *
  */
 public class AnnotationService {
 

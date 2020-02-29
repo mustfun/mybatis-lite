@@ -152,7 +152,7 @@ public class TemplateEditMenuAction extends AnAction {
                                         .equals(DigestUtils.md5Hex(editingTemplate.getTepContent()))) {
                                         return;
                                     }
-                                    Connection connection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+                                    Connection connection = ConnectionHolder.getInstance(project).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
                                     if (connection == null) {
                                         return;
                                     }

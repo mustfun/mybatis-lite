@@ -36,9 +36,9 @@ public class SqlLiteService {
     }
 
 
-    public SqlLiteService() {
+    public SqlLiteService(Project project) {
         DbUtil dbUtil = new DbUtil();
-        this.connection = dbUtil.getSqlliteConnection();
+        this.connection = dbUtil.getSqlliteConnection(project);
         try {
             this.statement = connection.createStatement();
         } catch (SQLException e) {

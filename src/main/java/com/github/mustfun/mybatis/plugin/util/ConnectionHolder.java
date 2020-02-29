@@ -1,7 +1,10 @@
 package com.github.mustfun.mybatis.plugin.util;
 
 
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,10 +17,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConnectionHolder {
 
+
     private ConcurrentHashMap<String, Connection> connectionMap;
 
     public ConnectionHolder() {
         connectionMap = new ConcurrentHashMap<>(4);
+    }
+
+    public static ConnectionHolder getInstance(@NotNull Project project){
+        return ServiceManager.getService(project, ConnectionHolder.class);
     }
 
     public void addConnection(String key, Connection connection) {

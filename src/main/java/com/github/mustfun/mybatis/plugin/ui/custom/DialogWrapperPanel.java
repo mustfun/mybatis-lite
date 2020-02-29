@@ -67,8 +67,8 @@ public class DialogWrapperPanel extends DialogWrapper {
         String tablePrefix = connectDbSetting.getTablePrefixInput().getText();
         //连接数据库
         MysqlService mysqlService = DbServiceFactory.getInstance(project).createMysqlService();
-        Connection connection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
-        Connection sqlLiteConnection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+        Connection connection = ConnectionHolder.getInstance(project).getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
+        Connection sqlLiteConnection = ConnectionHolder.getInstance(project).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         try {
             DbServiceFactory.getInstance(project).createSqlLiteService().saveUserPreferPath(project,connectDbSetting);
             for (Object s : collectTableBoxList) {
@@ -87,7 +87,7 @@ public class DialogWrapperPanel extends DialogWrapper {
             e.printStackTrace();
         }
 
-        ServiceManager.getService(ConnectionHolder.class).remove();
+        ConnectionHolder.getInstance(project).remove();
 
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
         uiComponentFacade.buildNotify(project, "Mybatis Lite", "生成代码成功");

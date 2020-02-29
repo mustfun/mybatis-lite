@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.util;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,8 +49,8 @@ public class DbUtil {
     }
 
 
-    public Connection getConnection() {
-        Connection connection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
+    public Connection getConnection(Project project) {
+        Connection connection = ConnectionHolder.getInstance(project).getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
         if (connection!=null){
             return connection;
         }
@@ -72,7 +73,7 @@ public class DbUtil {
             e.printStackTrace();
         }
         if (conn!=null) {
-            ServiceManager.getService(ConnectionHolder.class).addConnection(MybatisConstants.MYSQL_DB_CONNECTION, conn);
+            ConnectionHolder.getInstance(project).addConnection(MybatisConstants.MYSQL_DB_CONNECTION, conn);
         }
         return conn;
     }
@@ -80,9 +81,10 @@ public class DbUtil {
     /**
      *
      * @return
+     * @param project
      */
-    public Connection getSqlliteConnection() {
-        Connection connection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+    public Connection getSqlliteConnection(Project project) {
+        Connection connection = ConnectionHolder.getInstance(project).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         if (connection!=null){
             return connection;
         }
@@ -107,7 +109,7 @@ public class DbUtil {
             e.printStackTrace();
         }
         if (conn!=null) {
-            ServiceManager.getService(ConnectionHolder.class).addConnection(MybatisConstants.SQL_LITE_CONNECTION, conn);
+            ConnectionHolder.getInstance(project).addConnection(MybatisConstants.SQL_LITE_CONNECTION, conn);
         }
         return conn;
     }

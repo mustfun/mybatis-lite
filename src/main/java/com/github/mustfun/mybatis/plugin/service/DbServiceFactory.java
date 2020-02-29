@@ -39,6 +39,6 @@ public class DbServiceFactory {
      * @return
      */
     public SqlLiteService createSqlLiteService(){
-        return new SqlLiteService();
+        return new SqlLiteService(project);
     }
 }
