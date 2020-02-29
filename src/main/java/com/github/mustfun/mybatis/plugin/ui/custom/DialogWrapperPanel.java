@@ -9,6 +9,7 @@ import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -66,8 +67,8 @@ public class DialogWrapperPanel extends DialogWrapper {
         String tablePrefix = connectDbSetting.getTablePrefixInput().getText();
         //连接数据库
         MysqlService mysqlService = DbServiceFactory.getInstance(project).createMysqlService();
-        Connection connection = ConnectionHolder.getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
-        Connection sqlLiteConnection = ConnectionHolder.getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+        Connection connection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
+        Connection sqlLiteConnection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
         try {
             DbServiceFactory.getInstance(project).createSqlLiteService().saveUserPreferPath(project,connectDbSetting);
             for (Object s : collectTableBoxList) {
@@ -86,7 +87,7 @@ public class DialogWrapperPanel extends DialogWrapper {
             e.printStackTrace();
         }
 
-        ConnectionHolder.remove();
+        ServiceManager.getService(ConnectionHolder.class).remove();
 
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
         uiComponentFacade.buildNotify(project, "Mybatis Lite", "生成代码成功");

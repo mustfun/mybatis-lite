@@ -108,6 +108,7 @@
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.DbServiceFactory"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.alias.AliasFacade"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.locator.MapperLocator"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.util.ConnectionHolder"/>
 
         <!--实现跳转的lineMarkerProvider-->
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.github.mustfun.mybatis.plugin.provider.MapperLineMarkerProvider"/>

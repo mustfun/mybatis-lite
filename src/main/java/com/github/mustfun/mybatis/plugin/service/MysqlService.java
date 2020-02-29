@@ -10,6 +10,7 @@ import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -76,7 +77,7 @@ public class MysqlService {
     }
 
     public Connection getNewConnection(DbSourcePo dbSourcePo) {
-        ConnectionHolder.remove();
+        ServiceManager.getService(ConnectionHolder.class).remove();
         return getConnection(dbSourcePo);
     }
 

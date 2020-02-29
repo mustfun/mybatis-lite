@@ -14,6 +14,7 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
@@ -151,8 +152,7 @@ public class TemplateEditMenuAction extends AnAction {
                                         .equals(DigestUtils.md5Hex(editingTemplate.getTepContent()))) {
                                         return;
                                     }
-                                    Connection connection = ConnectionHolder
-                                        .getConnection(MybatisConstants.SQL_LITE_CONNECTION);
+                                    Connection connection = ServiceManager.getService(ConnectionHolder.class).getConnection(MybatisConstants.SQL_LITE_CONNECTION);
                                     if (connection == null) {
                                         return;
                                     }

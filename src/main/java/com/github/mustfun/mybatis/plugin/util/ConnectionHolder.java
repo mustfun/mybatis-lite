@@ -1,9 +1,10 @@
 package com.github.mustfun.mybatis.plugin.util;
 
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.sql.Connection;
 import java.util.concurrent.ConcurrentHashMap;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * @author dengzhiyuan
@@ -13,28 +14,29 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class ConnectionHolder {
 
-    private static ThreadLocal<ConcurrentHashMap<String, Connection>> connectionMapThreadLocal = new ThreadLocal<>();
+    private ConcurrentHashMap<String, Connection> connectionMap;
 
+    public ConnectionHolder() {
+        connectionMap = new ConcurrentHashMap<>(4);
+    }
 
-    public static void addConnection(String key, Connection connection) {
+    public void addConnection(String key, Connection connection) {
         String digest = DigestUtils.md5Hex(key.getBytes());
-        ConcurrentHashMap<String, Connection> stringConnectionConcurrentHashMap = connectionMapThreadLocal.get();
-        if (stringConnectionConcurrentHashMap==null){
-            stringConnectionConcurrentHashMap = new ConcurrentHashMap<>(4);
+        if (connectionMap == null) {
+            connectionMap = new ConcurrentHashMap<>(4);
         }
-        stringConnectionConcurrentHashMap.put(digest, connection);
-        connectionMapThreadLocal.set(stringConnectionConcurrentHashMap);
+        connectionMap.put(digest, connection);
     }
 
-    public static Connection getConnection(String key) {
-        if (connectionMapThreadLocal.get()==null){
-            return  null;
+    public Connection getConnection(String key) {
+        if (connectionMap == null) {
+            return null;
         }
-        return connectionMapThreadLocal.get().get(DigestUtils.md5Hex(key.getBytes()));
+        return connectionMap.get(DigestUtils.md5Hex(key.getBytes()));
     }
 
-    public static void remove() {
-        connectionMapThreadLocal.remove();
+    public void remove() {
+        connectionMap.clear();
     }
 
 }

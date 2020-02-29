@@ -43,7 +43,7 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      <h4>1.1.0</h4>
+      <h4>1.1.2</h4>
       <ul>
           <li>跳转功能重写,性能增强</li>
           <li>新增Sql智能提示,字段提示</li>
