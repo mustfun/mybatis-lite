@@ -4,7 +4,9 @@ import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
@@ -428,5 +430,32 @@ public final class JavaUtils {
             }
         }
         return null;
+    }
+
+
+    /**
+     * 根据pattern找到文件，含优先级，优先找出优先级别高的文件
+     * @param base
+     * @param patten
+     * @return
+     */
+    public static Map<String,VirtualFile> findFileByNameOrder(VirtualFile base, String... patten) {
+        Map<String, VirtualFile> result = new HashMap<>();
+        VfsUtilCore.visitChildrenRecursively(base, new VirtualFileVisitor<VirtualFile>() {
+            @Override
+            public boolean visitFile(@NotNull VirtualFile file) {
+                //不继续查看下面的子节点
+                if (file.getPath().contains("/.git")||file.getPath().contains("/.idea")||file.getPath().contains("/.gradle")||file.getPath().contains("/.target")) {
+                    return false;
+                }
+                for (String s : patten) {
+                    if (file.getPath().contains(s)){
+                        result.put(s, file);
+                    }
+                }
+                return true;
+            }
+        });
+        return result;
     }
 }

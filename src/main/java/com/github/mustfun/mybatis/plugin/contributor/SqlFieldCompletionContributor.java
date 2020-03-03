@@ -1,8 +1,11 @@
 package com.github.mustfun.mybatis.plugin.contributor;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
+import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
+import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
+import com.github.mustfun.mybatis.plugin.util.SqlUtil;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -10,20 +13,22 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 
 /**
- * @author yanglin
- * @update itar
- * @function sql里面的代码补全
+ * @date 2020-03-02
+ * @author  itar
+ * @function 写sql的时候补全字段
  */
-public class SqlParamCompletionContributor extends CompletionContributor {
+public class SqlFieldCompletionContributor extends CompletionContributor {
 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters,
@@ -51,30 +56,34 @@ public class SqlParamCompletionContributor extends CompletionContributor {
         int offset = documentWindow.injectedToHost(position.getTextOffset());
         Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(xmlFile.findElementAt(offset));
         if (idDomElement.isPresent()) {
-            XmlParamContributor.addElementForPsiParameter(position.getProject(), result, idDomElement.get());
+            addSqlFieldParameter(position.getProject(), result, idDomElement.get());
             result.stopHere();
         }
+    }
+
+    /**
+     * 展示字段的候选项吧
+     * @param project
+     * @param result
+     * @param idDomElement
+     */
+    private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement) {
+        String sql = idDomElement.getValue();
+        String tableName = SqlUtil.getTableNameFromSql(sql);
+        new InitMybatisLiteActivity().runActivity(project);
     }
 
     /**
      * @param file
      * @param offset sql如果有2行，那么就是上一行的offset加上本行的offset之和
      * @return
-     * @function 倒序查找，如果看到{# 就开启代码补全
+     * @function 倒序查找，
      */
     private boolean shouldAddElement(PsiFile file, int offset) {
         String text = file.getText();
-        boolean closeFlag=false;
         for (int i = offset - 1; i > 0; i--) {
             char c = text.charAt(i);
-            if (c=='}'){
-                closeFlag=true;
-            }
-            //如果有.应该应用.的唤醒，不应用下面唤醒
-            if (c=='.'){
-                return true;
-            }
-            if (c == '{' && text.charAt(i - 1) == '#'&&!closeFlag) {
+            if (c=='a'){
                 return true;
             }
         }

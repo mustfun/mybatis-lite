@@ -103,6 +103,7 @@
         <dom.fileDescription implementation="com.github.mustfun.mybatis.plugin.dom.description.ConfigurationDescription"/>
         -->
 
+        <postStartupActivity implementation="com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity"/>
         <spring.customModuleComponentsDiscoverer implementation="com.github.mustfun.mybatis.plugin.provider.MapperImplicitBeansProvider"/>
 
 
@@ -132,6 +133,7 @@
         <!--代码补全贡献方-->
         <!--<completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.XmlParamContributor"/>-->
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
+        <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlFieldCompletionContributor" order="first"/>
 
         <!--<fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
         <defaultLiveTemplatesProvider implementation="com.github.mustfun.mybatis.plugin.template.SqlLiveTemplateProvider"/>
