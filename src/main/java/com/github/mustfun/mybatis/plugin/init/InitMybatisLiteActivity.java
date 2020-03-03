@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.init;
 
+import com.github.mustfun.mybatis.plugin.service.resolver.YamlFileResolver;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -52,7 +53,8 @@ public class InitMybatisLiteActivity implements StartupActivity {
             if(moduleFile==null){
                 continue;
             }
-            Map<String, VirtualFile> fileByNameOrder = JavaUtils.findFileByNameOrder(moduleFile.getParent(), "application-dev.properties", "application-dev.yml", "application.yml");
+            YamlFileResolver yamlFileResolver = new YamlFileResolver();
+            yamlFileResolver.resolve(moduleFile.getParent());
         }
     }
 }
