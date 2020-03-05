@@ -15,6 +15,7 @@ public interface Icons {
 
 
     Icon PARAM_COMPLETION_ICON = PlatformIcons.PARAMETER_ICON;
+    Icon FIELD_COMPLETION_ICON = PlatformIcons.FIELD_ICON;
 
     Icon MAPPER_LINE_MARKER_ICON = IconLoader.getIcon("/images/down.png");
 

@@ -44,13 +44,19 @@ public class DbUtil {
         this.password = password;
     }
 
+    public DbUtil(String url, String userName, String password) {
+        this.url =url;
+        this.username = userName;
+        this.password = password;
+    }
+
     public DbUtil() {
 
     }
 
 
-    public Connection getConnection(Project project) {
-        Connection connection = ConnectionHolder.getInstance(project).getConnection(MybatisConstants.MYSQL_DB_CONNECTION);
+    public Connection getConnection(Project project,String cacheKey) {
+        Connection connection = ConnectionHolder.getInstance(project).getConnection(cacheKey);
         if (connection!=null){
             return connection;
         }
@@ -73,7 +79,7 @@ public class DbUtil {
             e.printStackTrace();
         }
         if (conn!=null) {
-            ConnectionHolder.getInstance(project).addConnection(MybatisConstants.MYSQL_DB_CONNECTION, conn);
+            ConnectionHolder.getInstance(project).addConnection(cacheKey, conn);
         }
         return conn;
     }

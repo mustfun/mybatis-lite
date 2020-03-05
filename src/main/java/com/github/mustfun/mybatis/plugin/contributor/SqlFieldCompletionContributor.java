@@ -3,11 +3,15 @@ package com.github.mustfun.mybatis.plugin.contributor;
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
+import com.github.mustfun.mybatis.plugin.model.LocalColumn;
+import com.github.mustfun.mybatis.plugin.model.LocalTable;
+import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.util.*;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
@@ -16,8 +20,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
+import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,11 +33,25 @@ import static com.github.mustfun.mybatis.plugin.util.MybatisConstants.MODULE_DB_
 
 
 /**
+ * LocalDataSource localDataSource = LocalDataSource.create("test", "com.mysql.jdbc.Driver", dbSourcePo.getDbAddress(), dbSourcePo.getUserName());
+ *         DatabaseCredentials credentials =DatabaseCredentials.getInstance();
+ *         credentials.setPassword(localDataSource, new OneTimeString("root"));
+ *         DatabaseSessionManager.Facade facade = DatabaseSessionManager.facade(project,localDataSource , credentials, null, null, DGDepartment.UNKNOWN);
+ *         try {
+ *             GuardedRef<DatabaseConnection> connect = facade.connect();
+ *             DatabaseConnection databaseConnection = connect.get();
+ *
+ *         } catch (Exception e) {
+ *             e.printStackTrace();
+ *         }
+ *
  * @date 2020-03-02
  * @author  itar
  * @function 写sql的时候补全字段
  */
 public class SqlFieldCompletionContributor extends CompletionContributor {
+
+    private static  final  Logger logger = LoggerFactory.getLogger(SqlFieldCompletionContributor.class);
 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters,
@@ -81,14 +102,38 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         for (String s : config.keySet()) {
             System.out.println("config = " + config);
         }
-        System.out.println("idDomElement = " + idDomElement.getModule().getName());
         //只有一个module的情况
+        DbSourcePo dbSourcePo;
         if(config.size()==1){
-
+            dbSourcePo = config.get("resteasy-demo-config");
+        }else {
+            //多个module根据名称来
+            dbSourcePo = config.get(Objects.requireNonNull(idDomElement.getModule().getName()));
         }
-        //多个module根据名称来
-        DbSourcePo dbSourcePo = config.get(Objects.requireNonNull(idDomElement.getModule().getName()));
+        if (dbSourcePo==null){
+            return ;
+        }
+        DbUtil dbUtil = new DbUtil(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", dbSourcePo.getUserName(), dbSourcePo.getPassword());
+        Connection connection = dbUtil.getConnection(project, idDomElement.getModule().getName());
+        if (connection==null){
+            logger.warn("【Mybatis Lite】===================获取不到链接");
+            return;
+        }
+        List<LocalTable> tables = DbServiceFactory.getInstance(project).createMysqlService().getTables(connection);
+        for (LocalTable table : tables) {
+            if (table.getTableName().equals(tableName)){
+                addParameterToResult(table, result);
+            }
+        }
+    }
 
+    private void addParameterToResult(LocalTable table, CompletionResultSet result) {
+        List<LocalColumn> columnList = table.getColumnList();
+        for (LocalColumn localColumn : columnList) {
+            LookupElementBuilder builder = LookupElementBuilder.create(localColumn.getColumnName())
+                    .withIcon(Icons.FIELD_COMPLETION_ICON);
+            result.addElement(builder);
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -73,7 +74,7 @@ public class MysqlService {
             dbUtil = new DbUtil(configPo.getDbAddress(), configPo.getDbName(), configPo.getUserName(),
                 configPo.getPassword(), configPo.getPort());
         }
-        return dbUtil.getConnection(project);
+        return dbUtil.getConnection(project, MybatisConstants.MYSQL_DB_CONNECTION);
     }
 
     public Connection getNewConnection(DbSourcePo dbSourcePo) {

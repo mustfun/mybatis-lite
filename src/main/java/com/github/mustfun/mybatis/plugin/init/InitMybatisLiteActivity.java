@@ -3,11 +3,13 @@ package com.github.mustfun.mybatis.plugin.init;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.service.resolver.YamlFileResolver;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
+import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.eclipse.aether.util.ConfigUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -90,6 +92,11 @@ public class InitMybatisLiteActivity implements StartupActivity {
             dbSourcePo.setDbAddress(masterUrl==null?url:masterUrl);
             dbSourcePo.setUserName(masterUserName==null?userName:masterUserName);
             dbSourcePo.setPassword(masterPassword==null?password:masterPassword);
+            try {
+                dbSourcePo.setPassword(dbSourcePo.getPassword().length()>64? ConfigTools.decrypt(dbSourcePo.getPassword()):dbSourcePo.getPassword());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             map.put(module.getName(), dbSourcePo);
         }
         return map;
