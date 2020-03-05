@@ -2,10 +2,8 @@ package com.github.mustfun.mybatis.plugin.contributor;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
-import com.github.mustfun.mybatis.plugin.util.JavaUtils;
-import com.github.mustfun.mybatis.plugin.util.MapperUtils;
-import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
-import com.github.mustfun.mybatis.plugin.util.SqlUtil;
+import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
+import com.github.mustfun.mybatis.plugin.util.*;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -20,7 +18,11 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.github.mustfun.mybatis.plugin.util.MybatisConstants.MODULE_DB_CONFIG;
 
 
 /**
@@ -67,10 +69,26 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
      * @param result
      * @param idDomElement
      */
+    @SuppressWarnings("unchecked")
     private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement) {
         String sql = idDomElement.getValue();
         String tableName = SqlUtil.getTableNameFromSql(sql);
         new InitMybatisLiteActivity().runActivity(project);
+        Map<String, DbSourcePo> config = (Map<String, DbSourcePo>) ConnectionHolder.getInstance(project).getConfig(MODULE_DB_CONFIG);
+        if (config==null){
+            return;
+        }
+        for (String s : config.keySet()) {
+            System.out.println("config = " + config);
+        }
+        System.out.println("idDomElement = " + idDomElement.getModule().getName());
+        //只有一个module的情况
+        if(config.size()==1){
+
+        }
+        //多个module根据名称来
+        DbSourcePo dbSourcePo = config.get(Objects.requireNonNull(idDomElement.getModule().getName()));
+
     }
 
     /**

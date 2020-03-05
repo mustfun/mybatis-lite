@@ -6,8 +6,17 @@
 
     <description><![CDATA[
           Plugin for mybatis to generate controller,service,dao,mapper and model <br/>
+          The plugin provide those features.
+          <ul>
+              <li>Generate Controller,Service,Dao,Mapper Xml and Model</li>
+              <li>Code completion, syntax highlighting.</li>
+              <li>Smart SQL parameter completion based on SQL statement context.</li>
+              <li>Navigation</li>
+              <li>Generate Mapper XML, SQL statement, statement declaration on the fly.</li>
+          </ul>
           Feel free to feedback , thanks.
-      ]]></description>
+      ]]>
+    </description>
 
     <change-notes><![CDATA[
       <h4>1.1.5</h4>

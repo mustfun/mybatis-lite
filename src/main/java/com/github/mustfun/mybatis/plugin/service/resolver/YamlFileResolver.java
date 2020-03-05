@@ -1,6 +1,5 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
-import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.yaml.snakeyaml.Yaml;
 
@@ -30,26 +29,30 @@ public class YamlFileResolver extends AbstractFileResolver<VirtualFile, Properti
         try {
             Map<String, Object> source = (Map<String, Object>) yaml.load(new FileInputStream(new File(map.getPath())));
             Map<StringBuilder,Object> resultMap = new HashMap<>();
-            transMapToString(source, new StringBuilder(), resultMap);
-            for (StringBuilder stringBuilder : resultMap.keySet()) {
-                System.out.println("stringBuilder = " + resultMap.get(stringBuilder));
-            }
+            tranHashMapToFlatMap(source, new StringBuilder(), resultMap);
+            Properties properties = new Properties();
+            properties.putAll(resultMap);
+            return properties;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
+    /**
+     * 平铺hashMap - 筛选关键字用
+     * @param map
+     * @param key  properties的键
+     * @param resultMap 返回map
+     */
     @SuppressWarnings("unchecked")
-    private void transMapToString(Map<String, Object> map,StringBuilder key,Map<StringBuilder,Object> resultMap) {
+    private void tranHashMapToFlatMap(Map<String, Object> map,StringBuilder key,Map<StringBuilder,Object> resultMap) {
         for (String s : map.keySet()) {
             Object o = map.get(s);
             if(o instanceof Map){
-                key.append(s);
-                transMapToString((Map) o,key,resultMap);
+                tranHashMapToFlatMap((Map) o,new StringBuilder(key).append(s).append("."),resultMap);
             }else{
-                resultMap.put(key, o);
+                resultMap.put(new StringBuilder(key).append(s), o);
             }
         }
     }

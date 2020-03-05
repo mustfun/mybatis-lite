@@ -2,9 +2,11 @@ package com.github.mustfun.mybatis.plugin.service.resolver;
 
 import com.intellij.openapi.vfs.VirtualFile;
 
-import java.util.Collections;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -16,7 +18,7 @@ public class PropertiesFileResolver extends AbstractFileResolver<VirtualFile,Pro
 
     @Override
     String[] getPattern() {
-        List<String> strings = Collections.singletonList("application-dev.properties");
+        List<String> strings = Arrays.asList("application-dev.properties", "db.properties","dbConfig.properties");
         return strings.toArray(new String[0]);
     }
 
@@ -24,6 +26,13 @@ public class PropertiesFileResolver extends AbstractFileResolver<VirtualFile,Pro
 
     @Override
     protected Properties convert(VirtualFile map) {
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream(new File(map.getPath())));
+            return properties;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
