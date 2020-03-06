@@ -126,31 +126,23 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         }
         DatabaseDriverManager instance = DatabaseDriverManager.getInstance();
         Collection<? extends DatabaseDriver> drivers = instance.getDrivers();
-        for (DatabaseDriver driver : drivers) {
-            logger.info(driver.getDriverClass());
-            if (driver.getAdditionalClasspathElements().size()<1){
-                continue;
-            }
-            if(!"MySQL".equals(driver.getName())){
-                continue;
-            }
-            SimpleClasspathElement simpleClasspathElement = driver.getAdditionalClasspathElements().get(0);
-            try {
-                URL url= new URL(simpleClasspathElement.getClassesRootUrls().get(0).replaceAll("(?:/\\s*)+", "/"));
-                ClassLoader classLoader = new ExternalClassLoader(new URL[]{url},ClassLoader.getSystemClassLoader());
-                Class.forName(driver.getDriverClass(),false,classLoader);
-                Properties props = new Properties();
-                props.setProperty("user", dbSourcePo.getUserName());
-                props.setProperty("password", dbSourcePo.getPassword());
-                //设置可以获取remarks信息
-                props.setProperty("remarks", "true");
-                //设置可以获取tables remarks信息
-                props.setProperty("useInformationSchema", "true");
-                Connection connection1 = DriverManager.getConnection(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", props);
-                System.out.println("connection1 = " + connection1.getSchema());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        DatabaseDriver driver = drivers.stream().filter(x -> x.getName().equals("MySQL")).findAny().orElseGet(null);
+
+        SimpleClasspathElement simpleClasspathElement = driver.getAdditionalClasspathElements().get(0);
+        try {
+            URL url= new URL(simpleClasspathElement.getClassesRootUrls().get(0).replaceAll("(?:/\\s*)+", "/"));
+            ClassLoader classLoader = new ExternalClassLoader(new URL[]{url},ClassLoader.getSystemClassLoader());
+            Class.forName(driver.getDriverClass(),false,classLoader);
+            Properties props = new Properties();
+            props.setProperty("user", dbSourcePo.getUserName());
+            props.setProperty("password", dbSourcePo.getPassword());
+            //设置可以获取remarks信息
+            props.setProperty("remarks", "true");
+            //设置可以获取tables remarks信息
+            props.setProperty("useInformationSchema", "true");
+            Connection connection1 = DriverManager.getConnection(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", props);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         List<LocalTable> tables = DbServiceFactory.getInstance(project).createMysqlService().getTables(connection);

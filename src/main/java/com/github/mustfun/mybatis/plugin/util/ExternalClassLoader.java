@@ -5,6 +5,7 @@ import java.net.URLClassLoader;
 
 /**
  * 加载外部类用
+ * @author itar
  */
 public class ExternalClassLoader extends URLClassLoader {
     public ExternalClassLoader(URL[] urls, ClassLoader parent) {
