@@ -36,6 +36,7 @@ public final class MybatisConstants {
     public static final String DEFAULT_INSERT_PATTEN_KEY = "DEFAULT_INSERT_PATTEN";
     public static final String DEFAULT_DELETE_PATTEN_KEY = "DEFAULT_DELETE_PATTEN";
     public static final String NAVIGATION_OPEN_STATUS = "NAVIGATION_OPEN_STATUS";
+    public static final String SQL_FIELD_STATUS = "SQL_FIELD_STATUS";
     public static final String TRUE = "1";
     public static final String MODULE_DB_CONFIG = "MODULE_ALL_DB_CONFIG";
 }

@@ -6,6 +6,7 @@ import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.*;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -14,7 +15,6 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.database.dataSource.DatabaseDriver;
 import com.intellij.database.dataSource.DatabaseDriverManager;
-import com.intellij.database.dialects.mysql.MysqlDialect;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
@@ -22,19 +22,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.Url;
-import com.intellij.util.lang.UrlClassLoader;
-import com.intellij.util.ui.classpath.SimpleClasspathElement;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.*;
 
 import static com.github.mustfun.mybatis.plugin.util.MybatisConstants.MODULE_DB_CONFIG;
@@ -64,6 +57,10 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters,
         @NotNull final CompletionResultSet result) {
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.SQL_FIELD_STATUS))) {
+            return ;
+        }
         //sql补全一般是普通类型的，不是smart
         if (parameters.getCompletionType() != CompletionType.BASIC) {
             return;

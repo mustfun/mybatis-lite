@@ -13,6 +13,7 @@ import lombok.Setter;
  * @author yanglin
  * @update itar
  * @function form
+ * 心得： 只有当最后一个radioBox是want Grow的时候才会撑满后面的
  */
 @Setter
 @Getter
@@ -32,12 +33,19 @@ public class MybatisSettingForm {
     private JTextField selectPattenInput;
     private JTextField deletePattenInput;
     private JPanel otherSettingPanel1;
+    private JRadioButton sqlFieldOpenButton;
+    private JRadioButton sqlFieldCloseButton;
 
     public MybatisSettingForm() {
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(closeNaviRadioButton);
         buttonGroup.add(openNaviButton);
         openNaviButton.setSelected(true);
+
+        ButtonGroup buttonGroup2 = new ButtonGroup();
+        buttonGroup2.add(sqlFieldCloseButton);
+        buttonGroup2.add(sqlFieldOpenButton);
+        sqlFieldCloseButton.setSelected(true);
     }
 
 }

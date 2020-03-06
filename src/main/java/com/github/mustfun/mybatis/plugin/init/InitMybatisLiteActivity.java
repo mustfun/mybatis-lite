@@ -2,7 +2,9 @@ package com.github.mustfun.mybatis.plugin.init;
 
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.service.resolver.YamlFileResolver;
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -32,7 +34,10 @@ public class InitMybatisLiteActivity implements StartupActivity {
      */
     @Override
     public void runActivity(@NotNull Project project) {
-        long l = System.currentTimeMillis();
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.SQL_FIELD_STATUS))) {
+            return ;
+        }
         try {
             Map<String, DbSourcePo> stringDbSourcePoMap = initDatabase(project);
             if (!stringDbSourcePoMap.isEmpty()) {
