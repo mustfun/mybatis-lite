@@ -12,6 +12,9 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.database.dataSource.DatabaseDriver;
+import com.intellij.database.dataSource.DatabaseDriverManager;
+import com.intellij.database.dialects.mysql.MysqlDialect;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
@@ -19,15 +22,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.Url;
+import com.intellij.util.lang.UrlClassLoader;
+import com.intellij.util.ui.classpath.SimpleClasspathElement;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.Connection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.sql.DriverManager;
+import java.util.*;
 
 import static com.github.mustfun.mybatis.plugin.util.MybatisConstants.MODULE_DB_CONFIG;
 
@@ -79,7 +86,7 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         int offset = documentWindow.injectedToHost(position.getTextOffset());
         Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(xmlFile.findElementAt(offset));
         if (idDomElement.isPresent()) {
-            addSqlFieldParameter(position.getProject(), result, idDomElement.get());
+            addSqlFieldParameter(position.getProject(), result, idDomElement.get(),position);
             result.stopHere();
         }
     }
@@ -89,28 +96,26 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
      * @param project
      * @param result
      * @param idDomElement
+     * @param position
      */
     @SuppressWarnings("unchecked")
-    private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement) {
-        String sql = idDomElement.getValue();
-        String tableName = SqlUtil.getTableNameFromSql(sql);
+    private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement, PsiElement position) {
+        String tableName = SqlUtil.getTableNameFromSql(idDomElement,position);
         new InitMybatisLiteActivity().runActivity(project);
         Map<String, DbSourcePo> config = (Map<String, DbSourcePo>) ConnectionHolder.getInstance(project).getConfig(MODULE_DB_CONFIG);
         if (config==null){
             return;
         }
-        for (String s : config.keySet()) {
-            System.out.println("config = " + config);
-        }
         //只有一个module的情况
         DbSourcePo dbSourcePo;
         if(config.size()==1){
-            dbSourcePo = config.get("resteasy-demo-config");
+            dbSourcePo = config.get(config.keySet().iterator().next());
         }else {
             //多个module根据名称来
-            dbSourcePo = config.get(Objects.requireNonNull(idDomElement.getModule().getName()));
+            dbSourcePo = config.get(Objects.requireNonNull(Objects.requireNonNull(idDomElement.getModule()).getName()));
         }
         if (dbSourcePo==null){
+            logger.warn("【Mybatis Lite】该模块下找不到合适的数据源");
             return ;
         }
         DbUtil dbUtil = new DbUtil(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", dbSourcePo.getUserName(), dbSourcePo.getPassword());
@@ -119,19 +124,49 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
             logger.warn("【Mybatis Lite】===================获取不到链接");
             return;
         }
+        DatabaseDriverManager instance = DatabaseDriverManager.getInstance();
+        Collection<? extends DatabaseDriver> drivers = instance.getDrivers();
+        for (DatabaseDriver driver : drivers) {
+            logger.info(driver.getDriverClass());
+            if (driver.getAdditionalClasspathElements().size()<1){
+                continue;
+            }
+            if(!"MySQL".equals(driver.getName())){
+                continue;
+            }
+            SimpleClasspathElement simpleClasspathElement = driver.getAdditionalClasspathElements().get(0);
+            try {
+                URL url= new URL(simpleClasspathElement.getClassesRootUrls().get(0).replaceAll("(?:/\\s*)+", "/"));
+                ClassLoader classLoader = new ExternalClassLoader(new URL[]{url},ClassLoader.getSystemClassLoader());
+                Class.forName(driver.getDriverClass(),false,classLoader);
+                Properties props = new Properties();
+                props.setProperty("user", dbSourcePo.getUserName());
+                props.setProperty("password", dbSourcePo.getPassword());
+                //设置可以获取remarks信息
+                props.setProperty("remarks", "true");
+                //设置可以获取tables remarks信息
+                props.setProperty("useInformationSchema", "true");
+                Connection connection1 = DriverManager.getConnection(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", props);
+                System.out.println("connection1 = " + connection1.getSchema());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         List<LocalTable> tables = DbServiceFactory.getInstance(project).createMysqlService().getTables(connection);
         for (LocalTable table : tables) {
             if (table.getTableName().equals(tableName)){
                 addParameterToResult(table, result);
             }
         }
+
     }
 
     private void addParameterToResult(LocalTable table, CompletionResultSet result) {
         List<LocalColumn> columnList = table.getColumnList();
         for (LocalColumn localColumn : columnList) {
             LookupElementBuilder builder = LookupElementBuilder.create(localColumn.getColumnName())
-                    .withIcon(Icons.FIELD_COMPLETION_ICON);
+                    .withIcon(Icons.FIELD_COMPLETION_ICON).withTypeText(table.getTableName());
             result.addElement(builder);
         }
     }
