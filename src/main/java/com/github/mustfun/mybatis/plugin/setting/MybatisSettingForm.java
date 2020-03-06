@@ -45,7 +45,6 @@ public class MybatisSettingForm {
         ButtonGroup buttonGroup2 = new ButtonGroup();
         buttonGroup2.add(sqlFieldCloseButton);
         buttonGroup2.add(sqlFieldOpenButton);
-        sqlFieldCloseButton.setSelected(true);
     }
 
 }

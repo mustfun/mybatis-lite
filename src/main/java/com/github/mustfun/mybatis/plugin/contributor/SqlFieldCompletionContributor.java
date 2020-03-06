@@ -160,11 +160,9 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
      */
     private boolean shouldAddElement(PsiFile file, int offset) {
         String text = file.getText();
-        for (int i = offset - 1; i > 0; i--) {
-            char c = text.charAt(i);
-            if (c=='a'){
-                return true;
-            }
+        String s = String.valueOf(text.charAt(offset - 2));
+        if(" ".equals(s) || ",".equals(s)){
+            return true;
         }
         return false;
     }

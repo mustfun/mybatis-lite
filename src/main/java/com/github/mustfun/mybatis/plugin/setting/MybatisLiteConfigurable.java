@@ -52,8 +52,6 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         return getId();
     }
 
-    Boolean navi = false;
-
     @Nullable
     @Override
     public JComponent createComponent() {

@@ -69,6 +69,7 @@ public class MybatisLiteSetting implements PersistentStateComponent<MybatisLiteS
 
     /**
      * 存储字段的map
+     * 构造函数决定最初初始值
      */
     static class MybatisLiteState {
         public Map<String, String> map;
