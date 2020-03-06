@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.util;
 
 
+import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +24,7 @@ public class ConnectionHolder {
 
     private ConcurrentHashMap<String, Connection> connectionMap;
     private Map<String, Object> configMap;
+    private Map<String, List<LocalTable>> tableCache;
 
     public ConnectionHolder() {
         connectionMap = new ConcurrentHashMap<>(4);
@@ -62,5 +65,19 @@ public class ConnectionHolder {
             configMap = new HashMap<>(1);
         }
         configMap.put(key, value);
+    }
+
+    public List<LocalTable> getTableCache(String key) {
+        if (tableCache==null){
+            return null;
+        }
+        return tableCache.get(key);
+    }
+
+    public void putTableCache(String key ,List<LocalTable> value) {
+        if (tableCache==null){
+            tableCache = new HashMap<>(1);
+        }
+        tableCache.put(key, value);
     }
 }

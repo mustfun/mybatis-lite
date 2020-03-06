@@ -25,6 +25,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.Url;
 import com.intellij.util.lang.UrlClassLoader;
 import com.intellij.util.ui.classpath.SimpleClasspathElement;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,39 +119,30 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
             logger.warn("【Mybatis Lite】该模块下找不到合适的数据源");
             return ;
         }
-        DbUtil dbUtil = new DbUtil(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", dbSourcePo.getUserName(), dbSourcePo.getPassword());
-        Connection connection = dbUtil.getConnection(project, idDomElement.getModule().getName());
-        if (connection==null){
-            logger.warn("【Mybatis Lite】===================获取不到链接");
-            return;
-        }
+
         DatabaseDriverManager instance = DatabaseDriverManager.getInstance();
         Collection<? extends DatabaseDriver> drivers = instance.getDrivers();
         DatabaseDriver driver = drivers.stream().filter(x -> x.getName().equals("MySQL")).findAny().orElseGet(null);
 
-        SimpleClasspathElement simpleClasspathElement = driver.getAdditionalClasspathElements().get(0);
-        try {
-            URL url= new URL(simpleClasspathElement.getClassesRootUrls().get(0).replaceAll("(?:/\\s*)+", "/"));
-            ClassLoader classLoader = new ExternalClassLoader(new URL[]{url},ClassLoader.getSystemClassLoader());
-            Class.forName(driver.getDriverClass(),false,classLoader);
-            Properties props = new Properties();
-            props.setProperty("user", dbSourcePo.getUserName());
-            props.setProperty("password", dbSourcePo.getPassword());
-            //设置可以获取remarks信息
-            props.setProperty("remarks", "true");
-            //设置可以获取tables remarks信息
-            props.setProperty("useInformationSchema", "true");
-            Connection connection1 = DriverManager.getConnection(dbSourcePo.getDbAddress()+"&serverTimezone=GMT", props);
-        } catch (Exception e) {
-            e.printStackTrace();
+        Connection connection = DbUtil.getConnectionUseDriver(project, DigestUtils.md5Hex(dbSourcePo.getDbAddress()), driver, dbSourcePo);
+
+        if (connection==null){
+            logger.warn("【Mybatis Lite】===================获取不到链接");
+            return;
         }
 
-        List<LocalTable> tables = DbServiceFactory.getInstance(project).createMysqlService().getTables(connection);
+        List<LocalTable> tables = ConnectionHolder.getInstance(project).getTableCache(tableName);
+        if (CollectionUtils.isEmpty(tables)){
+            tables = DbServiceFactory.getInstance(project).createMysqlService().getTables(connection);
+            ConnectionHolder.getInstance(project).putTableCache(tableName, tables);
+        }
         for (LocalTable table : tables) {
             if (table.getTableName().equals(tableName)){
                 addParameterToResult(table, result);
             }
         }
+
+
 
     }
 
