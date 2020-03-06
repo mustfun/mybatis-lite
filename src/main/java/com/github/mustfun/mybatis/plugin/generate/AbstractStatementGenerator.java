@@ -38,17 +38,13 @@ public abstract class AbstractStatementGenerator<T> {
      * 获取所有的生成器
      * @return
      */
-    public static Set<AbstractStatementGenerator> getALLGenerator(){
-        final AbstractStatementGenerator updateGenerator = new UpdateGenerator(MybatisConstants.DEFAULT_UPDATE_PATTEN);
-
-        final AbstractStatementGenerator selectGenerator = new SelectGenerator(MybatisConstants.DEFAULT_SELECT_PATTEN);
-
-        final AbstractStatementGenerator deleteGenerator = new DeleteGenerator(MybatisConstants.DEFAULT_DELETE_PATTEN);
-
-        final AbstractStatementGenerator insertGenerator = new InsertGenerator(MybatisConstants.DEFAULT_INSERT_PATTEN);
-
-        return ImmutableSet
-                .of(updateGenerator, selectGenerator, deleteGenerator, insertGenerator);
+    public static List<AbstractStatementGenerator> getALLGenerator() {
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        AbstractStatementGenerator updateGenerator = new UpdateGenerator(valueMap.get(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY).split(","));
+        AbstractStatementGenerator selectGenerator = new SelectGenerator(valueMap.get(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY).split(","));
+        AbstractStatementGenerator deleteGenerator = new DeleteGenerator(valueMap.get(MybatisConstants.DEFAULT_DELETE_PATTEN_KEY).split(","));
+        AbstractStatementGenerator insertGenerator = new InsertGenerator(valueMap.get(MybatisConstants.DEFAULT_INSERT_PATTEN_KEY).split(","));
+        return Arrays.asList(updateGenerator, selectGenerator, deleteGenerator, insertGenerator);
     }
 
     /**
@@ -117,12 +113,13 @@ public abstract class AbstractStatementGenerator<T> {
      * @param method
      * @return
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     public static AbstractStatementGenerator[] getGenerators(@NotNull PsiMethod method) {
         GenerateModel model = new GenerateModel.StartWithModel();
         String target = method.getName();
         List<AbstractStatementGenerator> result = Lists.newArrayList();
-        Set<AbstractStatementGenerator> allGenerator = getALLGenerator();
+        List<AbstractStatementGenerator> allGenerator = getALLGenerator();
         for (AbstractStatementGenerator generator : allGenerator) {
             //找出符合的generator
             if (model.matchesAny(generator.getPatterns(), target)) {
@@ -207,6 +204,10 @@ public abstract class AbstractStatementGenerator<T> {
     @NotNull
     public abstract String getDisplayText();
 
+    /**
+     * 用set防止重复
+     * @return
+     */
     public Set<String> getPatterns() {
         return patterns;
     }

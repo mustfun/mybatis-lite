@@ -81,7 +81,7 @@ public class MybatisLiteSetting implements PersistentStateComponent<MybatisLiteS
             map.put(MybatisConstants.DEFAULT_DELETE_PATTEN_KEY, StringUtils.join(MybatisConstants.DEFAULT_DELETE_PATTEN,SEPARATOR));
             map.put(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY, StringUtils.join(MybatisConstants.DEFAULT_SELECT_PATTEN,SEPARATOR));
             map.put(NAVIGATION_OPEN_STATUS, MybatisConstants.TRUE);
-            map.put(SQL_FIELD_STATUS, MybatisConstants.TRUE);
+            map.put(SQL_FIELD_STATUS, "0");
         }
 
         public MybatisLiteState(Map<String, String> map) {
