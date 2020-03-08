@@ -84,7 +84,8 @@ public abstract class AbstractFileResolver<T, F> implements FileResolver<T, F> {
 
     protected boolean excludeFile(VirtualFile file) {
         if (file.getPath().contains("/.git") || file.getPath().contains("/.idea")
-                || file.getPath().contains("/.gradle") || file.getPath().contains("/.target")) {
+                || file.getPath().contains("/.gradle") || file.getPath().contains("/.target")
+                ||file.getPath().contains("/target/")) {
             return true;
         }
         return false;

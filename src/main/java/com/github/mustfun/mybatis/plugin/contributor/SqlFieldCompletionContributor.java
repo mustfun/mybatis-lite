@@ -72,6 +72,7 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(position.getProject()).getTopLevelFile(position);
         if (MybatisDomUtils.isMybatisFile(topLevelFile)) {
             if (shouldAddElement(position.getContainingFile(), parameters.getOffset())) {
+                new InitMybatisLiteActivity().runActivity(position.getProject());
                 process(topLevelFile, result, position);
             }
         }

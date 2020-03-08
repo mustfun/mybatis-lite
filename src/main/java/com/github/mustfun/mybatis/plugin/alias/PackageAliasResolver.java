@@ -6,13 +6,16 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
-import java.util.Collection;
-import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Set;
+
 /**
  * @author yanglin
+ * @updater itar
+ * @function 包名解析器
  */
 public abstract class PackageAliasResolver extends AliasResolver {
 

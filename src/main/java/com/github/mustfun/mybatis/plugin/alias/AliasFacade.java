@@ -50,6 +50,7 @@ public class AliasFacade {
         this.registerResolver(AliasResolverFactory.createConfigPackageResolver(project));
         this.registerResolver(AliasResolverFactory.createAnnotationResolver(project));
         this.registerResolver(AliasResolverFactory.createInnerAliasResolver(project));
+        this.registerResolver(AliasResolverFactory.createBootConfigAliasResolver(project));
     }
 
     /**

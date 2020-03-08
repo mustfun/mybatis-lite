@@ -4,6 +4,7 @@ package com.github.mustfun.mybatis.plugin.util;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,14 +61,19 @@ public class ConnectionHolder {
         return configMap.get(key);
     }
 
-    public Object getConfigOrOne(String key) {
+    /**
+     * 返回是否是单module或者多module
+     * @param key
+     * @return
+     */
+    public Pair<Boolean,Object> getConfigOrOne(String key) {
         if (configMap==null){
             return null;
         }
         if (configMap.size()==1){
-            return configMap.get(configMap.keySet().iterator().next());
+            return Pair.pair(false,configMap.get(configMap.keySet().iterator().next()));
         }
-        return configMap.get(key);
+        return Pair.pair(true,configMap.get(key));
     }
 
     public void putConfig(String key ,Object value) {

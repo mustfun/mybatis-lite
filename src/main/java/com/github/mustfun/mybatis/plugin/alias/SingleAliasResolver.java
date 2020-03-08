@@ -10,6 +10,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.intellij.psi.util.PsiUtil;
@@ -45,29 +46,6 @@ public class SingleAliasResolver extends AliasResolver {
                 return true;
             }
         });
-        //如果没有config是boot文件的
-        Module currentModule = ModuleUtil.findModuleForPsiElement(element);
-        if(currentModule==null){
-            return result;
-        }
-        ModuleConfig config = (ModuleConfig)ConnectionHolder.getInstance(project).getConfigOrOne(currentModule.getName()) ;
-        if (config==null){
-            return result;
-        }
-        String typeAliasPackage = config.getTypeAliasPackage();
-        //找到package
-        PsiDirectory possiblePackageDirectoryInModule = PackageUtil.findPossiblePackageDirectoryInModule(currentModule, typeAliasPackage);
-        if (possiblePackageDirectoryInModule==null){
-            return result;
-        }
-        PsiFile[] files = possiblePackageDirectoryInModule.getFiles();
-        for (PsiFile file : files) {
-            if (file instanceof PsiJavaFile){
-                PsiClass clazz = ((PsiJavaFileImpl) file).getClasses()[0];
-                addAliasDesc(result,clazz, clazz.getName());
-            }
-        }
-
         return result;
     }
 
