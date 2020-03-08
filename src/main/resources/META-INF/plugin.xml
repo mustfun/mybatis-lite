@@ -125,6 +125,7 @@
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.EditorService"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.DbServiceFactory"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.alias.AliasFacade"/>
+        <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.service.resolver.ResolverFacade"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.locator.MapperLocator"/>
         <projectService serviceImplementation="com.github.mustfun.mybatis.plugin.util.ConnectionHolder"/>
 

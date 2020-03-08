@@ -1,7 +1,6 @@
 package com.github.mustfun.mybatis.plugin.contributor;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
-import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
@@ -72,7 +71,6 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(position.getProject()).getTopLevelFile(position);
         if (MybatisDomUtils.isMybatisFile(topLevelFile)) {
             if (shouldAddElement(position.getContainingFile(), parameters.getOffset())) {
-                new InitMybatisLiteActivity().runActivity(position.getProject());
                 process(topLevelFile, result, position);
             }
         }
@@ -100,7 +98,6 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
     @SuppressWarnings("unchecked")
     private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement, PsiElement position) {
         String tableName = SqlUtil.getTableNameFromSql(idDomElement,position);
-        new InitMybatisLiteActivity().runActivity(project);
         Map<String, DbSourcePo> config = (Map<String, DbSourcePo>) ConnectionHolder.getInstance(project).getConfig(MODULE_DB_CONFIG);
         if (config==null){
             return;
