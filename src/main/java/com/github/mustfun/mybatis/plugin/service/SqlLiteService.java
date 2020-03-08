@@ -167,8 +167,9 @@ public class SqlLiteService {
                 "        from db_source order by id desc limit 1";
 
             ResultSet rs = statement.executeQuery(sql);
-            DbSourcePo dbSource = new DbSourcePo();
+            DbSourcePo dbSource = null;
             while (rs.next()) {
+                dbSource = new DbSourcePo();
                 dbSource.setId(rs.getInt("id"));
                 dbSource.setDbName(rs.getString("db_name"));
                 dbSource.setDbAddress(rs.getString("db_address"));

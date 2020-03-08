@@ -3,6 +3,7 @@ package com.github.mustfun.mybatis.plugin.ui;
 import com.github.mustfun.mybatis.plugin.listener.CheckMouseListener;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
+import com.github.mustfun.mybatis.plugin.model.ModuleConfig;
 import com.github.mustfun.mybatis.plugin.model.Template;
 import com.github.mustfun.mybatis.plugin.model.enums.VmTypeEnums;
 import com.github.mustfun.mybatis.plugin.service.MysqlService;
@@ -10,15 +11,19 @@ import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ConnectDbSetting;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
+import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.panel.ProgressPanel;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CheckBoxList;
@@ -27,10 +32,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
@@ -330,20 +332,34 @@ public final class UiGenerateUtil {
         if (readFromConnectLog(connectDbSetting)) {
             return;
         }
-        VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
-        VirtualFile file = JavaUtils
-            .getFileByPattenName(Objects.requireNonNull(baseDir), "application.properties", "application-dev.properties", "application.yml",
-                "application-dev.yml");
-        if (file == null) {
-            return;
+        Pair<Boolean, Object> pair = ConnectionHolder.getInstance(project).getConfigOrOne("DEFAULT");
+        Object second = pair.getSecond();
+        if(second == null){
+            return ;
         }
-        //读取yml文件
-        File ymlFile = new File(file.getPath());
-        if (file.getPath().contains(".yml") || file.getPath().contains(".yaml")) {
-            insertPanelUseYaml(connectDbSetting, ymlFile);
-        } else if (file.getPath().contains(".properties")) {
-            insertPanelUseProperties(connectDbSetting, ymlFile);
+        ModuleConfig config = (ModuleConfig) second;
+        insertPanelUseConfig(connectDbSetting, config);
+    }
+
+    private void insertPanelUseConfig(ConnectDbSetting connectDbSetting, ModuleConfig config) {
+        connectDbSetting.getUserName().setText(config.getUserName());
+        String password = config.getPassword();
+        if (password != null && password.length() >= 64) {
+            try {
+                password = ConfigTools.decrypt(password);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        connectDbSetting.getPassword().setText(password);
+
+        String value = config.getDbAddress();
+        String[] s = value.split("/");
+        String[] split = s[2].split(":");
+        connectDbSetting.getAddress().setText(split[0]);
+        connectDbSetting.getPort().setText(split[1]);
+        String s1 = s[3].split("\\?")[0];
+        connectDbSetting.getDbName().setText(s1);
     }
 
     /**

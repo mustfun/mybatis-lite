@@ -9,6 +9,7 @@
 - 可选保存当前位置，作用于当前项目，避免系统选择错误
 - 双击模板一列即可实时编辑模板，语法高亮显示
 - 可选PO大小写功能，默认小写Po
+> Tools->Mybatis-Lite->Generate-Code
 
 ![生成controller等案例](doc/sample_new.gif)
 ### II. 跳转配置
