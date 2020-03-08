@@ -5,6 +5,7 @@ import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
+import com.github.mustfun.mybatis.plugin.model.ModuleConfig;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.*;
@@ -19,6 +20,7 @@ import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.injected.editor.VirtualFileWindow;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -100,22 +102,13 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
     @SuppressWarnings("unchecked")
     private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement, PsiElement position) {
         String tableName = SqlUtil.getTableNameFromSql(idDomElement,position);
-        Map<String, DbSourcePo> config = (Map<String, DbSourcePo>) ConnectionHolder.getInstance(project).getConfig(MODULE_DB_CONFIG);
-        if (config==null){
+        Pair<Boolean, Object> configOrOne = ConnectionHolder.getInstance(project).getConfigOrOne(Objects.requireNonNull(idDomElement.getModule()).getName());
+        if (configOrOne==null||configOrOne.getSecond()==null){
+            logger.warn("【Mybatis Lite】该模块下找不到合适的数据源");
             return;
         }
         //只有一个module的情况
-        DbSourcePo dbSourcePo;
-        if(config.size()==1){
-            dbSourcePo = config.get(config.keySet().iterator().next());
-        }else {
-            //多个module根据名称来
-            dbSourcePo = config.get(Objects.requireNonNull(Objects.requireNonNull(idDomElement.getModule()).getName()));
-        }
-        if (dbSourcePo==null){
-            logger.warn("【Mybatis Lite】该模块下找不到合适的数据源");
-            return ;
-        }
+        DbSourcePo dbSourcePo= (DbSourcePo) configOrOne.getSecond();
 
         DatabaseDriverManager instance = DatabaseDriverManager.getInstance();
         Collection<? extends DatabaseDriver> drivers = instance.getDrivers();
