@@ -5,6 +5,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,6 +28,7 @@ public class ResolverFacade {
     }
 
     private void initFileResolvers() {
+        fileResolvers = new ArrayList<>();
         fileResolvers.add(new YamlFileResolver());
         fileResolvers.add(new PropertiesFileResolver());
         fileResolvers.add(new XmlConfigFileResolver());

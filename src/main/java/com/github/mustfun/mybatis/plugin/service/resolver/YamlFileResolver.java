@@ -27,8 +27,8 @@ public class YamlFileResolver extends AbstractFileResolver<VirtualFile, Properti
         //典型普通yml文件
         Yaml yaml = new Yaml();
         try {
-            Map<String, Object> source = (Map<String, Object>) yaml.load(new FileInputStream(new File(map.getPath())));
-            Map<StringBuilder,Object> resultMap = new HashMap<>();
+            Map<String, Object> source = yaml.load(new FileInputStream(new File(map.getPath())));
+            Map<StringBuilder,Object> resultMap = new HashMap<>(20);
             tranHashMapToFlatMap(source, new StringBuilder(), resultMap);
             Properties properties = new Properties();
             properties.putAll(resultMap);

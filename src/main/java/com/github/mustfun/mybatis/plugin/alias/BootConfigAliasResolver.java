@@ -36,7 +36,7 @@ public class BootConfigAliasResolver extends PackageAliasResolver {
             return res;
         }
         Pair<Boolean, Object> config = ConnectionHolder.getInstance(project).getConfigOrOne(currentModule.getName()) ;
-        if (config.second==null){
+        if (config==null||config.second==null){
             return res;
         }
         ModuleConfig moduleConfig = (ModuleConfig) config.second;

@@ -96,6 +96,7 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
             mybatisSettingForm.getSqlFieldOpenButton().setSelected(false);
             mybatisSettingForm.getSqlFieldCloseButton().setSelected(true);
         }
+        mybatisSettingForm.getBootConfigNameTextField().setText(rawStateMap.get(MybatisConstants.CONFIG_FILE_NAME));
     }
 
 
@@ -111,6 +112,7 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         map.put(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY,mybatisSettingForm.getSelectPattenInput().getText());
         map.put(MybatisConstants.NAVIGATION_OPEN_STATUS, mybatisSettingForm.openNaviButton.isSelected() ? MybatisConstants.TRUE : "0");
         map.put(MybatisConstants.SQL_FIELD_STATUS, mybatisSettingForm.getSqlFieldOpenButton().isSelected() ? MybatisConstants.TRUE : "0");
+        map.put(MybatisConstants.CONFIG_FILE_NAME, mybatisSettingForm.getBootConfigNameTextField().getText());
         return map;
     }
 

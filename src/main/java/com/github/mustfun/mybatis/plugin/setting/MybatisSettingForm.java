@@ -14,7 +14,7 @@ import lombok.Setter;
  * @update itar
  * @function form
  * 心得： 只有当最后一个radioBox是want Grow的时候才会撑满后面的
- * 心得2： 两个panel互相嵌套时候
+ * 心得2： 两个panel互相嵌套时候 直接往后拉
  */
 @Setter
 @Getter
