@@ -6,6 +6,7 @@ import com.github.mustfun.mybatis.plugin.util.MapperUtils;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.DomElement;
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +50,6 @@ public class DaoMethodConverter extends AbstractConverterAdaptor<PsiMethod> {
     @Nullable
     @Override
     public LookupElement createLookupElement(PsiMethod psiMethod) {
-        return LookupElementBuilder.createWithIcon(psiMethod);
+        return LookupElementBuilder.createWithIcon(psiMethod).withTypeText(((PsiClassImpl) psiMethod.getParent()).getName());
     }
 }
