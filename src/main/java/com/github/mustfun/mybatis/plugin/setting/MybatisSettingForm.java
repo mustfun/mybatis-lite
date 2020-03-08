@@ -14,6 +14,7 @@ import lombok.Setter;
  * @update itar
  * @function form
  * 心得： 只有当最后一个radioBox是want Grow的时候才会撑满后面的
+ * 心得2： 两个panel互相嵌套时候
  */
 @Setter
 @Getter
@@ -35,6 +36,7 @@ public class MybatisSettingForm {
     private JPanel otherSettingPanel1;
     private JRadioButton sqlFieldOpenButton;
     private JRadioButton sqlFieldCloseButton;
+    private JTextField bootConfigNameTextField;
 
     public MybatisSettingForm() {
         ButtonGroup buttonGroup = new ButtonGroup();
