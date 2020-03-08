@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.init;
 
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
+import com.github.mustfun.mybatis.plugin.model.ModuleConfig;
 import com.github.mustfun.mybatis.plugin.service.resolver.YamlFileResolver;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
@@ -11,14 +12,11 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.eclipse.aether.util.ConfigUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import static com.github.mustfun.mybatis.plugin.util.MybatisConstants.MODULE_DB_CONFIG;
 
 /**
  * @author itar
@@ -41,7 +39,9 @@ public class InitMybatisLiteActivity implements StartupActivity {
         try {
             Map<String, DbSourcePo> stringDbSourcePoMap = initDatabase(project);
             if (!stringDbSourcePoMap.isEmpty()) {
-                ConnectionHolder.getInstance(project).putConfig(MODULE_DB_CONFIG, stringDbSourcePoMap);
+                for (String s : stringDbSourcePoMap.keySet()) {
+                    ConnectionHolder.getInstance(project).putConfig(s,stringDbSourcePoMap.get(s));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,10 +66,11 @@ public class InitMybatisLiteActivity implements StartupActivity {
             if(resolve==null){
                 continue;
             }
-            String masterUserName=null,userName=null,masterPassword=null,password=null,masterUrl=null,url=null;
+            String masterUserName=null,userName=null,masterPassword=null,password=null,masterUrl=null,url=null,typeAliasPackage=null;
             for (Object o : resolve.keySet()) {
                 String key = o.toString();
                 String value = resolve.get(o).toString();
+                //解析数据库
                 if (key.contains("database")&&(key.contains("username")|| key.contains("user"))){
                     if (key.contains("master")) {
                         masterUserName = value;
@@ -91,18 +92,22 @@ public class InitMybatisLiteActivity implements StartupActivity {
                         url = value;
                     }
                 }
-
+                //解析mybatis配置文件
+                if (key.contains("mybatis")&&key.contains("type")&&key.contains("aliases")&&key.contains("package")) {
+                    typeAliasPackage = value;
+                }
             }
-            DbSourcePo dbSourcePo = new DbSourcePo();
-            dbSourcePo.setDbAddress(masterUrl==null?url:masterUrl);
-            dbSourcePo.setUserName(masterUserName==null?userName:masterUserName);
-            dbSourcePo.setPassword(masterPassword==null?password:masterPassword);
+            ModuleConfig moduleConfig = new ModuleConfig();
+            moduleConfig.setDbAddress(masterUrl==null?url:masterUrl);
+            moduleConfig.setUserName(masterUserName==null?userName:masterUserName);
+            moduleConfig.setPassword(masterPassword==null?password:masterPassword);
             try {
-                dbSourcePo.setPassword(dbSourcePo.getPassword().length()>64? ConfigTools.decrypt(dbSourcePo.getPassword()):dbSourcePo.getPassword());
+                moduleConfig.setPassword(moduleConfig.getPassword().length()>64? ConfigTools.decrypt(moduleConfig.getPassword()):moduleConfig.getPassword());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            map.put(module.getName(), dbSourcePo);
+            moduleConfig.setTypeAliasPackage(typeAliasPackage);
+            map.put(module.getName(), moduleConfig);
         }
         return map;
     }

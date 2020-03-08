@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @updater itar
- * @funcion 配置包路径解析器
+ * @funcion 配置包路径解析器 - configuration package时候用
  */
 public class ConfigPackageAliasResolver extends PackageAliasResolver {
 

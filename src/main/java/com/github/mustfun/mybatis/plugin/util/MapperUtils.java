@@ -204,6 +204,11 @@ public final class MapperUtils {
         return isMapperWithSameNamespace(contextMapper, mapper) ? id : idsignature;
     }
 
+    /**
+     * 找类型别名
+     * @param project
+     * @param processor
+     */
     public static void processConfiguredTypeAliases(@NotNull Project project, @NotNull Processor<TypeAlias> processor) {
         for (Configuration conf : getMybatisConfigurations(project)) {
             for (TypeAliases tas : conf.getTypeAliases()) {

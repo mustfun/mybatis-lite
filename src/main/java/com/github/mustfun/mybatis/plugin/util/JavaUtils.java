@@ -33,6 +33,11 @@ public final class JavaUtils {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * 判断是否是模型类，不是接口不是枚举等
+     * @param clazz
+     * @return
+     */
     public static boolean isModelClazz(@Nullable PsiClass clazz) {
         return null != clazz && !clazz.isAnnotationType() && !clazz.isInterface() && !clazz.isEnum() && clazz.isValid();
     }

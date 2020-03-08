@@ -68,7 +68,7 @@ public class AliasFacade {
         for (AliasResolver resolver : resolvers) {
             Set<AliasDesc> classAliasDescriptions = resolver.getClassAliasDescriptions(element);
             for (AliasDesc desc : classAliasDescriptions) {
-                if (desc.getAlias().equals(shortName)) {
+                if (desc.getAlias().equalsIgnoreCase(shortName)) {
                     return Optional.of(desc.getClazz());
                 }
             }

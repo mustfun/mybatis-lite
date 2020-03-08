@@ -60,6 +60,16 @@ public class ConnectionHolder {
         return configMap.get(key);
     }
 
+    public Object getConfigOrOne(String key) {
+        if (configMap==null){
+            return null;
+        }
+        if (configMap.size()==1){
+            return configMap.get(configMap.keySet().iterator().next());
+        }
+        return configMap.get(key);
+    }
+
     public void putConfig(String key ,Object value) {
         if (configMap==null){
             configMap = new HashMap<>(1);
