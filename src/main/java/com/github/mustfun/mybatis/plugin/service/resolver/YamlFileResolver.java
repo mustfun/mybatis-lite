@@ -1,6 +1,10 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
+import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.lang.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -17,7 +21,19 @@ public class YamlFileResolver extends AbstractFileResolver<VirtualFile, Properti
 
     @Override
     String[] getPattern() {
-        List<String> strings = Collections.singletonList("application-dev.yml");
+        List<String> strings =null;
+        String[] pattern = super.getPattern();
+        List<String> result = new ArrayList<>();
+        for (String s : pattern) {
+            if (s.contains("yml")||s.contains("ymal")){
+                result.add(s);
+            }
+        }
+        if (CollectionUtils.isEmpty(result)){
+            strings= Arrays.asList("application*.yml","application*.ymal");
+        }else{
+            strings = result;
+        }
         return strings.toArray(new String[0]);
     }
 

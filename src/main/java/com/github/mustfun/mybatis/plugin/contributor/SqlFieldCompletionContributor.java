@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.contributor;
 
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
+import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.LocalColumn;
 import com.github.mustfun.mybatis.plugin.model.LocalTable;
@@ -71,6 +72,7 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         PsiFile topLevelFile = InjectedLanguageManager.getInstance(position.getProject()).getTopLevelFile(position);
         if (MybatisDomUtils.isMybatisFile(topLevelFile)) {
             if (shouldAddElement(position.getContainingFile(), parameters.getOffset())) {
+                //new InitMybatisLiteActivity().runActivity(position.getProject()); //快捷测试用
                 process(topLevelFile, result, position);
             }
         }

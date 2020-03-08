@@ -6,7 +6,7 @@
 
     <description><![CDATA[
           Plugin for mybatis to generate controller,service,dao,mapper and model <br/>
-          The plugin provide those features.
+          The plugin provides those features.
           <ul>
               <li>Generate Controller,Service,Dao,Mapper Xml and Model</li>
               <li>Code completion, syntax highlighting.</li>

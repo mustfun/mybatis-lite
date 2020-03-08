@@ -66,7 +66,7 @@ public class InitMybatisLiteActivity implements StartupActivity {
             }
             for (AbstractFileResolver<VirtualFile, Properties> fileResolver : fileResolvers) {
                 Properties resolve = fileResolver.resolve(moduleFile.getParent());
-                if(resolve==null){
+                if(resolve==null||resolve.size()==0){
                     continue;
                 }
                 addToConfigMap(map, module,resolve);

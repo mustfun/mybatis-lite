@@ -1,11 +1,13 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
+import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -20,7 +22,11 @@ public abstract class AbstractFileResolver<T, F> implements FileResolver<T, F> {
      *
      * @return
      */
-    abstract String[] getPattern();
+    String[] getPattern(){
+        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        String s = valueMap.get(MybatisConstants.CONFIG_FILE_NAME);
+        return new String[]{s};
+    }
 
     public F beforeResolve(T t) {
         return null;
@@ -38,7 +44,7 @@ public abstract class AbstractFileResolver<T, F> implements FileResolver<T, F> {
     public F resolve(T file) {
         String[] pattern = getPattern();
         beforeResolve(file);
-        Map<String, VirtualFile> map = new HashMap<>();
+        Map<String, VirtualFile> map = new LinkedHashMap<>();
         VfsUtilCore.visitChildrenRecursively((VirtualFile) file, new VirtualFileVisitor<VirtualFile>() {
             @Override
             public boolean visitFile(@NotNull VirtualFile file) {
@@ -46,9 +52,18 @@ public abstract class AbstractFileResolver<T, F> implements FileResolver<T, F> {
                 if (excludeFile(file)) {
                     return false;
                 }
+                if (file.getExtension()==null){
+                    return true;
+                }
+                //application*.properties , db*.properties , application*.ymal
                 for (String s : pattern) {
-                    if (file.getPath().contains(s)) {
-                        map.put(s, file);
+                    s= s.replace("*", "");
+                    String[] split = s.split("\\.");
+                    if(split.length<1){
+                        continue;
+                    }
+                    if (file.getNameWithoutExtension().contains(split[0])&&file.getExtension().contains(split[1])){
+                        map.put(file.getName(), file);
                     }
                 }
                 return true;
@@ -61,15 +76,21 @@ public abstract class AbstractFileResolver<T, F> implements FileResolver<T, F> {
         return convert(virtualFile);
     }
 
+    /**
+     * 获得测试环境的配置文件
+     * @param map
+     * @return
+     */
     protected VirtualFile guessMostLikelyConfigFile(Map<String, VirtualFile> map) {
         VirtualFile configFile = null;
         for (String s : map.keySet()) {
-            if (map.get(s).getPath().contains("config")) {
+            if (s.contains("dev")) {
                 configFile = map.get(s);
             }
-            if (configFile == null) {
-                configFile = map.get(s);
-            }
+        }
+        //首先找application-dev之类的文件，如果没有-dev之类的文件,就取第一个好了
+        if (configFile == null) {
+            configFile = map.get(map.keySet().iterator().next());
         }
         return configFile;
     }

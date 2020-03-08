@@ -16,7 +16,7 @@ public class XmlConfigFileResolver extends AbstractFileResolver<VirtualFile,Prop
 
     @Override
     String[] getPattern() {
-        List<String> strings = Collections.singletonList("application-dev.properties");
+        List<String> strings = Collections.singletonList("application-dev.xml");
         return strings.toArray(new String[0]);
     }
 

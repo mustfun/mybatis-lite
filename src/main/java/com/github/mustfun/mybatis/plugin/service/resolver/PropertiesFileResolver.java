@@ -1,10 +1,12 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
+import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -18,7 +20,19 @@ public class PropertiesFileResolver extends AbstractFileResolver<VirtualFile,Pro
 
     @Override
     String[] getPattern() {
-        List<String> strings = Arrays.asList("application-dev.properties", "db.properties","dbConfig.properties");
+        List<String> strings =null;
+        String[] pattern = super.getPattern();
+        List<String> result = new ArrayList<>();
+        for (String s : pattern) {
+            if (s.contains("properties")){
+                result.add(s);
+            }
+        }
+        if (CollectionUtils.isEmpty(result)){
+            strings=Arrays.asList("application*.properties", "db*.properties");
+        }else{
+            strings = result;
+        }
         return strings.toArray(new String[0]);
     }
 
