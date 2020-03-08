@@ -22,6 +22,7 @@
       <h4>1.1.5</h4>
       <ul>
           <li>修复其它地方注入Mapper报错问题</li>
+          <li>修复SpringBoot支持Mybatis别名问题</li>
       </ul>
       <h4>1.1.3</h4>
       <ul>
