@@ -134,15 +134,17 @@ public class DbUtil {
                 tempFile.mkdirs();
             }
             File targetFile = new File(tempFile, "generate_web.db");
-            System.out.println("creating temp db File file: " + targetFile.getAbsolutePath());
 
             FileOutputStream fileOutputStream = new FileOutputStream(targetFile);
+            FileOutputStream fileOutputStreamBk = new FileOutputStream(new File(tempFile,"generate_web_bk.db"));
             byte[] buffer = new byte[32768];
             int length;
             while ((length = stream.read(buffer)) > 0) {
                 fileOutputStream.write(buffer, 0, length);
+                fileOutputStreamBk.write(buffer, 0, length);
             }
             fileOutputStream.close();
+            fileOutputStreamBk.close();
             stream.close();
 
             return targetFile.getPath();
@@ -188,6 +190,29 @@ public class DbUtil {
         }
         if (conn != null) {
             ConnectionHolder.getInstance(project).addConnection(cacheKey, conn);
+        }
+        return conn;
+    }
+
+
+    /**
+     * 获取内部sqlLite数据信息
+     */
+    public Connection getInnerSqlLiteConnection(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection conn = null;
+        try {
+            //String realPath = DbUtil.this.getClass().getResource("/db/generate_web.db").getPath();
+            //作为第三方jar包时用resource方式依然访问不到,放弃
+            //conn = DriverManager.getConnection("jdbc:sqlite::resource:"+getClass().getResource("/db/generate_web.db").getFile());
+            String tempPath = MybatisConstants.TEMP_DIR_PATH + "/db/generate_web_bk.db";
+            conn = DriverManager.getConnection("jdbc:sqlite:"+tempPath);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return conn;
     }

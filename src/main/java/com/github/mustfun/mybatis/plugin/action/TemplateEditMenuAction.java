@@ -8,6 +8,8 @@ import com.github.mustfun.mybatis.plugin.setting.TemplateListForm;
 import com.github.mustfun.mybatis.plugin.setting.TemplateListForm.MyTableModel;
 import com.github.mustfun.mybatis.plugin.ui.custom.TemplateListPanel;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
+import com.github.mustfun.mybatis.plugin.util.DbUtil;
+import com.github.mustfun.mybatis.plugin.util.Icons;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.AppTopics;
 import com.intellij.ide.highlighter.JavaFileType;
@@ -34,10 +36,14 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -57,21 +63,22 @@ public class TemplateEditMenuAction extends AnAction {
         Project project = e.getProject();
         TemplateListForm templateListForm = new TemplateListForm(project);
         JBTable templateList = templateListForm.getTemplateList();
-        String[] headName = {"模板名称", "创建人", "模板类型", "操作"};
+        String[] headName = {"模板名称", "创建人", "模板类型", "操作",""};
 
         SqlLiteService sqlLiteService = DbServiceFactory.getInstance(Objects.requireNonNull(project)).createSqlLiteService();
-        Connection connection = sqlLiteService.getSqlLiteConnection();
 
         List<Template> templates = sqlLiteService.queryTemplateList();
         Object[][] obj = new Object[templates.size()][];
         for (int i = 0; i < templates.size(); i++) {
             Template template = templates.get(i);
             JButton button = new JButton("编辑");
-            Object[] objects = new Object[4];
+            JButton button2 = new JButton("初始化");
+            Object[] objects = new Object[5];
             objects[0] = template.getTepName();
             objects[1] = template.getCreateBy() == null ? "" : template.getCreateBy();
             objects[2] = VmTypeEnums.findVmNameByVmType(template.getVmType()).getMgs();
             objects[3] = button;
+            objects[4] = button2;
             obj[i] = objects;
         }
         templateList.setModel(new MyTableModel(headName, obj));
@@ -165,6 +172,22 @@ public class TemplateEditMenuAction extends AnAction {
                                 }
                             }
                         });
+                }
+                //还原模板文件用
+                if (column==4){
+                    if (Messages.showYesNoDialog("确定要恢复当前模板吗?", "Mybatis Lite", Icons.MYBATIS_LOGO_MINI)==Messages.NO){
+                        return;
+                    }
+                    String tepName = (String)table.getValueAt(row, 0);
+                    Template template = templates.stream().filter(x -> x.getTepName().equals(tepName)).findAny().orElse(null);
+                    if (template==null){
+                        return ;
+                    }
+                    SqlLiteService innerSqlLiteService = DbServiceFactory.getInstance(project).createInnerSqlLiteService();
+                    template = innerSqlLiteService.queryTemplateById(template.getId());
+                    SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
+                    sqlLiteService.updateTemplate(template);
+                    Messages.showMessageDialog("恢复模板成功", "Mybatis Lite", Icons.MYBATIS_LOGO_MINI);
                 }
             }
         });

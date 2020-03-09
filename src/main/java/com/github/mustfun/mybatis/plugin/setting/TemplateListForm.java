@@ -3,14 +3,13 @@ package com.github.mustfun.mybatis.plugin.setting;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
-import java.awt.Component;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 /**
  * @author dengzhiyuan
@@ -95,9 +94,6 @@ public class TemplateListForm {
             boolean isSelected, boolean hasFocus, int row, int column) {
             JButton cmb = (JButton) value;
             cmb.setFont(table.getFont());
-            if (isSelected) {
-
-            }
             return cmb;
         }
     }

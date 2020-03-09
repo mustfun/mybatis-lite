@@ -46,6 +46,16 @@ public class SqlLiteService {
         }
     }
 
+    public SqlLiteService() {
+        DbUtil dbUtil = new DbUtil();
+        this.connection = dbUtil.getInnerSqlLiteConnection();
+        try {
+            this.statement = connection.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public Template queryTemplateById(Integer id) {
         try {
@@ -80,8 +90,9 @@ public class SqlLiteService {
 
     public void updateTemplate(Template template) {
         try {
+            String content = template.getTepContent().replace("'", "''");
             statement.executeUpdate(
-                "update template set tep_content='" + template.getTepContent() + "' where id=" + template.getId());
+                "update template set tep_content='" + content + "' where id=" + template.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

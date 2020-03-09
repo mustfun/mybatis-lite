@@ -41,4 +41,13 @@ public class DbServiceFactory {
     public SqlLiteService createSqlLiteService(){
         return new SqlLiteService(project);
     }
+
+    /**
+     * 获取SqlLite的service
+     * @return
+     */
+    public SqlLiteService createInnerSqlLiteService(){
+        return new SqlLiteService();
+    }
 }
+
