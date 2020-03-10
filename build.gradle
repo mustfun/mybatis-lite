@@ -40,7 +40,7 @@ intellij {
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
     version = 'IU-2019.3'
-    plugins = ['coverage','Spring','DatabaseTools','java']//'coverage'
+    plugins = ['coverage','Spring','SpringBoot','DatabaseTools','java']//'coverage'
     pluginName = 'Mybatis-Lite'
 }
 patchPluginXml {

@@ -104,6 +104,7 @@
     <idea-version since-build="191.4213"/>
     <depends optional="true" config-file="">com.intellij.database</depends>
     <depends optional="true" config-file="">com.intellij.spring</depends>
+    <depends config-file="">com.intellij.spring.boot</depends>
     <depends config-file="">com.intellij.modules.java</depends>
     <depends config-file="">com.intellij.modules.ultimate</depends>
 
