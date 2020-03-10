@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.setting;
 
+import com.github.mustfun.mybatis.plugin.listener.SettingApplyListener;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.openapi.options.SearchableConfigurable;
 import org.jetbrains.annotations.Nls;
@@ -71,6 +72,7 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
     public void apply(){
         Map<String, String> newMap = transDataToMap();
         MybatisLiteSetting.getInstance().loadState(new MybatisLiteSetting.MybatisLiteState(newMap));
+        new SettingApplyListener().notify(newMap,rawStateMap);
         rawStateMap = newMap;
     }
 
