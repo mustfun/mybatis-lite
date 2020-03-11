@@ -11,21 +11,10 @@ import com.github.mustfun.mybatis.plugin.util.DbUtil;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -39,6 +28,17 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -48,6 +48,7 @@ import org.apache.velocity.runtime.resource.util.StringResourceRepository;
  * @since 1.0
  */
 public class MysqlService {
+    private static final  Logger logger = LoggerFactory.getLogger(MysqlService.class);
 
     public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String DEFAULT_PACKAGE_PATH = "com.github.mustfun";
@@ -103,6 +104,7 @@ public class MysqlService {
         LocalTable localTable = new LocalTable();
         String tableName = rs.getString("TABLE_NAME");
         System.out.println("tableName = " + tableName);
+        logger.debug("获取到的tableName = " + tableName);
         String tableType = rs.getString("TABLE_TYPE");
         String remarks = rs.getString("REMARKS");
         localTable.setComment(remarks);

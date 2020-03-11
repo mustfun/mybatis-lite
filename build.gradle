@@ -22,6 +22,9 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.23.1'
+    //compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    //compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    //compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compileOnly 'org.projectlombok:lombok:1.18.2'
@@ -133,4 +136,19 @@ publishPlugin {
 }
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+}
+jar.doFirst {
+    manifest {
+        def manifestFile = "${projectDir}/META-INF/MANIFEST.MF"
+        if (new File(manifestFile).exists())
+            from(manifestFile)
+
+        logger.info 'Manifest: ' + manifestFile
+        //attributes 'Class-Path': manifestPath
+        attributes 'Build-date': new Date();
+        attributes 'Application-Version': project.version
+        attributes 'Premain-Class': 'com.github.mustfun.mybatis.plugin.agent.MainAdapter'
+        attributes 'Author' : 'mustfun'
+
+    }
 }

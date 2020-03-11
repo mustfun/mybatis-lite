@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--本地的时候配置文件会打印-->
+<configuration>
+    <property name="pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [%magenta(%X{LIP:-#})][%yellow(%X{traceNo:-#})] &lt;%green(%t)&gt; %cyan(%logger{80}) :%msg%n"/>
+
+    <property name="LOG_HOME" value="D:\log"/>
+    <property name="log.level" value="debug"/>
+    <property name="log.maxHistory" value="30"/>
+
+    <appender name="ROOT_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- DEBUG级别日志 appender -->
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/debug/%d{yyyy-MM-dd}/%i.log</fileNamePattern>
+            <maxHistory>${log.maxHistory}</maxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>2MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.mustfun.mybatis.plugin" level="debug" additivity="false">
+        <appender-ref ref="ROOT_CONSOLE"/>
+        <appender-ref ref="DEBUG"/>
+    </logger>
+
+
+    <root level="debug">
+        <appender-ref ref="ROOT_CONSOLE"/>
+        <appender-ref ref="DEBUG"/>
+    </root>
+</configuration>
