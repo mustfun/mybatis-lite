@@ -99,6 +99,14 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
             mybatisSettingForm.getSqlFieldCloseButton().setSelected(true);
         }
         mybatisSettingForm.getBootConfigNameTextField().setText(rawStateMap.get(MybatisConstants.CONFIG_FILE_NAME));
+        boolean sqlPrint = MybatisConstants.TRUE.equalsIgnoreCase(rawStateMap.get(MybatisConstants.SQL_PRINT_STATUS));
+        if(sqlPrint){
+            mybatisSettingForm.getSqlPrintOpen().setSelected(true);
+            mybatisSettingForm.getSqlPrintClose().setSelected(false);
+        }else{
+            mybatisSettingForm.getSqlPrintOpen().setSelected(false);
+            mybatisSettingForm.getSqlPrintClose().setSelected(true);
+        }
     }
 
 
@@ -115,6 +123,7 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         map.put(MybatisConstants.NAVIGATION_OPEN_STATUS, mybatisSettingForm.openNaviButton.isSelected() ? MybatisConstants.TRUE : "0");
         map.put(MybatisConstants.SQL_FIELD_STATUS, mybatisSettingForm.getSqlFieldOpenButton().isSelected() ? MybatisConstants.TRUE : "0");
         map.put(MybatisConstants.CONFIG_FILE_NAME, mybatisSettingForm.getBootConfigNameTextField().getText());
+        map.put(MybatisConstants.SQL_PRINT_STATUS, mybatisSettingForm.getSqlPrintOpen().isSelected() ? MybatisConstants.TRUE : "0");
         return map;
     }
 

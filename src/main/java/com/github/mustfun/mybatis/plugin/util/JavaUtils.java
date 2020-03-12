@@ -3,6 +3,8 @@ package com.github.mustfun.mybatis.plugin.util;
 import com.github.mustfun.mybatis.plugin.annotation.Annotation;
 import com.github.mustfun.mybatis.plugin.dom.model.IdDomElement;
 import com.google.common.collect.Lists;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -462,5 +464,19 @@ public final class JavaUtils {
             }
         });
         return result;
+    }
+
+    public static String getPluginFullNameWithExtension(){
+        IdeaPluginDescriptor[] plugins = PluginManager.getPlugins();
+        IdeaPluginDescriptor currentPlugin = null;
+        for (IdeaPluginDescriptor plugin : plugins) {
+            if (plugin.getName().equals(MybatisConstants.PLUGIN_NO_CONNECT_NAME)){
+                currentPlugin = plugin;
+            }
+        }
+        if (currentPlugin==null){
+            throw new RuntimeException("【MyBatis-Lite】建议设置中关闭SQL打印功能，影响项目启动");
+        }
+        return MybatisConstants.PLUGIN_NAME+"-" + currentPlugin.getVersion() + ".jar";
     }
 }

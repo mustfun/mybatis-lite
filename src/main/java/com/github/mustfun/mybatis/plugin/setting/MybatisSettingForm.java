@@ -37,6 +37,8 @@ public class MybatisSettingForm {
     private JRadioButton sqlFieldOpenButton;
     private JRadioButton sqlFieldCloseButton;
     private JTextField bootConfigNameTextField;
+    private JRadioButton sqlPrintClose;
+    private JRadioButton sqlPrintOpen;
 
     public MybatisSettingForm() {
         ButtonGroup buttonGroup = new ButtonGroup();
@@ -47,6 +49,10 @@ public class MybatisSettingForm {
         ButtonGroup buttonGroup2 = new ButtonGroup();
         buttonGroup2.add(sqlFieldCloseButton);
         buttonGroup2.add(sqlFieldOpenButton);
+
+        ButtonGroup buttonGroup3 = new ButtonGroup();
+        buttonGroup3.add(sqlPrintClose);
+        buttonGroup3.add(sqlPrintOpen);
     }
 
 }

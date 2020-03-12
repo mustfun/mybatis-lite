@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
-    <version>1.1.5</version>
+    <version>1.1.6</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -19,6 +19,11 @@
     </description>
 
     <change-notes><![CDATA[
+      <h4>1.1.6</h4>
+      <ul>
+          <li>模板可以重置功能</li>
+          <li>右键项目菜单中新增MyBatis Lite选项功能</li>
+      </ul>
       <h4>1.1.5</h4>
       <ul>
           <li>修复其它地方注入Mapper报错问题</li>

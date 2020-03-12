@@ -6,13 +6,19 @@ import com.github.mustfun.mybatis.plugin.service.resolver.AbstractFileResolver;
 import com.github.mustfun.mybatis.plugin.service.resolver.ResolverFacade;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
+import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
+import com.intellij.execution.RunManager;
+import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.spring.boot.run.SpringBootApplicationConfigurationType;
+import com.intellij.spring.boot.run.SpringBootApplicationRunConfiguration;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -34,11 +40,36 @@ public class InitMybatisLiteActivity implements StartupActivity {
      */
     @Override
     public void runActivity(@NotNull Project project) {
+        initProjectConfig(project);
+        initProjectRunSetting(project);
+    }
+
+    private void initProjectRunSetting(Project project) {
         Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
-        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.SQL_FIELD_STATUS))) {
-            return ;
+        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.SQL_PRINT_STATUS))) {
+            return;
         }
+        List<RunnerAndConfigurationSettings> configurationSettingsList = RunManager.getInstance(project)
+                .getConfigurationSettingsList(SpringBootApplicationConfigurationType.class);
+        RunnerAndConfigurationSettings runnerAndConfigurationSettings = configurationSettingsList.get(0);
+        SpringBootApplicationRunConfiguration configuration = (SpringBootApplicationRunConfiguration) runnerAndConfigurationSettings.getConfiguration();
+
+        if (StringUtils.isEmpty(configuration.getVMParameters())) {
+            configuration.setVMParameters("-javaagent:" + MybatisConstants.PLUGIN_LIB_PATH + "/" + JavaUtils.getPluginFullNameWithExtension());
+        } else if (configuration.getVMParameters().contains("mybatis-lite")) {
+            return;
+        } else {
+            configuration.setVMParameters(configuration.getVMParameters() + "     -javaagent:" + MybatisConstants.PLUGIN_LIB_PATH + "/" + JavaUtils.getPluginFullNameWithExtension());
+        }
+        return;
+    }
+
+    private void initProjectConfig(@NotNull Project project) {
         try {
+            Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+            if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.SQL_FIELD_STATUS))) {
+                return ;
+            }
             Map<String, DbSourcePo> stringDbSourcePoMap = initDatabase(project);
             if (!stringDbSourcePoMap.isEmpty()) {
                 for (String s : stringDbSourcePoMap.keySet()) {

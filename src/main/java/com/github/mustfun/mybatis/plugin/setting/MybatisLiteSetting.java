@@ -5,13 +5,10 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.util.ArrayUtil;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +80,7 @@ public class MybatisLiteSetting implements PersistentStateComponent<MybatisLiteS
             map.put(NAVIGATION_OPEN_STATUS, MybatisConstants.TRUE);
             map.put(SQL_FIELD_STATUS, "0");
             map.put(MybatisConstants.CONFIG_FILE_NAME, "");
+            map.put(MybatisConstants.SQL_PRINT_STATUS, "0");
         }
 
         public MybatisLiteState(Map<String, String> map) {

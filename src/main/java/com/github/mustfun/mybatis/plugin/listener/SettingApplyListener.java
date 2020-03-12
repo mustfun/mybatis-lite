@@ -22,17 +22,32 @@ public class SettingApplyListener {
      * @param rawStateMap
      */
     public void notify(Map<String, String> newMap, Map<String, String> rawStateMap) {
-        String configNameNew = newMap.get(CONFIG_FILE_NAME);
-        String configNameRaw = rawStateMap.get(CONFIG_FILE_NAME);
-        if (configNameNew==null){
-           return ;
+        boolean a = false,b=false;
+        if (checkNeedRefresh(newMap.get(CONFIG_FILE_NAME), rawStateMap.get(CONFIG_FILE_NAME))){
+            a = true;
         }
-        if (configNameNew.equalsIgnoreCase(configNameRaw)){
-            return;
+        if (checkNeedRefresh(newMap.get(SQL_PRINT_STATUS), rawStateMap.get(SQL_PRINT_STATUS))){
+            b = true;
         }
+        if (a||b) {
+            refresh();
+        }
+    }
+
+    private void refresh() {
         Project[] defaultProject = ProjectManager.getInstance().getOpenProjects();
         for (Project project : defaultProject) {
             new InitMybatisLiteActivity().runActivity(project);
         }
+    }
+
+    private boolean checkNeedRefresh(String configNameNew, String configNameRaw) {
+        if (configNameNew==null){
+            return false;
+        }
+        if (configNameNew.equalsIgnoreCase(configNameRaw)){
+            return false;
+        }
+        return true;
     }
 }

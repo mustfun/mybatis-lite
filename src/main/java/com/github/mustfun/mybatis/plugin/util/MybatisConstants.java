@@ -11,9 +11,11 @@ import java.util.Arrays;
  */
 public final class MybatisConstants {
 
-    public static final String PLUGIN_NAME = "Mybatis-Lite";
+    public static final String PLUGIN_NAME = "MyBatis-Lite";
+    public static final String PLUGIN_NO_CONNECT_NAME = "MyBatis Lite";
 
     public static final String TEMP_DIR_PATH = PathManager.getPluginsPath() + "/" + PLUGIN_NAME + "/temp";
+    public static final String PLUGIN_LIB_PATH = PathManager.getPluginsPath() + "/" + PLUGIN_NAME + "/lib";
 
     public static final String SQL_LITE_CONNECTION = "sqlLiteConnection";
     public static final String MYSQL_DB_CONNECTION = "mysqlDbConnection";
@@ -37,6 +39,7 @@ public final class MybatisConstants {
     public static final String DEFAULT_DELETE_PATTEN_KEY = "DEFAULT_DELETE_PATTEN";
     public static final String NAVIGATION_OPEN_STATUS = "NAVIGATION_OPEN_STATUS";
     public static final String SQL_FIELD_STATUS = "SQL_FIELD_STATUS";
+    public static final String SQL_PRINT_STATUS = "SQL_PRINT_STATUS";
     public static final String CONFIG_FILE_NAME = "CONFIG_FILE_NAME";
     public static final String TRUE = "1";
     public static final String MODULE_DB_CONFIG = "MODULE_ALL_DB_CONFIG";
