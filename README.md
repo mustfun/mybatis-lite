@@ -1,4 +1,4 @@
-# Mybatis Lite
+# spring-boot-code-generator
 
 ## 写在最前面
 本项目 fork 自 [https://github.com/mustfun/mybatis-lite](https://github.com/mustfun/mybatis-lite) 起初只是为了 bug
