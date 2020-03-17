@@ -25,7 +25,7 @@ import javax.crypto.Cipher;
 import org.apache.commons.net.util.Base64;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/6/25
  * @since 1.0

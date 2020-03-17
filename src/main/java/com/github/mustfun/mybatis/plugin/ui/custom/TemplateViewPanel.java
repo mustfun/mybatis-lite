@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2020/02/26
  * @since 1.0

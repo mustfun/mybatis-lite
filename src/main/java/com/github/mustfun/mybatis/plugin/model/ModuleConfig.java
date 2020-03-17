@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * module的配置文件 - yml对应的配置信息
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/5/16
  * @since 1.0

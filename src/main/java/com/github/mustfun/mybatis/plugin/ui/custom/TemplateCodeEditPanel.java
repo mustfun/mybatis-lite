@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/6/13
  * @since 1.0

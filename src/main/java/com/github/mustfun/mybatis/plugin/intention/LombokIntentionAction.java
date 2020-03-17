@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * [Mybatis Lite]生成@Getter和@Setter注解
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/6/11
  * @since 1.0

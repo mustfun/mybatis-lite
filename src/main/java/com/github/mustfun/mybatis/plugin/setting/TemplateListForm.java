@@ -12,7 +12,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/6/19
  * @since 1.0

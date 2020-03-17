@@ -1,7 +1,7 @@
 package com.github.mustfun.mybatis.plugin.model.enums;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/5/17
  * @since 1.0

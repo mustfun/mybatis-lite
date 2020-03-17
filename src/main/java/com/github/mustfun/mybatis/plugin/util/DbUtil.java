@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/4/13
  * @since 1.0

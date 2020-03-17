@@ -9,7 +9,7 @@ import com.intellij.openapi.project.Project;
 import java.util.Objects;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/6/12
  * @since 1.0
