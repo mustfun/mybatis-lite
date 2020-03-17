@@ -29,7 +29,7 @@ import java.util.Properties;
 /**
  * @author itar
  * @date 2020-03-02
- * 项目初始化时候调用
+ * 项目初始化时候调用   等以后版本提高了之后可以使用DumbAware接口，版本要求193+
  */
 public class InitMybatisLiteActivity implements StartupActivity {
 

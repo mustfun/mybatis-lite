@@ -333,6 +333,9 @@ public final class UiGenerateUtil {
             return;
         }
         Pair<Boolean, Object> pair = ConnectionHolder.getInstance(project).getConfigOrOne("DEFAULT");
+        if(pair==null){
+            return ;
+        }
         Object second = pair.getSecond();
         if(second == null){
             return ;

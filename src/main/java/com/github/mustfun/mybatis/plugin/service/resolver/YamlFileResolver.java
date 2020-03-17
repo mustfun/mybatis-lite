@@ -3,6 +3,7 @@ package com.github.mustfun.mybatis.plugin.service.resolver;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang.StringUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -18,6 +19,10 @@ import java.util.*;
  * 抽象解析接口 - 专业解析Ymal 30年
  */
 public class YamlFileResolver extends AbstractFileResolver<VirtualFile, Properties> {
+
+    public YamlFileResolver(Project project) {
+        super(project);
+    }
 
     @Override
     String[] getPattern() {

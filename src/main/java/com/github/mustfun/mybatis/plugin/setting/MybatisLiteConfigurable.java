@@ -23,8 +23,6 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
 
     private MybatisSettingForm mybatisSettingForm;
 
-    private String separator = ";";
-
 
     public MybatisLiteConfigurable() {
         rawStateMap = Objects.requireNonNull(MybatisLiteSetting.getInstance().getState()).map;
@@ -98,7 +96,6 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
             mybatisSettingForm.getSqlFieldOpenButton().setSelected(false);
             mybatisSettingForm.getSqlFieldCloseButton().setSelected(true);
         }
-        mybatisSettingForm.getBootConfigNameTextField().setText(rawStateMap.get(MybatisConstants.CONFIG_FILE_NAME));
         boolean sqlPrint = MybatisConstants.TRUE.equalsIgnoreCase(rawStateMap.get(MybatisConstants.SQL_PRINT_STATUS));
         if(sqlPrint){
             mybatisSettingForm.getSqlPrintOpen().setSelected(true);
@@ -122,14 +119,13 @@ public class MybatisLiteConfigurable implements SearchableConfigurable {
         map.put(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY,mybatisSettingForm.getSelectPattenInput().getText());
         map.put(MybatisConstants.NAVIGATION_OPEN_STATUS, mybatisSettingForm.openNaviButton.isSelected() ? MybatisConstants.TRUE : "0");
         map.put(MybatisConstants.SQL_FIELD_STATUS, mybatisSettingForm.getSqlFieldOpenButton().isSelected() ? MybatisConstants.TRUE : "0");
-        map.put(MybatisConstants.CONFIG_FILE_NAME, mybatisSettingForm.getBootConfigNameTextField().getText());
         map.put(MybatisConstants.SQL_PRINT_STATUS, mybatisSettingForm.getSqlPrintOpen().isSelected() ? MybatisConstants.TRUE : "0");
         return map;
     }
 
     public Boolean needUpdate(Map<String,String> beforeMap,Map<String,String> afterMap){
         for (String s : beforeMap.keySet()) {
-            if (!afterMap.get(s).equalsIgnoreCase(beforeMap.get(s))){
+            if (!beforeMap.get(s).equalsIgnoreCase(afterMap.get(s))){
                 return true;
             }
         }

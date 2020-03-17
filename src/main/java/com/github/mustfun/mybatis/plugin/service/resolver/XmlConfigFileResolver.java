@@ -1,5 +1,6 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.util.Collections;
@@ -13,6 +14,10 @@ import java.util.Properties;
  * 属性解析接口
  */
 public class XmlConfigFileResolver extends AbstractFileResolver<VirtualFile,Properties>{
+
+    public XmlConfigFileResolver(Project project) {
+        super(project);
+    }
 
     @Override
     String[] getPattern() {

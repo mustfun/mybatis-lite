@@ -36,7 +36,6 @@ public class MybatisSettingForm {
     private JPanel otherSettingPanel1;
     private JRadioButton sqlFieldOpenButton;
     private JRadioButton sqlFieldCloseButton;
-    private JTextField bootConfigNameTextField;
     private JRadioButton sqlPrintClose;
     private JRadioButton sqlPrintOpen;
 

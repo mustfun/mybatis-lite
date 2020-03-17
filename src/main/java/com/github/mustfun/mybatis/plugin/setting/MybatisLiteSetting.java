@@ -19,7 +19,7 @@ import static com.github.mustfun.mybatis.plugin.util.MybatisConstants.SQL_FIELD_
 /**
  * @author yanglin
  * @update itar
- * @function Mybatis配置项 - 持久化
+ * @function Mybatis配置项 - 全局级别- 持久化
  */
 @State(
         name = "MybatisLiteSettings",
@@ -79,7 +79,6 @@ public class MybatisLiteSetting implements PersistentStateComponent<MybatisLiteS
             map.put(MybatisConstants.DEFAULT_SELECT_PATTEN_KEY, StringUtils.join(MybatisConstants.DEFAULT_SELECT_PATTEN,SEPARATOR));
             map.put(NAVIGATION_OPEN_STATUS, MybatisConstants.TRUE);
             map.put(SQL_FIELD_STATUS, "0");
-            map.put(MybatisConstants.CONFIG_FILE_NAME, "");
             map.put(MybatisConstants.SQL_PRINT_STATUS, "0");
         }
 

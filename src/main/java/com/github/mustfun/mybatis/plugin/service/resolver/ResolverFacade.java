@@ -20,18 +20,18 @@ public class ResolverFacade {
     private Project project;
 
     public ResolverFacade(Project project) {
-        initFileResolvers();
+        initFileResolvers(project);
     }
 
     public static ResolverFacade getInstance(@NotNull Project project) {
         return ServiceManager.getService(project, ResolverFacade.class);
     }
 
-    private void initFileResolvers() {
+    private void initFileResolvers(Project project) {
         fileResolvers = new ArrayList<>();
-        fileResolvers.add(new YamlFileResolver());
-        fileResolvers.add(new PropertiesFileResolver());
-        fileResolvers.add(new XmlConfigFileResolver());
+        fileResolvers.add(new YamlFileResolver(project));
+        fileResolvers.add(new PropertiesFileResolver(project));
+        fileResolvers.add(new XmlConfigFileResolver(project));
     }
 
     public List<AbstractFileResolver<VirtualFile, Properties>> getFileResolvers() {

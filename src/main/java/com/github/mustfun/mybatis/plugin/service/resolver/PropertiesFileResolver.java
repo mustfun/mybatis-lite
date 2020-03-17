@@ -1,6 +1,7 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
 import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.File;
@@ -17,6 +18,10 @@ import java.util.Properties;
  * 属性解析接口
  */
 public class PropertiesFileResolver extends AbstractFileResolver<VirtualFile,Properties>{
+
+    public PropertiesFileResolver(Project project) {
+        super(project);
+    }
 
     @Override
     String[] getPattern() {

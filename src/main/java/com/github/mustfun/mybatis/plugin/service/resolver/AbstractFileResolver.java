@@ -1,7 +1,9 @@
 package com.github.mustfun.mybatis.plugin.service.resolver;
 
+import com.github.mustfun.mybatis.plugin.setting.MybatisLiteProjectSetting;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
@@ -17,13 +19,22 @@ import java.util.Map;
  */
 public abstract class AbstractFileResolver<T, F> implements FileResolver<T, F> {
 
+    private Project project;
+
+    public AbstractFileResolver(Project project) {
+        this.project = project;
+    }
+
     /**
      * 获取解析的文件模式
      *
      * @return
      */
     String[] getPattern(){
-        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+        Map<String, String> valueMap = MybatisLiteProjectSetting.getInstance(project).getValueMap();
+        if (valueMap==null){
+            return new String[]{};
+        }
         String s = valueMap.get(MybatisConstants.CONFIG_FILE_NAME);
         return new String[]{s};
     }
