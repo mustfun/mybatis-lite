@@ -21,4 +21,5 @@ public class DbSourcePo {
     private String password;
     private String dbName;
     private Date createTime;
+    private String moduleName;
 }

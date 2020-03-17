@@ -206,22 +206,26 @@
 
 
     <actions>
-        <group id="MybatisPluginActionGroup" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
+        <group id="MyBatisLite" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeMainActionGroup" popup="true"
                text="Mybatis Lite" description="mybatis lite menu" icon="/images/logo_17.png">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
 
-        <action id="MybatisPluginActionGroup.GenerateCodeMainUI" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeUIAction"
+        <action id="MyBatisLite.GenerateCodeMainUI" class="com.github.mustfun.mybatis.plugin.action.GenerateCodeUIAction"
                 text="Generate Code" description="use template to generate code ">
-            <add-to-group group-id="MybatisPluginActionGroup" anchor="first"/>
+            <add-to-group group-id="MyBatisLite" anchor="first"/>
         </action>
 
-        <action id="MybatisPluginActionGroup.TemplateEditMenuAction" class="com.github.mustfun.mybatis.plugin.action.TemplateEditMenuAction"
+        <action id="MyBatisLite.TemplateEditMenuAction" class="com.github.mustfun.mybatis.plugin.action.TemplateEditMenuAction"
                 text="Edit Template" description="update template">
-            <add-to-group group-id="MybatisPluginActionGroup" anchor="last"/>
+            <add-to-group group-id="MyBatisLite" anchor="last"/>
         </action>
 
-
+        <action id="MyBatisLite.Project.Right.Popup"
+                class="com.github.mustfun.mybatis.plugin.action.ProjectRightPopupAction" text="Mybatis Lite"
+                description="根据模块生成代码" icon="/images/logo_17.png">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="SynchronizeCurrentFile"/>
+        </action>
     </actions>
 
 </idea-plugin>

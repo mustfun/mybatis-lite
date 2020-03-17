@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author dengzhiyuan
+ * @author itar
  * @version 1.0
  * @date 2018/4/16
  * @since 1.0
@@ -29,6 +29,8 @@ public class ConnectionHolder {
 
     public ConnectionHolder() {
         connectionMap = new ConcurrentHashMap<>(4);
+        configMap = new ConcurrentHashMap<>(4);
+        tableCache = new ConcurrentHashMap<>(4);
     }
 
     public static ConnectionHolder getInstance(@NotNull Project project){
@@ -70,6 +72,7 @@ public class ConnectionHolder {
         if (configMap==null){
             return null;
         }
+        //项目是多module情况下，一般只有一个，这个时候key是无效的
         if (configMap.size()==1){
             return Pair.pair(false,configMap.get(configMap.keySet().iterator().next()));
         }

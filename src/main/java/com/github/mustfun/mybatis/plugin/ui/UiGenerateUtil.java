@@ -16,13 +16,11 @@ import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.OrderedProperties;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.panel.ProgressPanel;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -37,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
 
-import com.intellij.util.ui.UI;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
@@ -78,13 +75,18 @@ public final class UiGenerateUtil {
         return new UiGenerateUtil(project);
     }
 
-    public DialogWrapperPanel getCommonDialog() {
+    /**
+     * 如果有module那么就根据module来找数据库连接参数
+     * @param moduleName
+     * @return
+     */
+    public DialogWrapperPanel getCommonDialog(String moduleName) {
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
         }
         //监听主面板点击事件
-        connectDbSetting.getConnectButton().addActionListener(getActionListener());
+        connectDbSetting.getConnectButton().addActionListener(getActionListener(moduleName));
 
         SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
         VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
@@ -105,7 +107,7 @@ public final class UiGenerateUtil {
         fillControllerPath(uiComponentFacade, sqlLiteService, baseDir);
 
         //读取ymal或者property进行填充
-        fillPanelText(connectDbSetting);
+        fillPanelText(moduleName,connectDbSetting);
 
         return new DialogWrapperPanel(project, true, connectDbSetting);
     }
@@ -255,7 +257,7 @@ public final class UiGenerateUtil {
     }
 
     @NotNull
-    private ActionListener getActionListener() {
+    private ActionListener getActionListener(String moduleName) {
         return e -> {
             connectDbSetting.getTemplateCheckbox().clear();
             connectDbSetting.getTableCheckBox().clear();
@@ -284,6 +286,7 @@ public final class UiGenerateUtil {
             dbSourcePo.setDbName(dbName);
             dbSourcePo.setUserName(userName);
             dbSourcePo.setPassword(password);
+            dbSourcePo.setModuleName(moduleName);
             //连接数据库
             MysqlService mysqlService = DbServiceFactory.getInstance(project).createMysqlService();
             //每次都要连接一个新的连接，保存旧的也没用，清空掉吧
@@ -324,15 +327,15 @@ public final class UiGenerateUtil {
     }
 
     /**
-     *
+     *  @param module
      * @param connectDbSetting
      */
-    private void fillPanelText(ConnectDbSetting connectDbSetting) {
+    private void fillPanelText(String module, ConnectDbSetting connectDbSetting) {
         //优先从历史记录里面读取
-        if (readFromConnectLog(connectDbSetting)) {
+        if (readFromConnectLog(module,connectDbSetting)) {
             return;
         }
-        Pair<Boolean, Object> pair = ConnectionHolder.getInstance(project).getConfigOrOne("DEFAULT");
+        Pair<Boolean, Object> pair = ConnectionHolder.getInstance(project).getConfigOrOne(module);
         if(pair==null){
             return ;
         }
@@ -368,9 +371,9 @@ public final class UiGenerateUtil {
     /**
      * 从数据库中读取最近一条历史记录
      */
-    private boolean readFromConnectLog(ConnectDbSetting connectDbSetting) {
+    private boolean readFromConnectLog(String module, ConnectDbSetting connectDbSetting) {
         SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
-        DbSourcePo dbSourcePo = sqlLiteService.queryLatestConnectLog();
+        DbSourcePo dbSourcePo = sqlLiteService.queryLatestConnectLog(module);
         if (dbSourcePo != null) {
             connectDbSetting.getDbName().setText(dbSourcePo.getDbName());
             connectDbSetting.getAddress().setText(dbSourcePo.getDbAddress());

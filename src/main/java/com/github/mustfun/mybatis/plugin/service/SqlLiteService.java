@@ -171,11 +171,11 @@ public class SqlLiteService {
      * 找到最近的连接记录
      * @return
      */
-    public DbSourcePo queryLatestConnectLog() {
+    public DbSourcePo queryLatestConnectLog(String key) {
         try {
             String sql = "select\n" +
                 "        id,db_name,db_address,user_name,password\n" +
-                "        from db_source order by id desc limit 1";
+                "        from db_source where module_name='"+key+"' order by id desc limit 1";
 
             ResultSet rs = statement.executeQuery(sql);
             DbSourcePo dbSource = null;
@@ -186,6 +186,7 @@ public class SqlLiteService {
                 dbSource.setDbAddress(rs.getString("db_address"));
                 dbSource.setUserName(rs.getString("user_name"));
                 dbSource.setPassword(rs.getString("password"));
+                dbSource.setModuleName(rs.getString("module_name"));
             }
             return dbSource;
         } catch (SQLException e) {
@@ -213,9 +214,9 @@ public class SqlLiteService {
             }
             id++;
             statement.executeUpdate(
-                "insert into db_source(id,db_name,db_address,user_name,password) values(" + id + ",'" + dbSourcePo
+                "insert into db_source(id,db_name,db_address,user_name,password,module_name) values(" + id + ",'" + dbSourcePo
                     .getDbName() + "','" + dbSourcePo.getDbAddress() + "','" + dbSourcePo.getUserName() + "','"
-                    + dbSourcePo.getPassword() + "')");
+                    + dbSourcePo.getPassword() + "','"+dbSourcePo.getModuleName()+"')");
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
