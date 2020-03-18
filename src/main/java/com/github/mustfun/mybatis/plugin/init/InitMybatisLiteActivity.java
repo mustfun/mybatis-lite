@@ -88,11 +88,10 @@ public class InitMybatisLiteActivity implements StartupActivity {
     private Map<String, DbSourcePo> initDatabase(Project project) {
         Map<String, DbSourcePo> map = new HashMap<>();
         Module[] modules = ModuleManager.getInstance(project).getModules();
-        boolean multiModule = modules.length>1;
         List<AbstractFileResolver<VirtualFile, Properties>> fileResolvers = ResolverFacade.getInstance(project).getFileResolvers();
         for (Module module : modules) {
             VirtualFile moduleFile = module.getModuleFile();
-            if(moduleFile==null||(module.getName().equals(project.getName())&&multiModule)){
+            if(moduleFile==null){
                 continue;
             }
             for (AbstractFileResolver<VirtualFile, Properties> fileResolver : fileResolvers) {
