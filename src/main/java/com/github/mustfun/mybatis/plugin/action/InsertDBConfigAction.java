@@ -12,10 +12,15 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.util.ui.JBUI;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static com.intellij.uiDesigner.core.GridConstraints.*;
 
@@ -55,11 +60,18 @@ public class InsertDBConfigAction extends AnAction {
         topPanel.add(viewPanel, new GridConstraints());
         topPanel.add(new JPanel(), new GridConstraints());
         int row=0;
+        List<SingleDBConnectInfoUI> uiList = new ArrayList<>();
         for (Module module : modules) {
             SingleDBConnectInfoUI dbconnectinfoui = new SingleDBConnectInfoUI();
             JPanel mainPanel = dbconnectinfoui.getMainPanel();
             String name = module.getName();
+            //加监听
             dbconnectinfoui.getModuleName().setText(name+getBlank(maxLength-name.length()));
+            dbconnectinfoui.getIpText().getDocument().addDocumentListener(addInputListener(1,dbConfigUI,name,uiList));
+            dbconnectinfoui.getPortText().getDocument().addDocumentListener(addInputListener(2,dbConfigUI,name,uiList));
+            dbconnectinfoui.getUserNameText().getDocument().addDocumentListener(addInputListener(3,dbConfigUI,name,uiList));
+            dbconnectinfoui.getPasswordText().getDocument().addDocumentListener(addInputListener(4,dbConfigUI,name,uiList));
+            uiList.add(dbconnectinfoui);
             //添加到list里面
             GridConstraints gridConstraints = new GridConstraints();
             gridConstraints.setAnchor(ANCHOR_NORTH);
@@ -72,6 +84,51 @@ public class InsertDBConfigAction extends AnAction {
         ModuleDBConfigListPanel templateListPanel = new ModuleDBConfigListPanel(project, true, dbConfigUI);
         templateListPanel.show();
 
+    }
+
+    @NotNull
+    private DocumentListener addInputListener(int i, ModuleDBConfigUI dbConfigUI, String module, List<SingleDBConnectInfoUI> modules) {
+        return new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                setText(e, modules, module);
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                setText(e, modules, module);
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                setText(e, modules, module);
+            }
+            private void setText(DocumentEvent e, List<SingleDBConnectInfoUI> modules, String module) {
+                if (!dbConfigUI.getMultiEdit().isSelected()){
+                    return;
+                }
+                Document document = e.getDocument();
+                for (SingleDBConnectInfoUI single : modules) {
+                    if (!single.getModuleName().getText().trim().equals(module.trim())) {
+                        switch (i){
+                        case 1:
+                            single.getIpText().setDocument(document);
+                            break;
+                        case 2:
+                            single.getPortText().setDocument(document);
+                            break;
+                        case 3:
+                            single.getUserNameText().setDocument(document);
+                            break;
+                        case 4:
+                            single.getPasswordText().setDocument(document);
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+            }
+
+        };
     }
 
     private String getBlank(int i) {
