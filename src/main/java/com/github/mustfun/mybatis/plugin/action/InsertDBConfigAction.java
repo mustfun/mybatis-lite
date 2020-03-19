@@ -36,9 +36,6 @@ import static com.intellij.uiDesigner.core.GridConstraints.*;
  */
 public class InsertDBConfigAction extends AnAction {
 
-    private static Component getListCellRendererComponent(JList<? extends JPanel> list, JPanel value, int index, boolean isSelected, boolean cellHasFocus) {
-        return value;
-    }
 
     /**
      * scrollPane（setView） + panel + 明细
@@ -91,7 +88,7 @@ public class InsertDBConfigAction extends AnAction {
         }
         //装配
         scrollPane.setViewportView(topPanel);
-        ModuleDBConfigListPanel templateListPanel = new ModuleDBConfigListPanel(project, true, dbConfigUI);
+        ModuleDBConfigListPanel templateListPanel = new ModuleDBConfigListPanel(project, true, dbConfigUI,uiList);
         templateListPanel.show();
 
     }
