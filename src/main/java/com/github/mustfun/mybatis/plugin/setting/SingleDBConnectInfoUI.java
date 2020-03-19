@@ -20,4 +20,5 @@ public class SingleDBConnectInfoUI {
     private JTextField userNameText;
     private JTextField passwordText;
     private JPanel mainPanel;
+    private JTextField dbNameText;
 }

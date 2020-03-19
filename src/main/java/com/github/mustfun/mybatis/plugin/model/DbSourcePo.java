@@ -23,4 +23,17 @@ public class DbSourcePo {
     private String dbName;
     private Date createTime;
     private String moduleName;
+
+    public DbSourcePo() {
+
+    }
+
+    public DbSourcePo(String dbAddress, Integer port, String dbName, String userName, String password, String moduleName) {
+        this.port = port;
+        this.userName = userName;
+        this.dbAddress = dbAddress;
+        this.password = password;
+        this.dbName = dbName;
+        this.moduleName = moduleName;
+    }
 }

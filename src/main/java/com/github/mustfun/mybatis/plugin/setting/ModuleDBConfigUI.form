@@ -39,7 +39,8 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="各模块的SQL连接信息，没有可以不填写"/>
+              <font size="10"/>
+              <text value="各模块的SQL连接信息，没有可以不填写,决定该模块SQL补全等"/>
             </properties>
           </component>
         </children>

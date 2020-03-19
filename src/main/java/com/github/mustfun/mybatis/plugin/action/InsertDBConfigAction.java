@@ -73,6 +73,7 @@ public class InsertDBConfigAction extends AnAction {
                 dbconnectinfoui.getPortText().setText(moduleConfig.getPort()+"");
                 dbconnectinfoui.getPasswordText().setText(moduleConfig.getPassword());
                 dbconnectinfoui.getUserNameText().setText(moduleConfig.getUserName());
+                dbconnectinfoui.getDbNameText().setText(moduleConfig.getDbName());
             }
             dbconnectinfoui.getIpText().getDocument().addDocumentListener(addInputListener(1,dbConfigUI,name,uiList));
             dbconnectinfoui.getPortText().getDocument().addDocumentListener(addInputListener(2,dbConfigUI,name,uiList));

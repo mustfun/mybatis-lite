@@ -1,5 +1,8 @@
 package com.github.mustfun.mybatis.plugin.ui.custom;
 
+import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
+import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
+import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ModuleDBConfigUI;
 import com.github.mustfun.mybatis.plugin.setting.SingleDBConnectInfoUI;
 import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
@@ -42,13 +45,12 @@ public class ModuleDBConfigListPanel extends DialogWrapper {
 
     @Override
     public void doCancelAction() {
-        System.out.println("cancel");
         super.doCancelAction();
     }
 
     @Override
     protected void doOKAction() {
-        System.out.println("ok");
+        saveConfig();
         super.doOKAction();
     }
 
@@ -61,12 +63,29 @@ public class ModuleDBConfigListPanel extends DialogWrapper {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //保存用户填写的信息，顺便弹个框
-                for (SingleDBConnectInfoUI singleDBConnectInfoUI : configList) {
-
-                }
+                saveConfig();
                 UiComponentFacade.getInstance(project).buildNotify(project, "MyBatis Lite", "保存模块数据库信息成功");
             }
         };
         return new Action[]{okAction, cancelAction, applyAction};
+    }
+
+    private void saveConfig() {
+        for (SingleDBConnectInfoUI singleDBConnectInfoUI : configList) {
+            String moduleName = singleDBConnectInfoUI.getModuleName().getText();
+            String ip = singleDBConnectInfoUI.getIpText().getText();
+            String port = singleDBConnectInfoUI.getPortText().getText();
+            try {
+                Integer.valueOf(port);
+            } catch (NumberFormatException ex) {
+                UiComponentFacade.getInstance(project).buildNotify(project, "MyBatis Lite", "端口配置不正确");
+                continue;
+            }
+            String dbName = singleDBConnectInfoUI.getDbNameText().getText();
+            String userName = singleDBConnectInfoUI.getUserNameText().getText();
+            String password = singleDBConnectInfoUI.getPasswordText().getText();
+            SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
+            sqlLiteService.insertDbConnectionInfo(new DbSourcePo(ip, Integer.valueOf(port), dbName, userName, password,moduleName));
+        }
     }
 }
