@@ -350,22 +350,10 @@ public final class UiGenerateUtil {
     private void insertPanelUseConfig(ConnectDbSetting connectDbSetting, ModuleConfig config) {
         connectDbSetting.getUserName().setText(config.getUserName());
         String password = config.getPassword();
-        if (password != null && password.length() >= 64) {
-            try {
-                password = ConfigTools.decrypt(password);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         connectDbSetting.getPassword().setText(password);
-
-        String value = config.getDbAddress();
-        String[] s = value.split("/");
-        String[] split = s[2].split(":");
-        connectDbSetting.getAddress().setText(split[0]);
-        connectDbSetting.getPort().setText(split[1]);
-        String s1 = s[3].split("\\?")[0];
-        connectDbSetting.getDbName().setText(s1);
+        connectDbSetting.getAddress().setText(config.getDbAddress());
+        connectDbSetting.getPort().setText(config.getPort()+"");
+        connectDbSetting.getDbName().setText(config.getDbName());
     }
 
     /**

@@ -17,6 +17,7 @@ public class DbSourcePo {
     private Integer id;
     private Integer port;
     private String userName;
+    private String url;
     private String dbAddress;
     private String password;
     private String dbName;

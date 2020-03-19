@@ -145,7 +145,16 @@ public class InitMybatisLiteActivity implements StartupActivity {
             }
         }
         ModuleConfig moduleConfig = new ModuleConfig();
-        moduleConfig.setDbAddress(masterUrl==null?url:masterUrl);
+        moduleConfig.setUrl(masterUrl==null?url:masterUrl);
+
+        String value = moduleConfig.getUrl();
+        String[] s = value.split("/");
+        String[] split = s[2].split(":");
+        moduleConfig.setDbAddress(split[0]);
+        moduleConfig.setPort(Integer.valueOf(split[1]));
+        String s1 = s[3].split("\\?")[0];
+        moduleConfig.setDbName(s1);
+
         moduleConfig.setUserName(masterUserName==null?userName:masterUserName);
         moduleConfig.setPassword(masterPassword==null?password:masterPassword);
         try {

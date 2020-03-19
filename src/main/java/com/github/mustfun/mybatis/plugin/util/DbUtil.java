@@ -184,7 +184,7 @@ public class DbUtil {
             props.setProperty("remarks", "true");
             //设置可以获取tables remarks信息
             props.setProperty("useInformationSchema", "true");
-            conn = DriverManager.getConnection(dbSourcePo.getDbAddress() + "&serverTimezone=GMT", props);
+            conn = DriverManager.getConnection(dbSourcePo.getUrl() + "&serverTimezone=GMT", props);
         } catch (Exception e) {
             e.printStackTrace();
         }
