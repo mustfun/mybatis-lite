@@ -1,8 +1,10 @@
 package com.github.mustfun.mybatis.plugin.action;
 
+import com.github.mustfun.mybatis.plugin.model.ModuleConfig;
 import com.github.mustfun.mybatis.plugin.setting.ModuleDBConfigUI;
 import com.github.mustfun.mybatis.plugin.setting.SingleDBConnectInfoUI;
 import com.github.mustfun.mybatis.plugin.ui.custom.ModuleDBConfigListPanel;
+import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.module.Module;
@@ -67,6 +69,14 @@ public class InsertDBConfigAction extends AnAction {
             String name = module.getName();
             //加监听
             dbconnectinfoui.getModuleName().setText(name+getBlank(maxLength-name.length()));
+            Object config = ConnectionHolder.getInstance(project).getConfig(module.getName());
+            if (config!=null){
+                ModuleConfig moduleConfig = (ModuleConfig) config;
+                dbconnectinfoui.getIpText().setText(moduleConfig.getDbAddress());
+                dbconnectinfoui.getPortText().setText(moduleConfig.getPort()+"");
+                dbconnectinfoui.getPasswordText().setText(moduleConfig.getPassword());
+                dbconnectinfoui.getUserNameText().setText(moduleConfig.getUserName());
+            }
             dbconnectinfoui.getIpText().getDocument().addDocumentListener(addInputListener(1,dbConfigUI,name,uiList));
             dbconnectinfoui.getPortText().getDocument().addDocumentListener(addInputListener(2,dbConfigUI,name,uiList));
             dbconnectinfoui.getUserNameText().getDocument().addDocumentListener(addInputListener(3,dbConfigUI,name,uiList));
