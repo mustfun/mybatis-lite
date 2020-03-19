@@ -1,6 +1,5 @@
 package com.github.mustfun.mybatis.plugin.action;
 
-import com.github.mustfun.mybatis.plugin.init.InitMybatisLiteActivity;
 import com.github.mustfun.mybatis.plugin.ui.UiGenerateUtil;
 import com.github.mustfun.mybatis.plugin.ui.custom.DialogWrapperPanel;
 import com.intellij.openapi.actionSystem.AnAction;

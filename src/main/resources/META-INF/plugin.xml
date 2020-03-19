@@ -221,6 +221,11 @@
             <add-to-group group-id="MyBatisLite" anchor="last"/>
         </action>
 
+        <action id="MyBatisLite.InsertDBConifg" class="com.github.mustfun.mybatis.plugin.action.InsertDBConfigAction"
+                text="DB Config" description="DB配置信息，便于自动补全使用">
+            <add-to-group group-id="MyBatisLite" anchor="last"/>
+        </action>
+
         <action id="MyBatisLite.Project.Right.Popup"
                 class="com.github.mustfun.mybatis.plugin.action.ProjectRightPopupAction" text="Mybatis Lite"
                 description="根据模块生成代码" icon="/images/logo_17.png">
