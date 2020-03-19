@@ -8,6 +8,8 @@ import com.github.mustfun.mybatis.plugin.setting.SingleDBConnectInfoUI;
 import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,15 +77,18 @@ public class ModuleDBConfigListPanel extends DialogWrapper {
             String moduleName = singleDBConnectInfoUI.getModuleName().getText();
             String ip = singleDBConnectInfoUI.getIpText().getText();
             String port = singleDBConnectInfoUI.getPortText().getText();
+            String dbName = singleDBConnectInfoUI.getDbNameText().getText();
+            String userName = singleDBConnectInfoUI.getUserNameText().getText();
+            String password = singleDBConnectInfoUI.getPasswordText().getText();
+            if (StringUtils.isEmpty(ip)||StringUtils.isEmpty(port)||StringUtils.isEmpty(dbName)||StringUtils.isEmpty(userName)|StringUtils.isEmpty(password)) {
+                continue ;
+            }
             try {
                 Integer.valueOf(port);
             } catch (NumberFormatException ex) {
                 UiComponentFacade.getInstance(project).buildNotify(project, "MyBatis Lite", "端口配置不正确");
                 continue;
             }
-            String dbName = singleDBConnectInfoUI.getDbNameText().getText();
-            String userName = singleDBConnectInfoUI.getUserNameText().getText();
-            String password = singleDBConnectInfoUI.getPasswordText().getText();
             SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
             sqlLiteService.insertDbConnectionInfo(new DbSourcePo(ip, Integer.valueOf(port), dbName, userName, password,moduleName));
         }
