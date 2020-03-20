@@ -48,6 +48,13 @@ public class DbUtil {
         this.password = password;
     }
 
+    public DbUtil(DbSourcePo dbSourcePo) {
+        this.url = "jdbc:mysql://" + dbSourcePo.getDbAddress() + ":" + dbSourcePo.getPort() + "/" + dbSourcePo.getDbName()
+                + "?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT";
+        this.username = dbSourcePo.getUserName();
+        this.password = dbSourcePo.getPassword();
+    }
+
     public DbUtil(String url, String userName, String password) {
         this.url = url;
         this.username = userName;
@@ -165,7 +172,7 @@ public class DbUtil {
      * @param dbSourcePo
      * @return
      */
-    public static Connection getConnectionUseDriver(Project project, String cacheKey, DatabaseDriver driver, DbSourcePo dbSourcePo) {
+    public  Connection getConnectionUseDriver(Project project, String cacheKey, DatabaseDriver driver, DbSourcePo dbSourcePo) {
 
         Connection connection = ConnectionHolder.getInstance(project).getConnection(cacheKey);
         if (connection != null) {
@@ -184,7 +191,7 @@ public class DbUtil {
             props.setProperty("remarks", "true");
             //设置可以获取tables remarks信息
             props.setProperty("useInformationSchema", "true");
-            conn = DriverManager.getConnection(dbSourcePo.getUrl() + "&serverTimezone=GMT", props);
+            conn = DriverManager.getConnection(this.url, props);
         } catch (Exception e) {
             e.printStackTrace();
         }

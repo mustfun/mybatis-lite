@@ -103,9 +103,12 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
     private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement, PsiElement position) {
         String tableName = SqlUtil.getTableNameFromSql(idDomElement,position);
         Pair<Boolean, Object> configOrOne = ConnectionHolder.getInstance(project).getConfigOrOne(Objects.requireNonNull(idDomElement.getModule()).getName());
-        if (configOrOne==null||configOrOne.getSecond()==null){
-            logger.warn("【Mybatis Lite】该模块下找不到合适的数据源");
-            return;
+        if (configOrOne.getSecond()==null){
+            configOrOne = Pair.pair(false,ConnectionHolder.getInstance(project).getConfig(project.getName()));
+            if (configOrOne.getSecond()==null) {
+                logger.warn("【Mybatis Lite】该模块下找不到合适的数据源");
+                return;
+            }
         }
         //只有一个module的情况
         DbSourcePo dbSourcePo= (DbSourcePo) configOrOne.getSecond();
@@ -114,7 +117,7 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         Collection<? extends DatabaseDriver> drivers = instance.getDrivers();
         DatabaseDriver driver = drivers.stream().filter(x -> x.getName().equals("MySQL")).findAny().orElseGet(null);
 
-        Connection connection = DbUtil.getConnectionUseDriver(project, DigestUtils.md5Hex(dbSourcePo.getDbAddress()), driver, dbSourcePo);
+        Connection connection = new DbUtil(dbSourcePo).getConnectionUseDriver(project, DigestUtils.md5Hex(dbSourcePo.getDbAddress()), driver, dbSourcePo);
 
         if (connection==null){
             logger.warn("【Mybatis Lite】===================获取不到链接");

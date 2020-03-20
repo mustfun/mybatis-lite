@@ -70,7 +70,7 @@ public class ConnectionHolder {
      */
     public Pair<Boolean,Object> getConfigOrOne(String key) {
         if (configMap==null){
-            return null;
+            return Pair.pair(false, null);
         }
         //项目是多module情况下，一般只有一个，这个时候key是无效的
         if (configMap.size()==1){
