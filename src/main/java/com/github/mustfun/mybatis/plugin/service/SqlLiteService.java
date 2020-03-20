@@ -187,6 +187,7 @@ public class SqlLiteService {
                 dbSource = new DbSourcePo();
                 dbSource.setId(rs.getInt("id"));
                 dbSource.setDbName(rs.getString("db_name"));
+                dbSource.setPort(Integer.valueOf(rs.getString("port")));
                 dbSource.setDbAddress(rs.getString("db_address"));
                 dbSource.setUserName(rs.getString("user_name"));
                 dbSource.setPassword(rs.getString("password"));
@@ -209,6 +210,7 @@ public class SqlLiteService {
                 DbSourcePo dbSource = new DbSourcePo();
                 dbSource.setId(rs.getInt("id"));
                 dbSource.setDbName(rs.getString("db_name"));
+                dbSource.setPort(Integer.valueOf(rs.getString("port")));
                 dbSource.setDbAddress(rs.getString("db_address"));
                 dbSource.setUserName(rs.getString("user_name"));
                 dbSource.setPassword(rs.getString("password"));
@@ -228,8 +230,8 @@ public class SqlLiteService {
     public boolean insertDbConnectionInfo(DbSourcePo dbSourcePo) {
         try {
             statement.executeUpdate(
-                "insert into db_source(db_name,db_address,user_name,password,module_name,create_time) values('" + dbSourcePo
-                    .getDbName() + "','" + dbSourcePo.getDbAddress() + "','" + dbSourcePo.getUserName() + "','"
+                "insert into db_source(db_name,db_address,port,user_name,password,module_name,create_time) values('" + dbSourcePo
+                    .getDbName() + "','" + dbSourcePo.getDbAddress() + "',"+dbSourcePo.getPort()+",'" + dbSourcePo.getUserName() + "','"
                     + dbSourcePo.getPassword() + "','"+dbSourcePo.getModuleName()+"',datetime())");
         } catch (SQLException e) {
             e.printStackTrace();
