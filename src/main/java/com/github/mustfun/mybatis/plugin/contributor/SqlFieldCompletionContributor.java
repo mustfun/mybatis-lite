@@ -117,7 +117,7 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
         Collection<? extends DatabaseDriver> drivers = instance.getDrivers();
         DatabaseDriver driver = drivers.stream().filter(x -> x.getName().equals("MySQL")).findAny().orElseGet(null);
 
-        Connection connection = new DbUtil(dbSourcePo).getConnectionUseDriver(project, DigestUtils.md5Hex(dbSourcePo.getDbAddress()), driver, dbSourcePo);
+        Connection connection = new DbUtil(dbSourcePo).getConnectionUseDriver(project, DigestUtils.md5Hex(dbSourcePo.getDbAddress()+dbSourcePo.getPort()+dbSourcePo.getDbName()), driver, dbSourcePo);
 
         if (connection==null){
             logger.warn("【Mybatis Lite】===================获取不到链接");
