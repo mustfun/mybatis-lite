@@ -2,6 +2,8 @@ package com.github.mustfun.mybatis.plugin.init;
 
 import com.github.mustfun.mybatis.plugin.model.DbSourcePo;
 import com.github.mustfun.mybatis.plugin.model.ModuleConfig;
+import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
+import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.service.resolver.AbstractFileResolver;
 import com.github.mustfun.mybatis.plugin.service.resolver.ResolverFacade;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
@@ -76,6 +78,9 @@ public class InitMybatisLiteActivity implements StartupActivity {
                     ConnectionHolder.getInstance(project).putConfig(s,stringDbSourcePoMap.get(s));
                 }
             }
+            //然后刷新下DB缓存
+            SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
+            sqlLiteService.refreshFromDB();
         } catch (Exception e) {
             e.printStackTrace();
         }
