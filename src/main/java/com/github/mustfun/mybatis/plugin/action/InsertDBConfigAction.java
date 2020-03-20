@@ -36,6 +36,7 @@ import static com.intellij.uiDesigner.core.GridConstraints.*;
  */
 public class InsertDBConfigAction extends AnAction {
 
+    private ModuleDBConfigListPanel templateListPanel;
 
     /**
      * scrollPane（setView） + panel + 明细
@@ -89,7 +90,7 @@ public class InsertDBConfigAction extends AnAction {
         }
         //装配
         scrollPane.setViewportView(topPanel);
-        ModuleDBConfigListPanel templateListPanel = new ModuleDBConfigListPanel(project, true, dbConfigUI,uiList);
+        templateListPanel = new ModuleDBConfigListPanel(project, true, dbConfigUI,uiList);
         templateListPanel.show();
 
     }
@@ -110,6 +111,7 @@ public class InsertDBConfigAction extends AnAction {
                 setText(e, modules, module);
             }
             private void setText(DocumentEvent e, List<SingleDBConnectInfoUI> modules, String module) {
+                templateListPanel.setApplyButtonEnable();
                 if (!dbConfigUI.getMultiEdit().isSelected()){
                     return;
                 }

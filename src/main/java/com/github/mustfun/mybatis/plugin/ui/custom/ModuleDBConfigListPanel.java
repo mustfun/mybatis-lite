@@ -6,6 +6,7 @@ import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.setting.ModuleDBConfigUI;
 import com.github.mustfun.mybatis.plugin.setting.SingleDBConnectInfoUI;
 import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
+import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
@@ -56,6 +57,13 @@ public class ModuleDBConfigListPanel extends DialogWrapper {
         super.doOKAction();
     }
 
+    public void setApplyButtonEnable(){
+        if (!action.isEnabled()) {
+            action.setEnabled(true);
+        }
+    }
+
+    private Action action;
     @NotNull
     @Override
     protected Action[] createActions() {
@@ -67,14 +75,16 @@ public class ModuleDBConfigListPanel extends DialogWrapper {
                 //保存用户填写的信息，顺便弹个框
                 saveConfig();
                 UiComponentFacade.getInstance(project).buildNotify(project, "MyBatis Lite", "保存模块数据库信息成功");
+                setEnabled(false);
             }
         };
+        action = applyAction;
         return new Action[]{okAction, cancelAction, applyAction};
     }
 
     private void saveConfig() {
         for (SingleDBConnectInfoUI singleDBConnectInfoUI : configList) {
-            String moduleName = singleDBConnectInfoUI.getModuleName().getText();
+            String moduleName = singleDBConnectInfoUI.getModuleName().getText().trim();
             String ip = singleDBConnectInfoUI.getIpText().getText();
             String port = singleDBConnectInfoUI.getPortText().getText();
             String dbName = singleDBConnectInfoUI.getDbNameText().getText();
@@ -91,6 +101,8 @@ public class ModuleDBConfigListPanel extends DialogWrapper {
             }
             SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
             sqlLiteService.insertDbConnectionInfo(new DbSourcePo(ip, Integer.valueOf(port), dbName, userName, password,moduleName));
+            //顺便刷新下缓存
+            sqlLiteService.refreshFromDB();
         }
     }
 }
