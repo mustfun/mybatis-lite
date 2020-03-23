@@ -9,7 +9,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.1.6'
+version '1.1.7'
 sourceCompatibility = 1.8
 
 
@@ -48,6 +48,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+      <h4>1.1.7</h4>
+      <ul>
+          <li>新增模块数据库配置化</li>
+      </ul>
       <h4>1.1.6</h4>
       <ul>
           <li>模板可以重置功能</li>

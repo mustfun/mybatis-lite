@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/mustfun/mybatis-lite">
     <id>com.github.mustfun.plugin.mybatis</id>
     <name>MyBatis Lite</name>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
     <vendor email="wuhandzy@gmail.com" url="https://github.com/mustfun">mustfun</vendor>
 
     <description><![CDATA[
@@ -19,6 +19,10 @@
     </description>
 
     <change-notes><![CDATA[
+      <h4>1.1.7</h4>
+      <ul>
+          <li>新增模块数据库配置化</li>
+      </ul>
       <h4>1.1.6</h4>
       <ul>
           <li>模板可以重置功能</li>
