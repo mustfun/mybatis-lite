@@ -271,7 +271,7 @@ public class MysqlService {
                 }
 
                 assert fileName != null;
-                fileHashMap.put(template.getVmType(), realPackageName + "." + fileName.split("\\.")[0]);
+                fileHashMap.put(template.getVmType(), realPackageName==null? fileName.split("\\.")[0] : realPackageName + "." + fileName.split("\\.")[0]);
                 //给VM填充
                 importNeedClass(context, template.getVmType(), table.getClassName());
 

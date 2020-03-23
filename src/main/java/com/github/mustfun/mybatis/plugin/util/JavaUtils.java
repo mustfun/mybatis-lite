@@ -383,7 +383,11 @@ public final class JavaUtils {
      * @return
      */
     public static String getNotExistPackageNameFromDirectory(VirtualFile virtualFile) {
-        return virtualFile.getPath().split("src/main/java/")[1].replace("/",".");
+        String[] split = virtualFile.getPath().split("src/main/java/");
+        if (split.length<2){
+            return null;
+        }
+        return split[1].replace("/",".");
     }
 
     /**
