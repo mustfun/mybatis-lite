@@ -24,11 +24,13 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.ui.CheckBoxList;
 
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -61,6 +63,7 @@ public final class UiGenerateUtil {
      */
     public static final String NUMBER_PATTEN = "^(\\w_)";
     private Project project;
+    public static final String FILE_PROTOCOL = "file://";
 
     private FileEditorManager fileEditorManager;
 
@@ -89,6 +92,7 @@ public final class UiGenerateUtil {
         connectDbSetting.getConnectButton().addActionListener(getActionListener(moduleName));
 
         SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
+        //Project目录
         VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
 
         //找出dao层所在目录
@@ -113,7 +117,7 @@ public final class UiGenerateUtil {
     }
 
     private void fillControllerPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
-        VirtualFile controllerPath = baseDir;
+        VirtualFile controllerPath = null;
         String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(),VmTypeEnums.CONTROLLER);
         if (poUserPreferPath != null) {
             connectDbSetting.getControllerPositionCheckBox().setSelected(true);
@@ -124,6 +128,9 @@ public final class UiGenerateUtil {
             if (findPath != null) {
                 controllerPath = findPath;
             }
+        }
+        if (controllerPath==null) {
+            controllerPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
         }
         connectDbSetting.getControllerInput().setText(Objects.requireNonNull(controllerPath).getPath());
 
@@ -139,7 +146,7 @@ public final class UiGenerateUtil {
     }
 
     private void fillServicePath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
-        VirtualFile servicePath = baseDir;
+        VirtualFile servicePath = null;
         String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.SERVICE);
         if (poUserPreferPath != null) {
             connectDbSetting.getServicePositionCheckBox().setSelected(true);
@@ -149,6 +156,9 @@ public final class UiGenerateUtil {
             if (findPath != null) {
                 servicePath = findPath;
             }
+        }
+        if (servicePath==null) {
+            servicePath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
         }
         connectDbSetting.getServiceInput().setText(Objects.requireNonNull(servicePath).getPath());
 
@@ -167,7 +177,7 @@ public final class UiGenerateUtil {
     }
 
     private void fillModelPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
-        VirtualFile modelPath = baseDir;
+        VirtualFile modelPath = null;
         String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.MODEL_PO);
         if (poUserPreferPath != null) {
             connectDbSetting.getModelPositionCheckBox().setSelected(true);
@@ -177,6 +187,9 @@ public final class UiGenerateUtil {
             if (findPath != null) {
                 modelPath = findPath;
             }
+        }
+        if (modelPath==null) {
+            modelPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
         }
         connectDbSetting.getPoInput().setText(Objects.requireNonNull(modelPath).getPath());
 
@@ -205,6 +218,9 @@ public final class UiGenerateUtil {
                 mapperPath = findPath;
             }
         }
+        if (mapperPath==null) {
+            mapperPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/resources");
+        }
         connectDbSetting.getMapperInput().setText(Objects.requireNonNull(mapperPath).getPath());
 
         JButton mapperButton = connectDbSetting.getMapperButton();
@@ -223,13 +239,14 @@ public final class UiGenerateUtil {
     }
 
     /**
+     * ModuleRootManagerImpl.getInstance(ModuleManagerImpl.getInstance(project).getModules()[2]).getSourceRoots()
      * 找出dao层所在目录
      * @param uiComponentFacade
      * @param sqlLiteService
      * @param baseDir
      */
     private void fillDaoPath(UiComponentFacade uiComponentFacade, SqlLiteService sqlLiteService, VirtualFile baseDir) {
-        VirtualFile daoPath = baseDir;
+        VirtualFile daoPath = null;
         String poUserPreferPath = sqlLiteService.getUserPreferPathByVmType(project.getName(), VmTypeEnums.DAO);
         if (poUserPreferPath != null) {
             connectDbSetting.getDaoPositionCheckBox().setSelected(true);
@@ -239,6 +256,9 @@ public final class UiGenerateUtil {
             if (findPath != null) {
                 daoPath = findPath;
             }
+        }
+        if (daoPath==null) {
+            daoPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
         }
         connectDbSetting.getDaoInput().setText(Objects.requireNonNull(daoPath).getPath());
 
