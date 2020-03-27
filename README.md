@@ -48,6 +48,8 @@
 例2: 返回值不匹配
 ![跳转](doc/error_sample2.png)
 
+### VI. 打印SQL
+> File->Setting->Mybatis Lite -> 其它配置-> 启用SQL打印选择开即可，然后运行项目即可打印SQL,暂时只针对使用druid数据源的项目生效，如果有使用到其它数据源请在issue中提出，后期会陆续适配
 
 ## 下载安装  
 - IDEA-> File -> Settings -> Plugins -> MarketPlace,输入mybatis lite，点install安装即可
