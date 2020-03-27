@@ -22,6 +22,7 @@ public class MapperXmlInspection extends BasicDomElementsInspection<DomElement> 
      * @param element
      * @param holder
      * @param helper
+     * 还会对required注解进行校验
      */
     @Override
     protected void checkDomElement(DomElement element, DomElementAnnotationHolder holder,
