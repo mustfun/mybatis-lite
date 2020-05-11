@@ -34,14 +34,6 @@ public abstract class AbstractConverterAdaptor<T> extends ResolvingConverter<T> 
         return super.getAdditionalVariants(context);
     }
 
-    @Override
-    public String getErrorMessage(@Nullable String s, ConvertContext context) {
-        if (StringUtils.isEmpty(s)){
-            return "不能为空哦";
-        }
-        return super.getErrorMessage(s, context);
-    }
-
     @Nullable
     @Override
     public String toString(@Nullable T t, ConvertContext context) {
