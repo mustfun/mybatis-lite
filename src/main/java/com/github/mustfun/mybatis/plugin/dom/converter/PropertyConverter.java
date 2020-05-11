@@ -53,11 +53,4 @@ public class PropertyConverter extends AbstractConverterAdaptor<XmlAttributeValu
             : null;
     }
 
-    @Override
-    public String getErrorMessage(@Nullable String s, ConvertContext context) {
-        if (!StringUtils.isEmpty(s)){
-            return "属性： "+s+"类中没有找到";
-        }
-        return super.getErrorMessage(s, context);
-    }
 }
