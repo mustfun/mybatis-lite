@@ -21,6 +21,12 @@ public class ResultPropertyReferenceSet extends ReferenceSetBase<PsiReference> {
         super(text, element, offset, DOT_SEPARATOR);
     }
 
+    /**
+     * property对应的reference
+     * @param range
+     * @param index
+     * @return
+     */
     @Nullable
     @NonNls
     @Override

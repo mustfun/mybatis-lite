@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  * @author yanglin
  * @updater itar
- * @function java属性跳转用
+ * @function java属性跳转用 - property属性跳java
  */
 public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue> {
 

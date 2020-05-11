@@ -19,6 +19,8 @@ import java.util.Optional;
 
 /**
  * @author yanglin
+ * @author itar
+ * @function 从xml推测PsiClass
  */
 public final class MapperBacktrackingUtils {
 

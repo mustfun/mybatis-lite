@@ -10,6 +10,7 @@ import com.intellij.util.xml.CustomReferenceConverter;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.GenericDomValue;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  * @updater itar
- * @function <result propertity=''></result> 等使用的需要可以跳转到java的属性类
+ * @function <result property=''></result> 等使用的需要可以跳转到java的属性类
+ * property转为XmlAttributeValue
  */
 public class PropertyConverter extends AbstractConverterAdaptor<XmlAttributeValue> implements
     CustomReferenceConverter<XmlAttributeValue> {
@@ -51,4 +53,11 @@ public class PropertyConverter extends AbstractConverterAdaptor<XmlAttributeValu
             : null;
     }
 
+    @Override
+    public String getErrorMessage(@Nullable String s, ConvertContext context) {
+        if (!StringUtils.isEmpty(s)){
+            return "属性： "+s+"类中没有找到";
+        }
+        return super.getErrorMessage(s, context);
+    }
 }

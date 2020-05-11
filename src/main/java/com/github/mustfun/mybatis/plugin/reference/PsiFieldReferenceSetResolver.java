@@ -46,7 +46,7 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
     @Override
     public Optional<PsiField> getStartElement(@Nullable String firstText) {
         Optional<PsiClass> clazz = MapperBacktrackingUtils.getPropertyClazz(getElement());
-        return clazz.flatMap(psiClass -> JavaUtils.findSettablePsiField(psiClass, firstText));
+        return clazz.flatMap(psiClass -> JavaUtils.findPsiField(psiClass, firstText));
     }
 
 }

@@ -44,11 +44,32 @@ public final class JavaUtils {
         return null != clazz && !clazz.isAnnotationType() && !clazz.isInterface() && !clazz.isEnum() && clazz.isValid();
     }
 
+    /**
+     * 查找有setter方法的属性
+     * @param clazz
+     * @param propertyName
+     * @return
+     */
     @NotNull
     public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
+        assert propertyName != null;
         PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
         return null == propertySetter ? Optional.<PsiField>empty()
             : Optional.ofNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
+    }
+
+    /**
+     * 查找属性
+     * @param clazz
+     * @param propertyName
+     * @return
+     */
+    @NotNull
+    public static Optional<PsiField> findPsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
+        assert propertyName != null;
+        PsiField propertySetter = PropertyUtil.findPropertyField(clazz, propertyName, false);
+        return null == propertySetter ? Optional.<PsiField>empty()
+                : Optional.ofNullable(propertySetter);
     }
 
     @NotNull
