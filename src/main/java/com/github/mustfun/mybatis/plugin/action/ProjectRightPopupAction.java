@@ -22,7 +22,7 @@ public class ProjectRightPopupAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
         Module module = e.getDataContext().getData(LangDataKeys.MODULE);
-        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(Objects.requireNonNull(project)).getCommonDialog(module==null?project.getName():module.getName());
+        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(Objects.requireNonNull(project)).getCommonDialog(module);
         commonDialog.show();
     }
 }

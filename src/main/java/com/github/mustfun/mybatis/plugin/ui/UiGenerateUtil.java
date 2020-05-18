@@ -30,7 +30,6 @@ import com.intellij.ui.CheckBoxList;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.URL;
 import java.sql.Connection;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -80,10 +79,14 @@ public final class UiGenerateUtil {
 
     /**
      * 如果有module那么就根据module来找数据库连接参数
-     * @param moduleName
+     * @param module
      * @return
      */
-    public DialogWrapperPanel getCommonDialog(String moduleName) {
+    public DialogWrapperPanel getCommonDialog(Module module) {
+        String moduleName = project.getName();
+        if(module!=null){
+            moduleName = module.getName();
+        }
         UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
         if (null == connectDbSetting) {
             this.connectDbSetting = new ConnectDbSetting();
@@ -93,7 +96,12 @@ public final class UiGenerateUtil {
 
         SqlLiteService sqlLiteService = DbServiceFactory.getInstance(project).createSqlLiteService();
         //Project目录
-        VirtualFile baseDir = ProjectUtil.guessProjectDir(project);
+        VirtualFile baseDir;
+        if(module!=null){
+            baseDir = module.getModuleFile()!=null?module.getModuleFile().getParent():module.getModuleFile();
+        }else{
+            baseDir = ProjectUtil.guessProjectDir(project);
+        }
 
         //找出dao层所在目录
         fillDaoPath(uiComponentFacade, sqlLiteService, baseDir);
@@ -131,6 +139,7 @@ public final class UiGenerateUtil {
         }
         if (controllerPath==null) {
             controllerPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
+            controllerPath = controllerPath==null?VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath()):controllerPath;
         }
         connectDbSetting.getControllerInput().setText(Objects.requireNonNull(controllerPath).getPath());
 
@@ -159,6 +168,7 @@ public final class UiGenerateUtil {
         }
         if (servicePath==null) {
             servicePath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
+            servicePath = servicePath==null?VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() ):servicePath;
         }
         connectDbSetting.getServiceInput().setText(Objects.requireNonNull(servicePath).getPath());
 
@@ -190,6 +200,7 @@ public final class UiGenerateUtil {
         }
         if (modelPath==null) {
             modelPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
+            modelPath =modelPath==null?VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath()):modelPath;
         }
         connectDbSetting.getPoInput().setText(Objects.requireNonNull(modelPath).getPath());
 
@@ -220,6 +231,7 @@ public final class UiGenerateUtil {
         }
         if (mapperPath==null) {
             mapperPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/resources");
+            mapperPath = mapperPath ==null?VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath()):mapperPath;
         }
         connectDbSetting.getMapperInput().setText(Objects.requireNonNull(mapperPath).getPath());
 
@@ -259,6 +271,7 @@ public final class UiGenerateUtil {
         }
         if (daoPath==null) {
             daoPath = VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath() + "/src/main/java");
+            daoPath = daoPath==null? VirtualFileManager.getInstance().findFileByUrl(FILE_PROTOCOL+baseDir.getPath()):daoPath;
         }
         connectDbSetting.getDaoInput().setText(Objects.requireNonNull(daoPath).getPath());
 

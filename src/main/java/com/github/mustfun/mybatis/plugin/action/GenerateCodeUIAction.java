@@ -19,7 +19,7 @@ public class GenerateCodeUIAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getProject();
-        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(Objects.requireNonNull(project)).getCommonDialog(project.getName());
+        DialogWrapperPanel commonDialog = UiGenerateUtil.getInstance(Objects.requireNonNull(project)).getCommonDialog(null);
         commonDialog.show();
     }
 
