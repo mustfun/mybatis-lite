@@ -7,6 +7,7 @@ import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.service.resolver.AbstractFileResolver;
 import com.github.mustfun.mybatis.plugin.service.resolver.ResolverFacade;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
+import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
 import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
@@ -22,6 +23,8 @@ import com.intellij.spring.boot.run.SpringBootApplicationConfigurationType;
 import com.intellij.spring.boot.run.SpringBootApplicationRunConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +38,7 @@ import java.util.Properties;
  */
 public class InitMybatisLiteActivity implements StartupActivity {
 
+    private static final Logger LOG = LoggerFactory.getLogger(InitMybatisLiteActivity.class);
 
     /**
      *
@@ -53,6 +57,10 @@ public class InitMybatisLiteActivity implements StartupActivity {
         }
         List<RunnerAndConfigurationSettings> configurationSettingsList = RunManager.getInstance(project)
                 .getConfigurationSettingsList(SpringBootApplicationConfigurationType.class);
+        if (CollectionUtils.isEmpty(configurationSettingsList)) {
+          LOG.error("【Mybatis Lite】初始化项目配置失败");
+          return;
+        }
         RunnerAndConfigurationSettings runnerAndConfigurationSettings = configurationSettingsList.get(0);
         SpringBootApplicationRunConfiguration configuration = (SpringBootApplicationRunConfiguration) runnerAndConfigurationSettings.getConfiguration();
 
