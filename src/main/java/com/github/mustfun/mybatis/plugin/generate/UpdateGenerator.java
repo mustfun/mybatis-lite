@@ -59,6 +59,10 @@ public class UpdateGenerator extends AbstractStatementGenerator<Update> {
             }
             mostLikeTableName[0] = from.split("set")[0];
         });
+        //没有找到相关的table
+        if (StringUtils.isEmpty(mostLikeTableName[0])){
+          return ;
+        }
         target.setValue("\n        update "+ mostLikeTableName[0].trim()+" set"+"\n"+"    ");
     }
 
