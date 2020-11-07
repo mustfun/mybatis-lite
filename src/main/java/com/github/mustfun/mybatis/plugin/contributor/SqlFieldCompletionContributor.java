@@ -8,6 +8,7 @@ import com.github.mustfun.mybatis.plugin.model.LocalTable;
 import com.github.mustfun.mybatis.plugin.model.ModuleConfig;
 import com.github.mustfun.mybatis.plugin.service.DbServiceFactory;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
+import com.github.mustfun.mybatis.plugin.ui.UiComponentFacade;
 import com.github.mustfun.mybatis.plugin.util.*;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -121,6 +122,8 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
 
         if (connection==null){
             logger.warn("【Mybatis Lite】===================获取不到链接");
+            UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
+            uiComponentFacade.buildNotify(project, "Mybatis Lite", "系统未配置相关数据源");
             return;
         }
 

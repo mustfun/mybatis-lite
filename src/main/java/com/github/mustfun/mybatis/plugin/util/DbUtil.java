@@ -15,6 +15,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -178,7 +179,11 @@ public class DbUtil {
         if (connection != null) {
             return connection;
         }
-        SimpleClasspathElement simpleClasspathElement = driver.getAdditionalClasspathElements().get(0);
+        List<SimpleClasspathElement> additionalClasspathElements = driver.getAdditionalClasspathElements();
+          if(CollectionUtils.isEmpty(additionalClasspathElements)){
+            return null;
+        }
+        SimpleClasspathElement simpleClasspathElement = additionalClasspathElements.get(0);
         Connection conn = null;
         try {
             URL url = new URL(simpleClasspathElement.getClassesRootUrls().get(0).replaceAll("(?:/\\s*)+", "/"));
