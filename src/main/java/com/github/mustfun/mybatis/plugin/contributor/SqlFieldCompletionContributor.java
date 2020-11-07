@@ -103,6 +103,10 @@ public class SqlFieldCompletionContributor extends CompletionContributor {
     @SuppressWarnings("unchecked")
     private void addSqlFieldParameter(Project project, CompletionResultSet result, IdDomElement idDomElement, PsiElement position) {
         String tableName = SqlUtil.getTableNameFromSql(idDomElement,position);
+        if (tableName==null){
+          logger.warn("【Mybatis Lite】从sql中获取不到表名称");
+          return ;
+        }
         Pair<Boolean, Object> configOrOne = ConnectionHolder.getInstance(project).getConfigOrOne(Objects.requireNonNull(idDomElement.getModule()).getName());
         if (configOrOne.getSecond()==null){
             configOrOne = Pair.pair(false,ConnectionHolder.getInstance(project).getConfig(project.getName()));
