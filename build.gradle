@@ -9,7 +9,7 @@ apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
 group 'com.github.mustfun'
-version '1.1.8'
+version '1.1.9'
 sourceCompatibility = 1.8
 
 
@@ -48,6 +48,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+      <h4>1.1.9</h4>
+      <ul>
+          <li>fix hign idea version NPE</li>
+      </ul>
       <h4>1.1.8</h4>
       <ul>
           <li>fix github issue #60</li>
@@ -141,6 +145,7 @@ patchPluginXml {
       </ul>
       """
     sinceBuild = '191.4213'
+    untilBuild = '202.*'
 }
 publishPlugin {
     token = ''
