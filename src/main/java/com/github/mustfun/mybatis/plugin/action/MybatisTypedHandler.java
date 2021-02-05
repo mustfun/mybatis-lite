@@ -1,14 +1,18 @@
 package com.github.mustfun.mybatis.plugin.action;
 
 import com.github.mustfun.mybatis.plugin.util.MybatisDomUtils;
+import com.intellij.codeInsight.AutoPopupController;
+import com.intellij.codeInsight.AutoPopupControllerImpl;
 import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.application.AppUIExecutor;
+import com.intellij.openapi.application.impl.AppUIExecutorImpl;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.sql.psi.SqlFile;
@@ -70,16 +74,18 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     }
 
     private static void autoPopupParameter(final Project project, final Editor editor) {
-        AppUIExecutor.onUiThread().later().withDocumentsCommitted(project).inTransaction(project).execute(new Runnable() {
-            @Override
-            public void run() {
-                //当前文件是否最新，没有未提交的
-                if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
-                    //唤醒代码自动补全 ， CompletionContributor
-                    new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
-                }
-            }
-        });
+      AppUIExecutorImpl appUIExecutor = (AppUIExecutorImpl) AppUIExecutor.onUiThread().withDocumentsCommitted(project);
+      appUIExecutor.later().inTransaction(project).execute(() -> {
+          //当前文件是否最新，没有未提交的
+          if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
+              //唤醒代码自动补全 ， CompletionContributor
+            CodeCompletionHandlerBase codeCompletionHandlerBase = new CodeCompletionHandlerBase(CompletionType.BASIC);
+            codeCompletionHandlerBase.invokeCompletion(project, editor, 1);
+            //帮忙回收吧
+            codeCompletionHandlerBase = null;
+          }
+      });
     }
+
 
 }
