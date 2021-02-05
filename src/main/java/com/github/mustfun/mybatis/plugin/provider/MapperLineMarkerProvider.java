@@ -40,42 +40,35 @@ public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
         }
     };
 
-    /**
-     * 这个地方PsiClass和PsiMethod都会进来
-     * @param element
-     * @param result
-     */
-    @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element,
-        @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
-
-        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
-        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
-            return;
-        }
-
-        //如果element是PsiNameIdentifierOwner对象(String id (参数))   int deleteByPrimary(String id) (方法))，且是接口
-        if (element instanceof PsiNameIdentifierOwner && !(element instanceof PsiParameterImpl)
-                && JavaUtils.isElementWithinInterface(element)) {
-            //表示ID元素的一个集合列表
-            CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<>();
-            //找出xml的namespace跟element相等的文件
-            JavaService.getInstance(element.getProject()).process(element, processor);
-            Collection<IdDomElement> results = processor.getResults();
-            if (!results.isEmpty()) {
-
-                //构建导航图标的builder
-                NavigationGutterIconBuilder<PsiElement> builder =
-                        NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
-                                .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                                //target是xmlTag
-                                .setTargets(Collections2.transform(results, FUN))
-                                .setTooltipTitle("导航到mapper xml中的方法");
-                RelatedItemLineMarkerInfo<PsiElement> lineMarkerInfo = builder.createLineMarkerInfo(
-                        Objects.requireNonNull(((PsiNameIdentifierOwner) element).getNameIdentifier()));
-                result.add(lineMarkerInfo);
-            }
-        }
+  @Override
+  protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
+    Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+    if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
+      return;
     }
+
+    //如果element是PsiNameIdentifierOwner对象(String id (参数))   int deleteByPrimary(String id) (方法))，且是接口
+    if (element instanceof PsiNameIdentifierOwner && !(element instanceof PsiParameterImpl)
+            && JavaUtils.isElementWithinInterface(element)) {
+      //表示ID元素的一个集合列表
+      CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<>();
+      //找出xml的namespace跟element相等的文件
+      JavaService.getInstance(element.getProject()).process(element, processor);
+      Collection<IdDomElement> results = processor.getResults();
+      if (!results.isEmpty()) {
+
+        //构建导航图标的builder
+        NavigationGutterIconBuilder<PsiElement> builder =
+                NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
+                        .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                        //target是xmlTag
+                        .setTargets(Collections2.transform(results, FUN))
+                        .setTooltipTitle("导航到mapper xml中的方法");
+        RelatedItemLineMarkerInfo<PsiElement> lineMarkerInfo = builder.createLineMarkerInfo(
+                Objects.requireNonNull(((PsiNameIdentifierOwner) element).getNameIdentifier()));
+        result.add(lineMarkerInfo);
+      }
+    }
+  }
 
 }

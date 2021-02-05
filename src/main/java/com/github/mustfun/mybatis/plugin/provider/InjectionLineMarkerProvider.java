@@ -29,47 +29,46 @@ import java.util.Optional;
  */
 public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
-    @Override
-    protected void collectNavigationMarkers(@NotNull PsiElement element,
-        Collection<? super RelatedItemLineMarkerInfo> result) {
-        Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
-        if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
-            return;
-        }
-
-        if (!(element instanceof PsiField)) {
-            return;
-        }
-        PsiField field = (PsiField) element;
-        if (!isTargetField(field)) {
-            return;
-        }
-
-        PsiType type = field.getType();
-        if (!(type instanceof PsiClassReferenceType)) {
-            return;
-        }
-
-        Optional<PsiClass> clazz = JavaUtils.findClazz(element.getProject(), type.getCanonicalText());
-        if (!clazz.isPresent()) {
-            return;
-        }
-
-        PsiClass psiClass = clazz.get();
-        Optional<Mapper> mapper = MapperUtils.findFirstMapper(element.getProject(), psiClass);
-        if (!mapper.isPresent()) {
-            return;
-        }
-
-        NavigationGutterIconBuilder<PsiElement> builder =
-            NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON_NEW)
-                .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                .setTarget(psiClass)
-                .setTooltipTitle("导航至文件 - " + psiClass.getQualifiedName());
-        result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
+  @Override
+  protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo<?>> result) {
+    Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
+    if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.NAVIGATION_OPEN_STATUS))) {
+      return;
     }
 
-    /**
+    if (!(element instanceof PsiField)) {
+      return;
+    }
+    PsiField field = (PsiField) element;
+    if (!isTargetField(field)) {
+      return;
+    }
+
+    PsiType type = field.getType();
+    if (!(type instanceof PsiClassReferenceType)) {
+      return;
+    }
+
+    Optional<PsiClass> clazz = JavaUtils.findClazz(element.getProject(), type.getCanonicalText());
+    if (!clazz.isPresent()) {
+      return;
+    }
+
+    PsiClass psiClass = clazz.get();
+    Optional<Mapper> mapper = MapperUtils.findFirstMapper(element.getProject(), psiClass);
+    if (!mapper.isPresent()) {
+      return;
+    }
+
+    NavigationGutterIconBuilder<PsiElement> builder =
+            NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON_NEW)
+                    .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                    .setTarget(psiClass)
+                    .setTooltipTitle("导航至文件 - " + psiClass.getQualifiedName());
+    result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
+  }
+
+  /**
      * AUTOWIRED注解或者resource上的name和 filed的name一致
      * @param field
      * @return

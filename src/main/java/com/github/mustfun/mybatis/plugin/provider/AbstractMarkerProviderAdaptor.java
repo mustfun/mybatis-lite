@@ -15,9 +15,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractMarkerProviderAdaptor implements LineMarkerProvider {
 
-    @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-    }
+
 
     @Nullable
     @Override

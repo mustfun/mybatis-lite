@@ -28,6 +28,7 @@ dependencies {
     compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compileOnly 'org.projectlombok:lombok:1.18.2'
+    compile group: 'org.javassist', name: 'javassist', version: '3.24.0-GA'
 
     
     testCompile gradleTestKit()
@@ -42,7 +43,7 @@ intellij {
     //def ideaVersionExternDefinition = System.getenv("IDEA_VERSION")
     //version = ideaVersionExternDefinition ? ideaVersionExternDefinition : ideaVersion
     //println "Building for IntelliJ version: ${version}"
-    version = 'IU-2019.3'
+    version = 'IU-2020.2'
     plugins = ['coverage','Spring','SpringBoot','DatabaseTools','java']//'coverage'
     pluginName = 'MyBatis-Lite'
 }

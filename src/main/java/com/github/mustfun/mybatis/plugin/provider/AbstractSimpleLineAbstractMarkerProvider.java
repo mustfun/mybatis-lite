@@ -26,9 +26,6 @@ import java.util.Optional;
  */
 public abstract class AbstractSimpleLineAbstractMarkerProvider<F extends PsiElement, T> extends AbstractMarkerProviderAdaptor {
 
-    @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-    }
 
     @SuppressWarnings("unchecked")
     @Nullable
