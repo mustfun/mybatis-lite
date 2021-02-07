@@ -59,7 +59,7 @@ public class XmlParamContributor extends CompletionContributor {
     }
 
     /**
-     * 给传进来的参数添加候选项
+     * 给传进来的参数添加候选项 , 这里对record.这种支持不好，后续要改
      * @param project
      * @param result
      * @param element
