@@ -32,7 +32,8 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     @Override
     public Result checkAutoPopup(char charTyped, @NotNull final Project project, @NotNull final Editor editor, @NotNull PsiFile file) {
         //在xml里面打个. 唤醒自动补全
-        if (charTyped == '.' && MybatisDomUtils.isMybatisFile(file)) {
+      PsiFile topLevelFile = InjectedLanguageManager.getInstance(project).getTopLevelFile(file);
+      if (charTyped == '.' && MybatisDomUtils.isMybatisFile(topLevelFile)) {
             autoPopupParameter(project, editor);
             return Result.STOP;
         }
@@ -74,17 +75,26 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     }
 
     private static void autoPopupParameter(final Project project, final Editor editor) {
-      AppUIExecutorImpl appUIExecutor = (AppUIExecutorImpl) AppUIExecutor.onUiThread().withDocumentsCommitted(project);
-      appUIExecutor.later().inTransaction(project).execute(() -> {
-          //当前文件是否最新，没有未提交的
-          if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
-              //唤醒代码自动补全 ， CompletionContributor
-            CodeCompletionHandlerBase codeCompletionHandlerBase = new CodeCompletionHandlerBase(CompletionType.BASIC);
-            codeCompletionHandlerBase.invokeCompletion(project, editor, 1);
-            //帮忙回收吧
-            codeCompletionHandlerBase = null;
-          }
-      });
+      //AutoPopupControllerImpl
+      AutoPopupControllerImpl.getInstance(project).autoPopupMemberLookup(editor, CompletionType.BASIC,
+              new Condition<PsiFile>() {
+                @Override
+                public boolean value(PsiFile psiFile) {
+                  return true;
+                }
+              });
+
+//      AppUIExecutorImpl appUIExecutor = (AppUIExecutorImpl) AppUIExecutor.onUiThread().withDocumentsCommitted(project);
+//      appUIExecutor.later().inTransaction(project).execute(() -> {
+//          //当前文件是否最新，没有未提交的
+//          if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
+//              //唤醒代码自动补全 ， CompletionContributor
+//            CodeCompletionHandlerBase codeCompletionHandlerBase = new CodeCompletionHandlerBase(CompletionType.BASIC);
+//            codeCompletionHandlerBase.invokeCompletion(project, editor, 1);
+//            //帮忙回收吧
+//            codeCompletionHandlerBase = null;
+//          }
+//      });
     }
 
 
