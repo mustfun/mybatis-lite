@@ -76,7 +76,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
 
     private static void autoPopupParameter(final Project project, final Editor editor) {
       //AutoPopupControllerImpl
-      AutoPopupControllerImpl.getInstance(project).autoPopupMemberLookup(editor, CompletionType.BASIC,
+      AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, CompletionType.BASIC,
               new Condition<PsiFile>() {
                 @Override
                 public boolean value(PsiFile psiFile) {
