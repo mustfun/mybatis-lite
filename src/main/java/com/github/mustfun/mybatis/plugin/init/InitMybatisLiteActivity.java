@@ -7,21 +7,14 @@ import com.github.mustfun.mybatis.plugin.service.SqlLiteService;
 import com.github.mustfun.mybatis.plugin.service.resolver.AbstractFileResolver;
 import com.github.mustfun.mybatis.plugin.service.resolver.ResolverFacade;
 import com.github.mustfun.mybatis.plugin.setting.MybatisLiteSetting;
-import com.github.mustfun.mybatis.plugin.util.CollectionUtils;
 import com.github.mustfun.mybatis.plugin.util.ConnectionHolder;
-import com.github.mustfun.mybatis.plugin.util.JavaUtils;
 import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.github.mustfun.mybatis.plugin.util.crypto.ConfigTools;
-import com.intellij.execution.RunManager;
-import com.intellij.execution.RunnerAndConfigurationSettings;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.spring.boot.run.SpringBootApplicationConfigurationType;
-import com.intellij.spring.boot.run.SpringBootApplicationRunConfiguration;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,26 +43,11 @@ public class InitMybatisLiteActivity implements StartupActivity {
         initProjectRunSetting(project);
     }
 
+    //应该改为走消息订阅来改，先不动
     private void initProjectRunSetting(Project project) {
         Map<String, String> valueMap = MybatisLiteSetting.getInstance().getValueMap();
         if (!MybatisConstants.TRUE.equalsIgnoreCase(valueMap.get(MybatisConstants.SQL_PRINT_STATUS))) {
             return;
-        }
-        List<RunnerAndConfigurationSettings> configurationSettingsList = RunManager.getInstance(project)
-                .getConfigurationSettingsList(SpringBootApplicationConfigurationType.class);
-        if (CollectionUtils.isEmpty(configurationSettingsList)) {
-          LOG.error("【Mybatis Lite】初始化项目配置失败");
-          return;
-        }
-        RunnerAndConfigurationSettings runnerAndConfigurationSettings = configurationSettingsList.get(0);
-        SpringBootApplicationRunConfiguration configuration = (SpringBootApplicationRunConfiguration) runnerAndConfigurationSettings.getConfiguration();
-
-        if (StringUtils.isEmpty(configuration.getVMParameters())) {
-            configuration.setVMParameters("-javaagent:" + MybatisConstants.PLUGIN_LIB_PATH + "/" + JavaUtils.getPluginFullNameWithExtension());
-        } else if (configuration.getVMParameters().contains("mybatis-lite")) {
-            return;
-        } else {
-            configuration.setVMParameters(configuration.getVMParameters() + "     -javaagent:" + MybatisConstants.PLUGIN_LIB_PATH + "/" + JavaUtils.getPluginFullNameWithExtension());
         }
         return;
     }
