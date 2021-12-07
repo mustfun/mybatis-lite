@@ -11,9 +11,7 @@ import com.github.mustfun.mybatis.plugin.util.MybatisConstants;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
-import com.intellij.patterns.XmlElementPattern;
 import com.intellij.patterns.XmlPatterns;
-import com.intellij.patterns.XmlTagPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.util.PsiUtil;
@@ -103,19 +101,34 @@ public class XmlParamContributor extends CompletionContributor {
                 PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
                 if (psiClass!=null){
                     PsiField[] fields = psiClass.getFields();
-                    addLookupElements(result, fields);
+                    addLookupElements(result, fields, psiClass);
                 }
 
             }
         }
     }
 
-    private static void addLookupElements(@NotNull CompletionResultSet result, PsiField[] fields) {
+    private static void addLookupElements(@NotNull CompletionResultSet result, PsiField[] fields, PsiClass psiClass) {
         for (PsiField field : fields) {
             LookupElementBuilder builder = LookupElementBuilder.create(field.getName())
                     .withIcon(PlatformIcons.FIELD_ICON);
             //变成一个有优先级的对象，其实不加也行
             result.addElement(builder);
+        }
+
+        // 提取get方法
+        PsiMethod[] allMethods = psiClass.getAllMethods();
+        for (PsiMethod method : allMethods) {
+            String name = method.getName();
+            boolean startGet = name.startsWith("get");
+            if (startGet && name.length() > 3) {
+                String fieldNameSuffix = name.substring(4);
+                String firstIndex = (String.valueOf(name.charAt(3))).toLowerCase();
+                LookupElementBuilder builder = LookupElementBuilder.create(firstIndex + fieldNameSuffix)
+                        .withIcon(PlatformIcons.FIELD_ICON);
+                //变成一个有优先级的对象，其实不加也行
+                result.addElement(builder);
+            }
         }
     }
 }

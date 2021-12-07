@@ -15,6 +15,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -45,10 +46,13 @@ public class SqlParamCompletionContributor extends CompletionContributor {
     }
 
     private void process(PsiFile xmlFile, CompletionResultSet result, PsiElement position) {
-        //总而言之是为了拿到documentWindows
+        // mybatis xml文件 如果配置成SQL类型，需要通过documentWindow.injectedToHost 获取真正的位置
         VirtualFile virtualFile = position.getContainingFile().getVirtualFile();
-        DocumentWindow documentWindow = ((VirtualFileWindow) virtualFile).getDocumentWindow();
-        int offset = documentWindow.injectedToHost(position.getTextOffset());
+        int offset = position.getTextOffset();
+        if (Objects.nonNull(virtualFile)) {
+            DocumentWindow documentWindow = ((VirtualFileWindow) virtualFile).getDocumentWindow();
+            offset = documentWindow.injectedToHost(position.getTextOffset());
+        }
         Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(xmlFile.findElementAt(offset));
         if (idDomElement.isPresent()) {
             XmlParamContributor.addElementForPsiParameter(position.getProject(), result, idDomElement.get());

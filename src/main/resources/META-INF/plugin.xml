@@ -171,6 +171,7 @@
         <!--代码补全贡献方-->
         <!--<completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.XmlParamContributor"/>-->
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
+        <completion.contributor language="XML" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlParamCompletionContributor" order="first"/>
         <completion.contributor language="SQL" implementationClass="com.github.mustfun.mybatis.plugin.contributor.SqlFieldCompletionContributor" order="first"/>
 
         <!--<fileTemplateGroup implementation="com.github.mustfun.mybatis.plugin.template.MybatisFileTemplateDescriptorFactory"/>
